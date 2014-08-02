@@ -16,6 +16,7 @@ import micdoodle8.mods.galacticraft.core.network.GCCorePacketManager;
 import micdoodle8.mods.galacticraft.core.tile.GCCoreTileEntityLandingPad;
 import micdoodle8.mods.galacticraft.core.util.PacketUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
+import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntityRocketT2;
 import micdoodle8.mods.galacticraft.mars.items.GCMarsItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,6 +29,7 @@ import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
+import foodisgood_orukum.mods.pop.PlanetsOPlenty;
 import foodisgood_orukum.mods.pop.items.POPItems;
 
 /**
@@ -36,7 +38,7 @@ import foodisgood_orukum.mods.pop.items.POPItems;
  * All rights reserved.
  *
  */
-public class POPEntityRocketT4 extends EntityTieredRocket
+public class POPEntityRocketT4 extends GCMarsEntityRocketT2
 {
     public IUpdatePlayerListBox rocketSoundUpdater;
 
@@ -47,8 +49,8 @@ public class POPEntityRocketT4 extends EntityTieredRocket
 
     public POPEntityRocketT4(World par1World, double par2, double par4, double par6, EnumRocketType rocketType)
     {
-        super(par1World, par2, par4, par6);
-        this.rocketType = rocketType;
+        super(par1World, par2, par4, par6, rocketType);
+        //this.rocketType = rocketType;
         this.cargoItems = new ItemStack[this.getSizeInventory()];
     }
 
@@ -58,13 +60,13 @@ public class POPEntityRocketT4 extends EntityTieredRocket
         this.cargoItems = inv;
     }
 
-    @Override
+    /*@Override
     protected void entityInit()
     {
         super.entityInit();
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void setDead()
     {
         super.setDead();
@@ -73,6 +75,11 @@ public class POPEntityRocketT4 extends EntityTieredRocket
         {
             this.rocketSoundUpdater.update();
         }
+    }*/
+    
+    @Override
+    public double getMountedYOffset() {
+    	return 3;
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -154,7 +161,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
         }
     }
 
-    @Override
+    /*@Override
     public void onTeleport(EntityPlayerMP player)
     {
         final GCCorePlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player);
@@ -176,9 +183,9 @@ public class POPEntityRocketT4 extends EntityTieredRocket
             playerBase.setRocketItem(POPItems.spaceshipT4);
             playerBase.setFuelLevel(this.fuelTank.getFluidAmount());
         }
-    }
+    }*/
 
-    protected void spawnParticles(boolean launched)
+    /*protected void spawnParticles(boolean launched)
     {
         final double x1 = 2.9 * Math.cos(this.rotationYaw * Math.PI / 180.0D) * Math.sin(this.rotationPitch * Math.PI / 180.0D);
         final double z1 = 2.9 * Math.sin(this.rotationYaw * Math.PI / 180.0D) * Math.sin(this.rotationPitch * Math.PI / 180.0D);
@@ -188,20 +195,19 @@ public class POPEntityRocketT4 extends EntityTieredRocket
 
         if (!this.isDead)
         {
-        	//For now, this is commented out... At runtime, MC doesn't seem to think spawnParticle is a real function
-            /*GalacticraftCore.proxy.spawnParticle("launchflame", this.posX + 0.4 - this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ + 0.4 - this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("launchflame", this.posX - 0.4 + this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ + 0.4 - this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("launchflame", this.posX - 0.4 + this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ - 0.4 + this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("launchflame", this.posX + 0.4 - this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ - 0.4 + this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("launchflame", this.posX + x1, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("launchflame", this.posX + 0.4 + x1, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("launchflame", this.posX - 0.4 + x1, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("launchflame", this.posX + x1, y - 0.0D + y1, this.posZ + 0.4D + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("launchflame", this.posX + x1, y - 0.0D + y1, this.posZ - 0.4D + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("blueflame", this.posX + x1 - 0.8, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("blueflame", this.posX + x1 + 0.8, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("blueflame", this.posX + x1, y - 0.0D + y1, this.posZ + z1 - 0.8, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("blueflame", this.posX + x1, y - 0.0D + y1, this.posZ + z1 + 0.8, x1, y1, z1, this.getLaunched());*/
+        	PlanetsOPlenty.proxy.spawnParticle("launchflame", this.posX + 0.4 - this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ + 0.4 - this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("launchflame", this.posX - 0.4 + this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ + 0.4 - this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("launchflame", this.posX - 0.4 + this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ - 0.4 + this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("launchflame", this.posX + 0.4 - this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ - 0.4 + this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("launchflame", this.posX + x1, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("launchflame", this.posX + 0.4 + x1, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("launchflame", this.posX - 0.4 + x1, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("launchflame", this.posX + x1, y - 0.0D + y1, this.posZ + 0.4D + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("launchflame", this.posX + x1, y - 0.0D + y1, this.posZ - 0.4D + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("blueflame", this.posX + x1 - 0.8, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("blueflame", this.posX + x1 + 0.8, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("blueflame", this.posX + x1, y - 0.0D + y1, this.posZ + z1 - 0.8, x1, y1, z1, this.getLaunched());
+            PlanetsOPlenty.proxy.spawnParticle("blueflame", this.posX + x1, y - 0.0D + y1, this.posZ + z1 + 0.8, x1, y1, z1, this.getLaunched());
         }
     }
 
@@ -220,7 +226,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
         return this.isDead ? false : par1EntityPlayer.getDistanceSqToEntity(this) <= 64.0D;
-    }
+    }*/
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
@@ -247,7 +253,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
         return new Vector3(this);
     }*/
 
-    @Override
+    /*@Override
     public void onPadDestroyed()
     {
         if (!this.isDead && this.launchPhase != EnumLaunchPhase.LAUNCHED.getPhase())
@@ -261,7 +267,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
     public boolean isDockValid(IFuelDock dock)
     {
         return dock instanceof GCCoreTileEntityLandingPad;
-    }
+    }*/
 
     /*@RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID = "ICBM|Explosion")
     public void destroyCraft()
