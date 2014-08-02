@@ -2,6 +2,7 @@ package foodisgood_orukum.mods.pop.entities;
 
 //import icbm.api.IMissile;
 import java.util.ArrayList;
+
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
 import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
@@ -27,11 +28,12 @@ import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
+import foodisgood_orukum.mods.pop.items.POPItems;
 
 /**
- * 
+ * Copyright 2014, foodisgoodyesiam and orukum
  *
- * 
+ * All rights reserved.
  *
  */
 public class POPEntityRocketT4 extends EntityTieredRocket
@@ -171,7 +173,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
             }
 
             playerBase.setRocketType(this.rocketType.getIndex());
-            playerBase.setRocketItem(GCMarsItems.spaceship);
+            playerBase.setRocketItem(POPItems.spaceshipT4);
             playerBase.setFuelLevel(this.fuelTank.getFluidAmount());
         }
     }
@@ -186,7 +188,8 @@ public class POPEntityRocketT4 extends EntityTieredRocket
 
         if (!this.isDead)
         {
-            GalacticraftCore.proxy.spawnParticle("launchflame", this.posX + 0.4 - this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ + 0.4 - this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
+        	//For now, this is commented out... At runtime, MC doesn't seem to think spawnParticle is a real function
+            /*GalacticraftCore.proxy.spawnParticle("launchflame", this.posX + 0.4 - this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ + 0.4 - this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
             GalacticraftCore.proxy.spawnParticle("launchflame", this.posX - 0.4 + this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ + 0.4 - this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
             GalacticraftCore.proxy.spawnParticle("launchflame", this.posX - 0.4 + this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ - 0.4 + this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
             GalacticraftCore.proxy.spawnParticle("launchflame", this.posX + 0.4 - this.rand.nextDouble() / 10 + x1, y - 0.0D + y1, this.posZ - 0.4 + this.rand.nextDouble() / 10 + z1, x1, y1, z1, this.getLaunched());
@@ -198,7 +201,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
             GalacticraftCore.proxy.spawnParticle("blueflame", this.posX + x1 - 0.8, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
             GalacticraftCore.proxy.spawnParticle("blueflame", this.posX + x1 + 0.8, y - 0.0D + y1, this.posZ + z1, x1, y1, z1, this.getLaunched());
             GalacticraftCore.proxy.spawnParticle("blueflame", this.posX + x1, y - 0.0D + y1, this.posZ + z1 - 0.8, x1, y1, z1, this.getLaunched());
-            GalacticraftCore.proxy.spawnParticle("blueflame", this.posX + x1, y - 0.0D + y1, this.posZ + z1 + 0.8, x1, y1, z1, this.getLaunched());
+            GalacticraftCore.proxy.spawnParticle("blueflame", this.posX + x1, y - 0.0D + y1, this.posZ + z1 + 0.8, x1, y1, z1, this.getLaunched());*/
         }
     }
 
@@ -288,7 +291,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
     @Override
     public int getFuelTankCapacity()
     {
-        return 1500;
+        return 6200;
     }
 
     @Override

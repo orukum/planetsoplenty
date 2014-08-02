@@ -63,12 +63,12 @@ import foodisgood_orukum.mods.pop.items.*;
 import foodisgood_orukum.mods.pop.entities.*;
 
 /**
+ * Copyright 2014, foodisgoodyesiam and orukum
  * 
- * 
- * 
+ * All rights reserved.
  * 
  */
-@Mod(name = PlanetsOPlenty.NAME, version = PlanetsOPlenty.VERSION/* + "." + PlanetsOPlenty.LOCALMINVERSION + "." + PlanetsOPlenty.LOCALBUILDVERSION*/, useMetadata = true, modid = PlanetsOPlenty.MODID, dependencies = "required-after:" + GalacticraftCore.MODID + ";required-after:" + GalacticraftMars.MODID + ";")
+@Mod(name = PlanetsOPlenty.NAME, version = PlanetsOPlenty.VERSION/* + "." + PlanetsOPlenty.LOCALMINVERSION + "." + PlanetsOPlenty.LOCALBUILDVERSION*/, useMetadata = true, modid = PlanetsOPlenty.MODID, dependencies = "required-after:" + GalacticraftCore.MODID + ";required-after:" + GalacticraftMars.MODID + ";")//";after:ICBM|Explosion; after:IC2; after:BuildCraft|Core; after:BuildCraft|Energy;")
 //@NetworkMod(channels = { GalacticraftMars.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = GCCoreConnectionHandler.class, packetHandler = GCCorePacketManager.class)
 public class PlanetsOPlenty {
     public static final String NAME = "Planets O' Plenty";
