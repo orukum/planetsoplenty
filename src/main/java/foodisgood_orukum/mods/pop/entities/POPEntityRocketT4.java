@@ -1,6 +1,6 @@
 package foodisgood_orukum.mods.pop.entities;
 
-import icbm.api.IMissile;
+//import icbm.api.IMissile;
 import java.util.ArrayList;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
 import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
@@ -29,9 +29,9 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 
 /**
- * Copyright 2012-2013, micdoodle8
+ * 
  *
- * All rights reserved.
+ * 
  *
  */
 public class POPEntityRocketT4 extends EntityTieredRocket
@@ -230,8 +230,9 @@ public class POPEntityRocketT4 extends EntityTieredRocket
     {
         super.readEntityFromNBT(par1NBTTagCompound);
     }
-
-    @RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID = "ICBM|Explosion")
+    
+    //TODO: Add ICBM API 
+    /*@RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID = "ICBM|Explosion")
     public boolean canLock(IMissile missile)
     {
         return true;
@@ -241,7 +242,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
     public Vector3 getPredictedPosition(int ticks)
     {
         return new Vector3(this);
-    }
+    }*/
 
     @Override
     public void onPadDestroyed()
@@ -259,7 +260,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
         return dock instanceof GCCoreTileEntityLandingPad;
     }
 
-    @RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID = "ICBM|Explosion")
+    /*@RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID = "ICBM|Explosion")
     public void destroyCraft()
     {
         this.setDead();
@@ -276,7 +277,7 @@ public class POPEntityRocketT4 extends EntityTieredRocket
     public boolean canBeTargeted(Object entity)
     {
         return this.launchPhase == EnumLaunchPhase.LAUNCHED.getPhase() && this.timeSinceLaunch > 50;
-    }
+    }*/
 
     @Override
     public int getRocketTier()
@@ -293,6 +294,6 @@ public class POPEntityRocketT4 extends EntityTieredRocket
     @Override
     public int getPreLaunchWait()
     {
-        return 400;
+        return 600;
     }
 }

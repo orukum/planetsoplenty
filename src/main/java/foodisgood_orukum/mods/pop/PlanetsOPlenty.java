@@ -40,6 +40,7 @@ import net.minecraft.block.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -62,19 +63,19 @@ import foodisgood_orukum.mods.pop.items.*;
 import foodisgood_orukum.mods.pop.entities.*;
 
 /**
- * Copyright 2012-2013, micdoodle8
  * 
- * All rights reserved.
+ * 
+ * 
  * 
  */
-@Mod(name = PlanetsOPlenty.NAME, version = PlanetsOPlenty.VERSION/* + "." + PlanetsOPlenty.LOCALMINVERSION + "." + PlanetsOPlenty.LOCALBUILDVERSION*/, useMetadata = true, modid = PlanetsOPlenty.MODID, dependencies = "required-after:" + GalacticraftCore.MODID + ", " + GalacticraftMars.MODID)
+@Mod(name = PlanetsOPlenty.NAME, version = PlanetsOPlenty.VERSION/* + "." + PlanetsOPlenty.LOCALMINVERSION + "." + PlanetsOPlenty.LOCALBUILDVERSION*/, useMetadata = true, modid = PlanetsOPlenty.MODID, dependencies = "required-after:" + GalacticraftCore.MODID + ";required-after:" + GalacticraftMars.MODID + ";")
 //@NetworkMod(channels = { GalacticraftMars.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = GCCoreConnectionHandler.class, packetHandler = GCCorePacketManager.class)
 public class PlanetsOPlenty {
     public static final String NAME = "Planets O' Plenty";
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "PlanetsOPlentyEntities";
-    public static final String VERSION = "-1.0";
+    public static final String VERSION = "-1.0000000000000000000000000001";
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
 
@@ -134,9 +135,12 @@ public class PlanetsOPlenty {
 
         CompressorRecipes.addShapelessRecipe(new ItemStack(GCMarsItems.marsItemBasic, 1, 3), new ItemStack(GCCoreItems.heavyPlatingTier1), new ItemStack(GCMoonItems.meteoricIronIngot, 1, 1));
         CompressorRecipes.addShapelessRecipe(new ItemStack(GCMarsItems.marsItemBasic, 1, 5), new ItemStack(GCMarsItems.marsItemBasic, 1, 2));*/
-    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.stone), new ItemStack(Block.bedrock));
-    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.grass), new ItemStack(POPItems.spaceshipT4));
-    	GalacticraftMars.instance.registerGalacticraftNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", 20000001, 150, 1, false);
+    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.stone, 2), new ItemStack(Block.bedrock, 3));
+    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.grass, 2), new ItemStack(POPItems.spaceshipT4));
+    	CompressorRecipes.addShapelessRecipe(new ItemStack(POPItems.spaceshipT4), new ItemStack(Block.grass, 2));
+    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.bedrock, 3), new ItemStack(Block.stone, 2));
+    	registerGalacticraftNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", 20000001, 150, 1, false);
+    	GameRegistry.addShapelessRecipe(new ItemStack(Item.diamond, 64), new ItemStack(Block.dirt));//Temp
     }
 
     @EventHandler
@@ -183,7 +187,7 @@ public class PlanetsOPlenty {
      * Here we should just use the methods as already provided in GC or GCMars, not make our own, I think. Hmm, maybe not, though
      */
 
-    /*public void registerGalacticraftCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore)
+    public void registerGalacticraftCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore)
     {
         EntityRegistry.registerGlobalEntityID(var0, var1, id, back, fore);
         EntityRegistry.registerModEntity(var0, var1, id, GalacticraftMars.instance, 80, 3, true);
@@ -193,5 +197,5 @@ public class PlanetsOPlenty {
     {
         EntityList.addMapping(var0, var1, id);
         EntityRegistry.registerModEntity(var0, var1, id, this, trackingDistance, updateFreq, sendVel);
-    }*/
+    }
 }
