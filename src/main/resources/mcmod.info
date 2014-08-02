@@ -1,0 +1,16 @@
+[
+{
+  "modid": "planetsoplenty",
+  "name": "Planets O'Plenty",
+  "description": "An addon to Galacticraft adding millions of star systems and planets.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["foodisgood"], ["Orukum"]
+  "credits": "micdoodle8 for Galacticraft and the Forge/FML guys",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
