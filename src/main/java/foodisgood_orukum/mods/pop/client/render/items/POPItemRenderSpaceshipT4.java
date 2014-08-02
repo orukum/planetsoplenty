@@ -30,7 +30,7 @@ public class POPItemRenderSpaceshipT4 extends GCCoreItemRendererSpaceship
 
     public POPItemRenderSpaceshipT4(POPModelTier4Rocket model)
     {
-        super(new POPEntityRocketT4(FMLClientHandler.instance().getClient().theWorld), model, new ResourceLocation(PlanetsOPlenty.TEXTURE_DOMAIN, "textures/models/rocketT4.png"));
+        super(new POPEntityRocketT4(FMLClientHandler.instance().getClient().theWorld), model, new ResourceLocation(PlanetsOPlenty.TEXTURE_DOMAIN, "textures/model/rocketT4.png"));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class POPItemRenderSpaceshipT4 extends GCCoreItemRendererSpaceship
                 GL11.glPushMatrix();
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                GL11.glScalef(0.5F, -0.5F, -0.5F);
+                GL11.glScalef(0.41F, -0.41F, -0.41F);//Changed from .5 as a test
                 GL11.glTranslatef(1.5F, 1.95F, 1.7F);
                 final short short1 = 0;
 
