@@ -79,8 +79,8 @@ public class PlanetsOPlenty {
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
 
-    //@SidedProxy(clientSide = "micdoodle8.mods.galacticraft.mars.client.ClientProxyMars", serverSide = "micdoodle8.mods.galacticraft.mars.CommonProxyMars")
-    //public static CommonProxyMars proxy;
+    @SidedProxy(clientSide = "foodisgood_orukum.mods.pop.client.POPClientProxy", serverSide = "foodisgood_orukum.mods.pop.CommonPOPProxy")
+    public static CommonPOPProxy proxy;
 
     @Instance(PlanetsOPlenty.MODID)
     public static PlanetsOPlenty instance;

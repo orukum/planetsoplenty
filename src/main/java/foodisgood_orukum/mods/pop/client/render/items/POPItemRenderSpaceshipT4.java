@@ -1,11 +1,13 @@
-package foodisgood_orukum.mods.pop.items;
+package foodisgood_orukum.mods.pop.client.render.items;
 
 import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
+import micdoodle8.mods.galacticraft.api.prefab.entity.EntitySpaceshipBase;
 import micdoodle8.mods.galacticraft.core.client.render.item.GCCoreItemRendererSpaceship;
 import micdoodle8.mods.galacticraft.core.entities.GCCoreEntityRocketT1;
 import micdoodle8.mods.galacticraft.mars.GalacticraftMars;
 import micdoodle8.mods.galacticraft.mars.client.model.GCMarsModelSpaceshipTier2;
 import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntityRocketT2;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,18 +19,18 @@ import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import foodisgood_orukum.mods.pop.entities.POPEntityRocketT4;
+import foodisgood_orukum.mods.pop.PlanetsOPlenty;
 import foodisgood_orukum.mods.pop.client.model.POPModelTier4Rocket;
+import foodisgood_orukum.mods.pop.entities.POPEntityRocketT4;
 
-public class POPItemRendererSpaceshipT4 extends GCCoreItemRendererSpaceship
+public class POPItemRenderSpaceshipT4 extends GCCoreItemRendererSpaceship
 {
-    /*private static final ResourceLocation cargoRocketTexture = new ResourceLocation(GalacticraftMars.TEXTURE_DOMAIN, "textures/model/cargoRocket.png");
-    private IModelCustom cargoRocketModel;*/
-    
-    public POPItemRendererSpaceshipT4(IModelCustom cargoRocketModel)
+	//private static final ResourceLocation cargoRocketTexture = new ResourceLocation(GalacticraftMars.TEXTURE_DOMAIN, "textures/model/cargoRocket.png");
+    //private IModelCustom cargoRocketModel;
+
+    public POPItemRenderSpaceshipT4(POPModelTier4Rocket model)
     {
-        super(new POPEntityRocketT4(FMLClientHandler.instance().getClient().theWorld), new POPModelTier4Rocket(), new ResourceLocation(GalacticraftMars.TEXTURE_DOMAIN, "textures/model/rocketT4.png"));
-        //this.cargoRocketModel = cargoRocketModel;
+        super(new POPEntityRocketT4(FMLClientHandler.instance().getClient().theWorld), model, new ResourceLocation(PlanetsOPlenty.TEXTURE_DOMAIN, "textures/model/rocketT4.png"));
     }
 
     @Override
@@ -38,18 +40,9 @@ public class POPItemRendererSpaceshipT4 extends GCCoreItemRendererSpaceship
 
         this.transform(item, type);
 
-        /*if (item.getItemDamage() < 10)
-        {*/
-            FMLClientHandler.instance().getClient().renderEngine.bindTexture(this.texture);
-            this.modelSpaceship.render(this.spaceship, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-            GL11.glPopMatrix();
-        /*}
-        else
-        {
-            FMLClientHandler.instance().getClient().renderEngine.bindTexture(PPOItemRendererSpaceshipT4.cargoRocketTexture);
-            this.cargoRocketModel.renderAll();
-            GL11.glPopMatrix();
-        }*/
+        FMLClientHandler.instance().getClient().renderEngine.bindTexture(this.texture);
+        this.modelSpaceship.render(this.spaceship, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+        GL11.glPopMatrix();
 
         if (type == ItemRenderType.INVENTORY)
         {
@@ -67,7 +60,7 @@ public class POPItemRendererSpaceshipT4 extends GCCoreItemRendererSpaceship
                 GL11.glTranslatef(1.5F, 1.95F, 1.7F);
                 final short short1 = 0;
 
-                GL11.glRotatef(short1, 0.0F, 1.0F, 0.0F);
+                GL11.glRotatef(short1, 0.3F, 1.0F, 0.0F);
                 GL11.glTranslatef(-1.5F, -1.5F, -1.5F);
                 float f1 = 0;
                 f1 = 1.0F - f1;
