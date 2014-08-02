@@ -76,6 +76,7 @@ public class PlanetsOPlenty {
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "PlanetsOPlentyEntities";
     public static final String VERSION = "-1.0000000000000000000000000002";
+    public static final boolean debug = true;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
 
@@ -117,6 +118,7 @@ public class PlanetsOPlenty {
     @EventHandler
     public void load(FMLInitializationEvent event)
     {
+    	PlanetsOPlenty.planetsOPlentyTab = new GCCoreCreativeTab(CreativeTabs.getNextID(), PlanetsOPlenty.MODID, POPItems.spaceshipT4.itemID, 5);
         /*SchematicRegistry.registerSchematicRecipe(new GCMarsSchematicRocketT2());
         SchematicRegistry.registerSchematicRecipe(new GCMarsSchematicCargoRocket());
 
@@ -135,12 +137,14 @@ public class PlanetsOPlenty {
 
         CompressorRecipes.addShapelessRecipe(new ItemStack(GCMarsItems.marsItemBasic, 1, 3), new ItemStack(GCCoreItems.heavyPlatingTier1), new ItemStack(GCMoonItems.meteoricIronIngot, 1, 1));
         CompressorRecipes.addShapelessRecipe(new ItemStack(GCMarsItems.marsItemBasic, 1, 5), new ItemStack(GCMarsItems.marsItemBasic, 1, 2));*/
-    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.stone, 2), new ItemStack(Block.bedrock, 3));
-    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.grass, 2), new ItemStack(POPItems.spaceshipT4));
-    	CompressorRecipes.addShapelessRecipe(new ItemStack(POPItems.spaceshipT4), new ItemStack(Block.grass, 2));
-    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.bedrock, 3), new ItemStack(Block.stone, 2));
+    	if (PlanetsOPlenty.debug) {
+	    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.stone, 2), new ItemStack(Block.bedrock, 3));
+	    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.grass, 2), new ItemStack(POPItems.spaceshipT4));
+	    	CompressorRecipes.addShapelessRecipe(new ItemStack(POPItems.spaceshipT4), new ItemStack(Block.grass, 2));
+	    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.bedrock, 3), new ItemStack(Block.stone, 2));
+	    	GameRegistry.addShapelessRecipe(new ItemStack(Item.diamond, 64), new ItemStack(Block.dirt));//Temp
+    	}
     	registerGalacticraftNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", 20000001, 150, 1, false);
-    	GameRegistry.addShapelessRecipe(new ItemStack(Item.diamond, 64), new ItemStack(Block.dirt));//Temp
     }
 
     @EventHandler
@@ -178,9 +182,9 @@ public class PlanetsOPlenty {
     @EventHandler
     public void postLoad(FMLPostInitializationEvent event)
     {
-        /*GalacticraftMars.proxy.postInit(event);
-        GalacticraftMars.proxy.registerRenderInformation();
-        GCMarsRecipeManager.loadRecipes();*/
+        PlanetsOPlenty.proxy.postInit(event);
+        PlanetsOPlenty.proxy.registerRenderInformation();
+        //GCMarsRecipeManager.loadRecipes();
     }
     
     /**
@@ -190,12 +194,12 @@ public class PlanetsOPlenty {
     public void registerGalacticraftCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore)
     {
         EntityRegistry.registerGlobalEntityID(var0, var1, id, back, fore);
-        EntityRegistry.registerModEntity(var0, var1, id, GalacticraftMars.instance, 80, 3, true);
+        EntityRegistry.registerModEntity(var0, var1, id, PlanetsOPlenty.instance, 80, 3, true);
     }
 
     public void registerGalacticraftNonMobEntity(Class<? extends Entity> var0, String var1, int id, int trackingDistance, int updateFreq, boolean sendVel)
     {
         EntityList.addMapping(var0, var1, id);
-        EntityRegistry.registerModEntity(var0, var1, id, this, trackingDistance, updateFreq, sendVel);
+        EntityRegistry.registerModEntity(var0, var1, id, /*this*//**Just to see if it works...*/GalacticraftMars.instance, trackingDistance, updateFreq, sendVel);
     }
 }

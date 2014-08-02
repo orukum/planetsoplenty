@@ -14,7 +14,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 /**
- * Copyright 2012-2013, micdoodle8
+ * Copyright 2014, foodisgoodyesiam and orukum
  * 
  * All rights reserved.
  * 
