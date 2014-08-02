@@ -97,7 +97,7 @@ public class POPItemRenderSpaceshipT4 extends GCCoreItemRendererSpaceship
             GL11.glRotatef(70, 1.0F, 0, 0);
             GL11.glRotatef(-10, 0.0F, 1, 0);
             GL11.glRotatef(50, 0.0F, 1, 1);
-            GL11.glTranslatef(0F, -3.2F, 0F);//Middle argument changed from 2
+            GL11.glTranslatef(0F, -2.234F, 0F);//Middle argument changed from 2
             GL11.glScalef(5.2F, 5.2F, 5.2F);
 
             if (itemstack.getItemDamage() >= 10)
