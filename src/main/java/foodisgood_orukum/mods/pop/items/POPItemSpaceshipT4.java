@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import foodisgood_orukum.mods.pop.PlanetsOPlenty;
+import foodisgood_orukum.mods.pop.entities.POPEntityRocketT4;
 
 public class POPItemSpaceshipT4 extends Item implements IHoldableItem {
     public POPItemSpaceshipT4(int par1)
@@ -82,7 +83,7 @@ public class POPItemSpaceshipT4 extends Item implements IHoldableItem {
 
             if (amountOfCorrectBlocks == 9)
             {
-                EntitySpaceshipBase rocket = new GCMarsEntityRocketT2(par3World, centerX, centerY + 4.2D, centerZ, EnumRocketType.values()[par1ItemStack.getItemDamage()]);
+                EntitySpaceshipBase rocket = new POPEntityRocketT4(par3World, centerX, centerY + 4.2D, centerZ, EnumRocketType.values()[par1ItemStack.getItemDamage()]);
 
                 par3World.spawnEntityInWorld(rocket);
 
