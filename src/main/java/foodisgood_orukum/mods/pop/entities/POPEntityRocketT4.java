@@ -40,7 +40,7 @@ import foodisgood_orukum.mods.pop.items.POPItems;
  */
 public class POPEntityRocketT4 extends GCMarsEntityRocketT2
 {
-    public IUpdatePlayerListBox rocketSoundUpdater;
+    //public IUpdatePlayerListBox rocketSoundUpdater;
 
     public POPEntityRocketT4(World par1World)
     {
@@ -79,7 +79,7 @@ public class POPEntityRocketT4 extends GCMarsEntityRocketT2
     
     @Override
     public double getMountedYOffset() {
-    	return 3;
+    	return 2.8;
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
