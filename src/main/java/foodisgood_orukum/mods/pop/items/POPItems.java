@@ -10,11 +10,8 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * Copyright 2014, foodisgoodyesiam and orukum
  * 
- * 
- * 
  */
-public class POPItems
-{
+public class POPItems {
 	public static Item spaceshipT4;
     /*public static Item marsItemBasic;
     public static Item deshPickaxe;

@@ -77,10 +77,10 @@ public class POPClientProxy extends CommonPOPProxy
         MinecraftForgeClient.registerItemRenderer(GCMarsItems.spaceship.itemID, new GCMarsItemRendererSpaceshipT2(cargoRocketModel));
         MinecraftForgeClient.registerItemRenderer(GCMarsItems.key.itemID, new GCCoreItemRendererKey(new ResourceLocation(GalacticraftMars.TEXTURE_DOMAIN, "textures/model/treasure.png")));
         MinecraftForgeClient.registerItemRenderer(GCMarsBlocks.machine.blockID, new GCMarsItemRendererMachine(chamberModel));*/
-    	POPModelTier4Rocket model = new POPModelTier4Rocket();
+    	//POPModelTier4Rocket model = new POPModelTier4Rocket();
     	//If it happens that the two renderers really do need separate model objects for some reason, we can set it up that way...
-    	RenderingRegistry.registerEntityRenderingHandler(POPEntityRocketT4.class, new GCCoreRenderSpaceship(model, PlanetsOPlenty.TEXTURE_DOMAIN, "textures/rocketT4.png"));
-        MinecraftForgeClient.registerItemRenderer(POPItems.spaceshipT4.itemID, new POPItemRenderSpaceshipT4(model));
+    	RenderingRegistry.registerEntityRenderingHandler(POPEntityRocketT4.class, new GCCoreRenderSpaceship(new POPModelTier4Rocket(), PlanetsOPlenty.TEXTURE_DOMAIN, "textures/rocketT4.png"));
+        MinecraftForgeClient.registerItemRenderer(POPItems.spaceshipT4.itemID, new POPItemRenderSpaceshipT4(new POPModelTier4Rocket()));
     }
 
     /*@Override

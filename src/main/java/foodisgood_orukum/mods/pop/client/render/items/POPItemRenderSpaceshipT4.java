@@ -30,7 +30,7 @@ public class POPItemRenderSpaceshipT4 extends GCCoreItemRendererSpaceship
 
     public POPItemRenderSpaceshipT4(POPModelTier4Rocket model)
     {
-        super(new POPEntityRocketT4(FMLClientHandler.instance().getClient().theWorld), model, new ResourceLocation(PlanetsOPlenty.TEXTURE_DOMAIN, "textures/model/rocketT4.png"));
+        super(new POPEntityRocketT4(FMLClientHandler.instance().getClient().theWorld), model, new ResourceLocation(PlanetsOPlenty.TEXTURE_DOMAIN, "textures/rocketT4.png"));
     }
 
     @Override
