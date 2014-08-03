@@ -5,7 +5,6 @@ import java.io.File;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
 import micdoodle8.mods.galacticraft.api.recipe.SchematicRegistry;
-import micdoodle8.mods.galacticraft.core.GCCoreCreativeTab;
 import micdoodle8.mods.galacticraft.core.GCLog;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.GCCoreItems;
@@ -86,7 +85,7 @@ public class PlanetsOPlenty {
     @Instance(PlanetsOPlenty.MODID)
     public static PlanetsOPlenty instance;
 
-    public static GCCoreCreativeTab planetsOPlentyTab;
+    public static POPCreativeTab planetsOPlentyTab;
 
     public static final String TEXTURE_DOMAIN = "planetsoplenty";
     public static final String TEXTURE_PREFIX = GalacticraftMars.TEXTURE_DOMAIN + ":";
@@ -118,7 +117,7 @@ public class PlanetsOPlenty {
     @EventHandler
     public void load(FMLInitializationEvent event)
     {
-    	PlanetsOPlenty.planetsOPlentyTab = new GCCoreCreativeTab(CreativeTabs.getNextID(), PlanetsOPlenty.MODID, POPItems.spaceshipT4.itemID, 5);
+    	PlanetsOPlenty.planetsOPlentyTab = new POPCreativeTab(CreativeTabs.getNextID(), PlanetsOPlenty.MODID, POPItems.spaceshipT4.itemID, 5);
         /*SchematicRegistry.registerSchematicRecipe(new GCMarsSchematicRocketT2());
         SchematicRegistry.registerSchematicRecipe(new GCMarsSchematicCargoRocket());
 
