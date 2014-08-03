@@ -80,7 +80,7 @@ public class POPEntityRocketT4 extends GCMarsEntityRocketT2
     
     @Override
     public double getMountedYOffset() {
-    	return 2.8;
+    	return 2.952;
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

@@ -74,7 +74,7 @@ public class PlanetsOPlenty {
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "PlanetsOPlentyEntities";
-    public static final String VERSION = "-1.0000000000000000000000000023";
+    public static final String VERSION = "-1.0000000000000000000000000025";
     public static final boolean debug = true;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
@@ -89,8 +89,6 @@ public class PlanetsOPlenty {
 
     public static final String TEXTURE_DOMAIN = "planetsoplenty";
     public static final String TEXTURE_PREFIX = GalacticraftMars.TEXTURE_DOMAIN + ":";
-
-    public static Fluid SLUDGE;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
