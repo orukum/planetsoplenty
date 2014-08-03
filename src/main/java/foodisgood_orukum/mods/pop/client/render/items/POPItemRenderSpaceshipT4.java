@@ -110,7 +110,7 @@ public class POPItemRenderSpaceshipT4 extends GCCoreItemRendererSpaceship
             GL11.glRotatef(73, 1.0F, 0, 0);
             GL11.glScalef(5.2F, 5.2F, 5.2F);
             
-            GL11.glTranslatef(-2F, 0F, 0F);
+            GL11.glTranslatef(0F, 0F, -2F);
 
             if (player != null && player.ridingEntity != null && player.ridingEntity instanceof EntitySpaceshipBase)
             {
