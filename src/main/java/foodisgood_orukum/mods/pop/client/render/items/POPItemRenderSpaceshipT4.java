@@ -89,24 +89,13 @@ public class POPItemRenderSpaceshipT4 extends GCCoreItemRendererSpaceship
 
         if (type == ItemRenderType.EQUIPPED)
         {
-            if (itemstack.getItemDamage() >= 10)
-            {
-                GL11.glTranslatef(0.5F, 0.2F, 0F);
-            }
-
-            GL11.glRotatef(70, 1.0F, 0, 0);
+        	GL11.glRotatef(70, 1.0F, 0, 0);
             GL11.glRotatef(-10, 0.0F, 1, 0);
             GL11.glRotatef(50, 0.0F, 1, 1);
-            GL11.glTranslatef(0F, -2.234F, 0F);//Middle argument changed from 2
+            GL11.glTranslatef(0F, -1.232F, 0F);//Middle argument changed from 2
             GL11.glScalef(5.2F, 5.2F, 5.2F);
 
-            if (itemstack.getItemDamage() >= 10)
-            {
-                GL11.glTranslatef(0F, 0.45F, 0F);
-                GL11.glScalef(0.45F, 0.45F, 0.45F);
-            }
-
-            if (player != null && player.ridingEntity != null && player.ridingEntity instanceof GCCoreEntityRocketT1)
+            if (player != null && player.ridingEntity != null && player.ridingEntity instanceof EntitySpaceshipBase)
             {
                 GL11.glScalef(0.0F, 0.0F, 0.0F);
             }
@@ -116,17 +105,14 @@ public class POPItemRenderSpaceshipT4 extends GCCoreItemRendererSpaceship
         {
             GL11.glTranslatef(-0.5F, 4.2F, 0F);
 
-            if (itemstack.getItemDamage() >= 10)
-            {
-                GL11.glTranslatef(0F, 1.5F, -6.0F);
-            }
-
             GL11.glRotatef(28, 0.0F, 0, 1);
             GL11.glRotatef(50 + 180, 0.0F, 1, 0);
             GL11.glRotatef(73, 1.0F, 0, 0);
             GL11.glScalef(5.2F, 5.2F, 5.2F);
+            
+            GL11.glTranslatef(-2F, 0F, 0F);
 
-            if (player != null && player.ridingEntity != null && player.ridingEntity instanceof GCCoreEntityRocketT1)
+            if (player != null && player.ridingEntity != null && player.ridingEntity instanceof EntitySpaceshipBase)
             {
                 GL11.glScalef(0.0F, 0.0F, 0.0F);
             }
@@ -141,7 +127,7 @@ public class POPItemRenderSpaceshipT4 extends GCCoreItemRendererSpaceship
             {
                 GL11.glRotatef(85F, 1F, 0F, 1F);
                 GL11.glRotatef(20F, 1F, 0F, 0F);
-                GL11.glScalef(0.9F, 0.9F, 0.9F);
+                GL11.glScalef(0.87F, 0.87F, 0.87F);
             }
             else
             {

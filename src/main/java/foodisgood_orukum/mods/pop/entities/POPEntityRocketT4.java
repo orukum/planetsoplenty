@@ -18,6 +18,7 @@ import micdoodle8.mods.galacticraft.core.util.PacketUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
 import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntityRocketT2;
 import micdoodle8.mods.galacticraft.mars.items.GCMarsItems;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -161,29 +162,20 @@ public class POPEntityRocketT4 extends GCMarsEntityRocketT2
         }
     }
 
-    /*@Override
+    @Override
     public void onTeleport(EntityPlayerMP player)
     {
-        final GCCorePlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player);
-
-        player.playerNetServerHandler.sendPacketToPlayer(PacketUtil.createPacket(GalacticraftCore.CHANNEL, EnumPacketClient.ZOOM_CAMERA, new Object[] { 0 }));
-
-        if (playerBase != null)
-        {
-            if (this.cargoItems == null || this.cargoItems.length == 0)
-            {
-                playerBase.setRocketStacks(new ItemStack[3]);
-            }
-            else
-            {
-                playerBase.setRocketStacks(this.cargoItems);
-            }
-
-            playerBase.setRocketType(this.rocketType.getIndex());
+    	super.onTeleport(player);
+    	if (player instanceof GCCorePlayerMP) {
+	        final GCCorePlayerMP playerBase = (GCCorePlayerMP) player;
             playerBase.setRocketItem(POPItems.spaceshipT4);
-            playerBase.setFuelLevel(this.fuelTank.getFluidAmount());
-        }
-    }*/
+    	} else {
+    		if (PlanetsOPlenty.debug) {
+				Minecraft.getMinecraft().thePlayer.sendChatMessage("Casting player to GCCorePlayerMP failed");
+				System.out.println("Casting player to GCCorePlayerMP failed");
+    		}
+    	}
+    }
 
     /*protected void spawnParticles(boolean launched)
     {
