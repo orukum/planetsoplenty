@@ -125,11 +125,6 @@ public class POPItemSpaceshipT4 extends Item implements IHoldableItem {
         {
             par3List.add(new ItemStack(par1, 1, i));
         }
-
-        for (int i = 11; i < 10 + EnumRocketType.values().length; i++)
-        {
-            par3List.add(new ItemStack(par1, 1, i));
-        }
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -156,11 +151,6 @@ public class POPItemSpaceshipT4 extends Item implements IHoldableItem {
         if (type.getPreFueled())
         {
             par2List.add(EnumColor.RED + "\u00a7o" + "Creative Only");
-        }
-
-        if (par1ItemStack.getItemDamage() >= 10)
-        {
-            par2List.add(EnumColor.AQUA + "Requires Launch Controller");
         }
     }
 
