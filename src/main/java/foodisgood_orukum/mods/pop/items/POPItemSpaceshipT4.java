@@ -150,7 +150,7 @@ public class POPItemSpaceshipT4 extends Item implements IHoldableItem {
 
         if (type.getPreFueled())
         {
-            par2List.add(EnumColor.RED + "\u00a7o" + "Creative Only");
+            par2List.add("\u00a7c" + "\u00a7o" + "Creative Only");
         }
     }
 
