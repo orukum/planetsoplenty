@@ -1,6 +1,6 @@
 package foodisgood_orukum.mods.pop.space;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector.Vector3;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.api.world.*;
 
 public class EastGalaxy extends POPGalaxy {
@@ -20,7 +20,7 @@ public class EastGalaxy extends POPGalaxy {
 	}
 
 	@Override
-	public Vector3 getRGBRingColors() {
+	public final Vector3 getRGBRingColors() {
         return new Vector3(240.0D / 256.0D, 256.0D / 256.0D, 6.0D / 256.0D);
 	}
 }

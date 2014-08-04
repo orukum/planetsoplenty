@@ -5,6 +5,7 @@ import java.io.File;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
 import micdoodle8.mods.galacticraft.api.recipe.SchematicRegistry;
+import micdoodle8.mods.galacticraft.api.world.IGalaxy;
 import micdoodle8.mods.galacticraft.core.GCLog;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.GCCoreItems;
@@ -35,7 +36,7 @@ import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityTerraformer;
 import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityTreasureChest;
 import micdoodle8.mods.galacticraft.mars.GalacticraftMars;
 import micdoodle8.mods.galacticraft.moon.dimension.GCMoonTeleportType;
-import micdoodle8.mods.galacticraft.moon.items.GCMoonItems;
+import micdoodle8.mods.galacticraft.moon.items.GCMoonItem;
 import net.minecraft.block.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -77,7 +78,7 @@ public class PlanetsOPlenty {
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "PlanetsOPlentyEntities";
-    public static final String VERSION = "-1.0000000000000000000000000034";
+    public static final String VERSION = "-1.0000000000000000000000000038";
     public static final boolean debug = true;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
@@ -114,6 +115,8 @@ public class PlanetsOPlenty {
         GalacticraftMars.proxy.preInit(event);*/
     	POPItems.initItems();
     	POPCelestialObjects.preInit(event);
+    	IGalaxy testing = POPCelestialObjects.westGalaxy;
+    	System.out.println("Hello" + testing.getRGBRingColors().x);
     }
 
     @EventHandler

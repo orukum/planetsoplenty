@@ -71,4 +71,9 @@ public abstract class POPStar implements IPlanet, IMapObject, ICelestialBodyRend
 	public boolean addToList() {
 		return false;
 	}
+
+	@Override
+	public boolean forceStaticLoad() {
+		return false;
+	}
 }

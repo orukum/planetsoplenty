@@ -91,4 +91,9 @@ public class NetherPlanet implements IPlanet, IMapObject, ICelestialBodyRenderer
 	public ICelestialBodyRenderer getSlotRenderer() {
 		return this;
 	}
+
+	@Override
+	public boolean forceStaticLoad() {
+		return false;
+	}
 }

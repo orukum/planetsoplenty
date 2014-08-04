@@ -18,9 +18,15 @@ group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-
 archivesBaseName = "planetsoplenty"
 
 dependencies {
-	compile files('../POPMods/MicCore-Dev-Deobf-1.6.4-2.0.4.42.jar')
-    compile files('../POPMods/GC-Dev-Deobf-1.6.4-2.0.4.42.jar')
-    compile files('../POPMods/GC-Planets-Dev-Deobf-1.6.4-2.0.4.42.jar')
+	//compile files('../POPMods/MicCore-Dev-Deobf-1.6.4-2.0.4.42.jar')
+    //compile files('../POPMods/GC-Dev-Deobf-1.6.4-2.0.4.42.jar')
+    //compile files('../POPMods/GC-Planets-Dev-Deobf-1.6.4-2.0.4.42.jar')
+	//compile files('../POPMods/micdoodlecore-1.6.4-2.0.13.1063.jar')
+    //compile files('../POPMods/galacticraft-1.6.4-2.0.13.1063.jar')
+    //compile files('../POPMods/galacticraft-planets-1.6.4-2.0.13.1063.jar')
+	compile files('../POPMods/MicdoodleCore-1.6.4-2.0.14.1084.jar')
+    compile files('../POPMods/Galacticraft-1.6.4-2.0.14.1084.jar')
+    compile files('../POPMods/Galacticraft-Planets-1.6.4-2.0.14.1084.jar')
 }
 
 minecraft {

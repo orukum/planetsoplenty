@@ -26,7 +26,7 @@ import micdoodle8.mods.galacticraft.core.world.gen.GCCoreCraterSize;
 import micdoodle8.mods.galacticraft.core.world.gen.GCCoreMapGenBaseMeta;
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.GCCoreMapGenDungeon;
 import micdoodle8.mods.galacticraft.moon.GCMoonConfigManager;
-import micdoodle8.mods.galacticraft.moon.blocks.GCMoonBlocks;
+import micdoodle8.mods.galacticraft.moon.blocks.GCMoonBlock;
 import micdoodle8.mods.galacticraft.moon.world.gen.GCMoonGenCaves;
 import micdoodle8.mods.galacticraft.moon.world.gen.dungeon.GCMoonRoomBoss;
 import micdoodle8.mods.galacticraft.moon.world.gen.dungeon.GCMoonRoomChests;
@@ -831,5 +831,10 @@ public class SuperflatEastPlanet extends POPPlanet {
 	@Override
 	public double getYCoordinateToTeleport() {
 		return 4000;
+	}
+
+	@Override
+	public boolean forceStaticLoad() {
+		return true;
 	}
 }
