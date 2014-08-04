@@ -27,6 +27,8 @@ public class POPCelestialObjects {
 			eastGalaxy.suns.add(eastStarB);
 			superflatEastPlanet = new SuperflatEastPlanet(10000);
 			netherPlanet = new NetherPlanet();
+			
+			superflatEastPlanet.initSolar(1);
 
 			GalacticraftRegistry.registerGalaxy(westGalaxy);
 			GalacticraftRegistry.registerGalaxy(eastGalaxy);
