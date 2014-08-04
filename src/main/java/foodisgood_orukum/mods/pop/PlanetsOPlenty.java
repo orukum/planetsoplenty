@@ -78,7 +78,7 @@ public class PlanetsOPlenty {
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "PlanetsOPlentyEntities";
-    public static final String VERSION = "-1.0000000000000000000000000038";
+    public static final String VERSION = "-1.0000000000000000000000000051";
     public static final boolean debug = true;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
@@ -114,9 +114,10 @@ public class PlanetsOPlenty {
 
         GalacticraftMars.proxy.preInit(event);*/
     	POPItems.initItems();
+    	PlanetsOPlenty.proxy.preInit(event);
     	POPCelestialObjects.preInit(event);
-    	IGalaxy testing = POPCelestialObjects.westGalaxy;
-    	System.out.println("Hello" + testing.getRGBRingColors().x);
+    	/*IGalaxy testing = POPCelestialObjects.westGalaxy;
+    	System.out.println("Hello" + testing.getRGBRingColors().x);*/
     }
 
     @EventHandler
@@ -152,7 +153,6 @@ public class PlanetsOPlenty {
     	registerGalacticraftNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", 20000001, 150, 1, false);
 
     	POPCelestialObjects.init(event);
-    	//POPCelestialObjects.init(event);
     }
 
     @EventHandler
@@ -208,6 +208,6 @@ public class PlanetsOPlenty {
     public void registerGalacticraftNonMobEntity(Class<? extends Entity> var0, String var1, int id, int trackingDistance, int updateFreq, boolean sendVel)
     {
         EntityList.addMapping(var0, var1, id);
-        EntityRegistry.registerModEntity(var0, var1, id, /*this*//**Just to see if it works...*/GalacticraftMars.instance, trackingDistance, updateFreq, sendVel);
+        EntityRegistry.registerModEntity(var0, var1, id, PlanetsOPlenty.instance, trackingDistance, updateFreq, sendVel);
     }
 }

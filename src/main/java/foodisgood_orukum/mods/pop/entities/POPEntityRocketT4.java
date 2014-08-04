@@ -279,6 +279,11 @@ public class POPEntityRocketT4 extends GCMarsEntityRocketT2
     {
         return this.launchPhase == EnumLaunchPhase.LAUNCHED.getPhase() && this.timeSinceLaunch > 50;
     }*/
+    
+    /*@Override
+	public void onReachAtmoshpere() {
+    	//TODO: Implement this for custom listing of planets specific to player on board
+    }*/
 
     @Override
     public int getRocketTier()

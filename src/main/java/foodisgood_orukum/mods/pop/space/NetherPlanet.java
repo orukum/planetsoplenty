@@ -4,12 +4,15 @@ import foodisgood_orukum.mods.pop.PlanetsOPlenty;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldProviderHell;
+import net.minecraftforge.common.DimensionManager;
 import micdoodle8.mods.galacticraft.api.world.*;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 
 public class NetherPlanet implements IPlanet, IMapObject, ICelestialBodyRenderer {
 	@Override
 	public String getName() {
-		return "The Nether";
+		return DimensionManager.getProvider(-1).getDimensionName();
 	}
 
 	@Override
@@ -34,17 +37,50 @@ public class NetherPlanet implements IPlanet, IMapObject, ICelestialBodyRenderer
 
 	@Override
 	public Class<? extends WorldProvider> getWorldProvider() {
-		return null;
+		return NetherProviderMine.class;
+	}
+	
+	public class NetherProviderMine extends WorldProviderHell implements IGalacticraftWorldProvider {
+		@Override
+		public float getGravity() {
+			return 1;
+		}
+
+		@Override
+		public double getMeteorFrequency() {
+			return 0;
+		}
+
+		@Override
+		public double getFuelUsageMultiplier() {
+			return 1;
+		}
+
+		@Override
+		public boolean canSpaceshipTierPass(int tier) {
+			return tier>3;
+		}
+
+		@Override
+		public float getFallDamageModifier() {
+			return 1;
+		}
+
+		@Override
+		public float getSoundVolReductionAmount() {
+			return 1;
+		}
 	}
 
 	@Override
 	public int getDimensionID() {
-		return 1;
+		return -1;
 	}
 
 	@Override
 	public IGalaxy getParentGalaxy() {
 		return POPCelestialObjects.northGalaxy;
+		//return GalacticraftCore.galaxyMilkyWay;
 	}
 
 	@Override
@@ -97,3 +133,56 @@ public class NetherPlanet implements IPlanet, IMapObject, ICelestialBodyRenderer
 		return false;
 	}
 }
+
+/*
+public class GCCorePlanetOverworld implements IPlanet
+{
+
+	@Override
+	public boolean isReachable()
+	{
+		return true;
+	}
+
+	@Override
+	public IMapObject getMapObject()
+	{
+		return this.overworld;
+	}
+
+	@Override
+	public IGalaxy getParentGalaxy()
+	{
+		return GalacticraftCore.galaxyMilkyWay;
+	}
+
+	@Override
+	public boolean addToList()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean autoRegister()
+	{
+		return false;
+	}
+
+	@Override
+	public Class<? extends WorldProvider> getWorldProvider()
+	{
+		return null;
+	}
+
+	@Override
+	public int getDimensionID()
+	{
+		return 0;
+	}
+
+	@Override
+	public boolean forceStaticLoad()
+	{
+		return false;
+	}
+}*/

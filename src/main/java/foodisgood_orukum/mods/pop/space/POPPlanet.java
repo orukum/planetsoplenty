@@ -126,7 +126,7 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
     @Override
     public String getSaveFolder()
     {
-        return "POP_DIM_" + getName();
+        return "POP_DIM_" + dimensionId;
     }
 
 	@Override

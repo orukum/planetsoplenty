@@ -49,7 +49,7 @@ public class POPCelestialObjects {
 	}
 	
 	public static void init(FMLInitializationEvent event) {
-		if (PlanetsOPlenty.debug) {
+		if (PlanetsOPlenty.debug && !superflatEastPlanet.autoRegister()) {
 			DimensionManager.registerProviderType(superflatEastPlanet.getDimensionID(), superflatEastPlanet.getWorldProvider(), false);
 			DimensionManager.registerDimension(superflatEastPlanet.getDimensionID(), superflatEastPlanet.getDimensionID());
 		}
