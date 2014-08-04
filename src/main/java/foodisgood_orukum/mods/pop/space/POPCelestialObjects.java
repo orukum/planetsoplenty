@@ -20,11 +20,16 @@ public class POPCelestialObjects {
 			westGalaxy = new WestGalaxy();
 			northGalaxy = new NetherGalaxy();
 			westStar = new WestStar();
-			westGalaxy.suns.add(westStar);
+			westGalaxy.suns = new POPStar[1];
+			westGalaxy.suns[0] = westStar;
+			//westGalaxy.suns.add(westStar);
 			eastStarA = new EastStarA();
-			eastGalaxy.suns.add(eastStarA);
+			eastGalaxy.suns = new POPStar[2];
+			//eastGalaxy.suns.add(eastStarA);
+			eastGalaxy.suns[0] = eastStarA;
 			eastStarB = new EastStarB();
-			eastGalaxy.suns.add(eastStarB);
+			eastGalaxy.suns[1] = eastStarB;
+			//eastGalaxy.suns.add(eastStarB);
 			superflatEastPlanet = new SuperflatEastPlanet(10000);
 			netherPlanet = new NetherPlanet();
 			

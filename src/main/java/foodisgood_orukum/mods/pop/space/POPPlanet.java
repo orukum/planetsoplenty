@@ -5,7 +5,8 @@ import net.minecraft.world.WorldProvider;
 import micdoodle8.mods.galacticraft.api.world.*;
 
 /**
- * Be sure to call initSolar whenever the solar system this is in has been set up completely, in particular when all stars have been added to it. Also be sure to register any moons here so they can be rendered in the sky
+ * Be sure to call initSolar whenever the solar system this is in has been set up completely, in particular when all stars have been added to it. Also be sure to register any moons here so they can be rendered in the sky.
+ * Don't forget to fill moons!
  * @author foodisgoodyesiam
  *
  */
@@ -13,7 +14,7 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
 	public double solarMultiplier;
 	double specialMultiplier;
 	
-	public IMoon[] moons;
+	public IMoon[] moons = {};
 	
 	public POPPlanet() {
 		solarMultiplier = 1;
@@ -36,12 +37,11 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
 	public void initSolar(double specialFactor) {
 		if (getParentGalaxy() instanceof POPGalaxy) {
 			POPGalaxy galaxy = (POPGalaxy) getParentGalaxy();
-			POPStar suns[] = galaxy.getSuns();
-			if (suns.length == 0)
+			if (galaxy.suns.length == 0)
 				solarMultiplier = .01;
 			else {
 				solarMultiplier = 0;
-				for (POPStar star : suns)
+				for (POPStar star : galaxy.suns)
 					solarMultiplier+=(star.getBrightness());
 				solarMultiplier*=(this.getDistanceFromCenter()*this.getDistanceFromCenter());
 			}

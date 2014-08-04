@@ -9,9 +9,13 @@ import micdoodle8.mods.galacticraft.api.world.*;
  *
  */
 public abstract class POPGalaxy implements IGalaxy {
-	public Vector<POPStar> suns;
+	public POPStar[] suns;
 	
 	public POPGalaxy() {
+		//suns = new Vector<POPStar>();
+	}
+	
+	/*public POPGalaxy() {
 		suns = new Vector<POPStar>();
 	}
 	
@@ -22,6 +26,10 @@ public abstract class POPGalaxy implements IGalaxy {
 	}
 	
 	public POPStar[] getSuns() {
-		return (POPStar[]) suns.toArray();
+		return suns.toArray(empty);
+	}*/
+	
+	public POPGalaxy(POPStar[] sunsArg) {
+		suns = sunsArg;
 	}
 }
