@@ -59,6 +59,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.items.*;
+import foodisgood_orukum.mods.pop.space.POPCelestialObjects;
 import foodisgood_orukum.mods.pop.entities.*;
 
 /**
@@ -116,6 +117,7 @@ public class PlanetsOPlenty {
     public void load(FMLInitializationEvent event)
     {
     	PlanetsOPlenty.planetsOPlentyTab = new POPCreativeTab(CreativeTabs.getNextID(), PlanetsOPlenty.MODID, POPItems.spaceshipT4.itemID, 5);
+        PlanetsOPlenty.proxy.init(event);
         /*SchematicRegistry.registerSchematicRecipe(new GCMarsSchematicRocketT2());
         SchematicRegistry.registerSchematicRecipe(new GCMarsSchematicCargoRocket());
 
@@ -142,6 +144,8 @@ public class PlanetsOPlenty {
 	    	GameRegistry.addShapelessRecipe(new ItemStack(Item.diamond, 64), new ItemStack(Block.dirt));//Temp
     	}
     	registerGalacticraftNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", 20000001, 150, 1, false);
+    	
+    	POPCelestialObjects.init(event);
     }
 
     @EventHandler
