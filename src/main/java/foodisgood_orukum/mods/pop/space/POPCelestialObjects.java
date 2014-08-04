@@ -30,10 +30,12 @@ public class POPCelestialObjects {
 
 			GalacticraftRegistry.registerGalaxy(westGalaxy);
 			GalacticraftRegistry.registerGalaxy(eastGalaxy);
+			GalacticraftRegistry.registerGalaxy(northGalaxy);
 			GalacticraftRegistry.registerCelestialBody(westStar);
 			GalacticraftRegistry.registerCelestialBody(eastStarA);
 			GalacticraftRegistry.registerCelestialBody(eastStarB);
 			GalacticraftRegistry.registerCelestialBody(superflatEastPlanet);
+			GalacticraftRegistry.registerCelestialBody(netherPlanet);
 		}
 	}
 }
