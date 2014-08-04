@@ -54,45 +54,41 @@ public class NetherPlanet implements IPlanet, IMapObject, ICelestialBodyRenderer
 
 	@Override
 	public String getPlanetName() {
-		// TODO Auto-generated method stub
-		return null;
+		return getName();
 	}
 
 	@Override
-	public void renderSlot(int index, int x, int y, float slotHeight,
-			Tessellator tessellator) {
-		// TODO Auto-generated method stub
-		
+	public void renderSlot(int index, int x, int y, float slotHeight, Tessellator tessellator) {
+        tessellator.startDrawingQuads();
+        tessellator.addVertexWithUV(x + 12 - slotHeight, y - 11 + slotHeight, -90.0D, 0.0, 1.0);
+        tessellator.addVertexWithUV(x + 12, y - 11 + slotHeight, -90.0D, 1.0, 1.0);
+        tessellator.addVertexWithUV(x + 12, y - 11, -90.0D, 1.0, 0.0);
+        tessellator.addVertexWithUV(x + 12 - slotHeight, y - 11, -90.0D, 0.0, 0.0);
+        tessellator.draw();
 	}
 
 	@Override
 	public float getPlanetSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 8;
 	}
 
 	@Override
 	public float getDistanceFromCenter() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public float getPhaseShift() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public float getStretchValue() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public ICelestialBodyRenderer getSlotRenderer() {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
-
 }

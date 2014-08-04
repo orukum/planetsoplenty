@@ -20,6 +20,6 @@ public class NetherGalaxy extends POPGalaxy {
 
 	@Override
 	public Vector3 getRGBRingColors() {
-		return new Vector3(1, 0, 0);
+		return new Vector3(1D, 0D, 0D);
 	}
 }
