@@ -1,6 +1,7 @@
 package foodisgood_orukum.mods.pop.space;
 
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
+import micdoodle8.mods.galacticraft.moon.dimension.GCMoonTeleportType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import foodisgood_orukum.mods.pop.PlanetsOPlenty;
 
@@ -43,6 +44,7 @@ public class POPCelestialObjects {
 			GalacticraftRegistry.registerCelestialBody(eastStarB);
 			GalacticraftRegistry.registerCelestialBody(superflatEastPlanet);
 			GalacticraftRegistry.registerCelestialBody(netherPlanet);
+			GalacticraftRegistry.registerTeleportType(SuperflatEastPlanet.class, new GCMoonTeleportType());
 		}
 	}
 }

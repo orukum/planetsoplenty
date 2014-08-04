@@ -28,6 +28,7 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
 	protected POPPlanet(double solarSpecialFactor) {
 		solarMultiplier = 1;
 		specialMultiplier = 1;
+		GalacticraftRegistry.
 	}
 	
 	/**
