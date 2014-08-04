@@ -52,12 +52,13 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 
 public class SuperflatEastPlanet extends POPPlanet {
-	int dimensionID;
-	
 	public SuperflatEastPlanet(int dimension) {
 		super();
-		dimensionID = dimension;
+		dimensionId = dimension;
 	}
+	
+	public SuperflatEastPlanet() {}
+	
 	@Override
 	public String getName() {
 		return "Superflat East Test Planet";
@@ -80,7 +81,7 @@ public class SuperflatEastPlanet extends POPPlanet {
 
 	@Override
 	public int getDimensionID() {
-		return dimensionID;
+		return dimensionId;
 	}
 
 	@Override
@@ -826,4 +827,9 @@ public class SuperflatEastPlanet extends POPPlanet {
             }*/
         }
     }
+
+	@Override
+	public double getYCoordinateToTeleport() {
+		return 4000;
+	}
 }

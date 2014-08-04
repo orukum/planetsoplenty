@@ -34,6 +34,7 @@ import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntitySlimelingEgg;
 import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityTerraformer;
 import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityTreasureChest;
 import micdoodle8.mods.galacticraft.mars.GalacticraftMars;
+import micdoodle8.mods.galacticraft.moon.dimension.GCMoonTeleportType;
 import micdoodle8.mods.galacticraft.moon.items.GCMoonItems;
 import net.minecraft.block.*;
 import net.minecraft.creativetab.CreativeTabs;
@@ -60,6 +61,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.items.*;
 import foodisgood_orukum.mods.pop.space.POPCelestialObjects;
+import foodisgood_orukum.mods.pop.space.SuperflatEastPlanet;
 import foodisgood_orukum.mods.pop.entities.*;
 
 /**
@@ -75,7 +77,7 @@ public class PlanetsOPlenty {
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "PlanetsOPlentyEntities";
-    public static final String VERSION = "-1.0000000000000000000000000028";
+    public static final String VERSION = "-1.0000000000000000000000000034";
     public static final boolean debug = true;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
@@ -111,6 +113,7 @@ public class PlanetsOPlenty {
 
         GalacticraftMars.proxy.preInit(event);*/
     	POPItems.initItems();
+    	POPCelestialObjects.preInit(event);
     }
 
     @EventHandler
@@ -144,8 +147,9 @@ public class PlanetsOPlenty {
 	    	GameRegistry.addShapelessRecipe(new ItemStack(Item.diamond, 64), new ItemStack(Block.dirt));//Temp
     	}
     	registerGalacticraftNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", 20000001, 150, 1, false);
-    	
+
     	POPCelestialObjects.init(event);
+    	//POPCelestialObjects.init(event);
     }
 
     @EventHandler

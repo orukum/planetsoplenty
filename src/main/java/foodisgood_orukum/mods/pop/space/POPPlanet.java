@@ -10,7 +10,7 @@ import micdoodle8.mods.galacticraft.api.world.*;
  * @author foodisgoodyesiam
  *
  */
-public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapObject, ICelestialBodyRenderer, IGalacticraftWorldProvider, ISolarLevel {
+public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapObject, ICelestialBodyRenderer, IGalacticraftWorldProvider, ISolarLevel, IExitHeight {
 	public double solarMultiplier;
 	double specialMultiplier;
 	

@@ -2,6 +2,7 @@ package foodisgood_orukum.mods.pop.space;
 
 import java.util.Vector;
 
+import micdoodle8.mods.galacticraft.api.vector.Vector.Vector3;
 import micdoodle8.mods.galacticraft.api.world.*;
 /**
  * Don't forget to add suns in this galaxy to the member suns[]. so they can be rendered properly in the sky
@@ -32,4 +33,10 @@ public abstract class POPGalaxy implements IGalaxy {
 	public POPGalaxy(POPStar[] sunsArg) {
 		suns = sunsArg;
 	}
+	
+    @Override
+    public Vector3 getRGBRingColors()
+    {
+        return new Vector3(0D / 256.0D, 0D / 256.0D, 256.0D / 256.0D);
+    }
 }
