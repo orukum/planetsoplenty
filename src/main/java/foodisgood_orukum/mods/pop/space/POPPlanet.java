@@ -129,6 +129,11 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
 	public ICelestialBodyRenderer getSlotRenderer() {
 		return this;
 	}
+	
+	@Override
+	public String getDimensionName() {
+		return getName();
+	}
 
     @Override
     public String getSaveFolder()

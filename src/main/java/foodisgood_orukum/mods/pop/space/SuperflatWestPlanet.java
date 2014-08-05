@@ -54,17 +54,17 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 
-public class SuperflatEastPlanet extends POPPlanet {
-	public SuperflatEastPlanet(int dimension) {
+public class SuperflatWestPlanet extends POPPlanet {
+	public SuperflatWestPlanet(int dimension) {
 		super();
 		dimensionId = dimension;
 	}
 	
-	public SuperflatEastPlanet() {}
+	public SuperflatWestPlanet() {}
 	
 	@Override
 	public String getName() {
-		return "Superflat East Test Planet";
+		return "Superflat West Test Planet";
 	}
 
 	@Override
@@ -89,18 +89,18 @@ public class SuperflatEastPlanet extends POPPlanet {
 
 	@Override
 	public IGalaxy getParentGalaxy() {
-		return POPCelestialObjects.eastGalaxy;
+		return POPCelestialObjects.westGalaxy;
 		//return GalacticraftCore.galaxyMilkyWay;
 	}
 
 	@Override
 	public float getPlanetSize() {
-		return 2F;
+		return .373F;
 	}
 
 	@Override
 	public float getDistanceFromCenter() {
-		return 1.3F;
+		return .27F;
 	}
 
 	@Override
@@ -115,25 +115,22 @@ public class SuperflatEastPlanet extends POPPlanet {
 
 	@Override
 	public ResourceLocation getPlanetSprite() {
-		return new ResourceLocation(PlanetsOPlenty.TEXTURE_DOMAIN, "textures/planets/eastsuperflat.png");
+		return new ResourceLocation(PlanetsOPlenty.TEXTURE_DOMAIN, "textures/planets/westsuperflat.png");
 	}
 
 	@Override
 	public String getPlanetName() {
-		return "Superflat East Test Planet";
+		return getName();
 	}
 	
 	@Override
 	public float getGravity() {
-		float ret = .0001F + .3F*((getWorldTime()/96)%10);
-		if (!isDaytime())
-			ret*=2;
-		return POPPlanet.getGCGravityFactor(ret);
+		return POPPlanet.getGCGravityFactor(.0008F);
 	}
 	
 	@Override
 	public double getMeteorFrequency() {
-		return 50D;
+		return 1D;
 	}
 	
 	@Override
@@ -143,12 +140,7 @@ public class SuperflatEastPlanet extends POPPlanet {
 	
 	@Override
 	public float getSoundVolReductionAmount() {
-		return .875F;
-	}
-	
-	@Override
-	public String getDimensionName() {
-		return getName();
+		return 9.3F;
 	}
 	
     /*@Override
@@ -259,13 +251,13 @@ public class SuperflatEastPlanet extends POPPlanet {
     @Override
     public void registerWorldChunkManager()
     {
-        this.worldChunkMgr = new POPSuperflatEastChunkManager();
+        this.worldChunkMgr = new POPSuperflatWestChunkManager();
     }
 
     @Override
     public IChunkProvider createChunkGenerator()
     {
-        return new POPSuperflatEastChunkProvider(this.worldObj, this.worldObj.getSeed(), true);
+        return new POPSuperflatWestChunkProvider(this.worldObj, this.worldObj.getSeed(), true);
     }
 
     @Override
@@ -289,13 +281,14 @@ public class SuperflatEastPlanet extends POPPlanet {
     @Override
     public boolean canSnowAt(int x, int y, int z)
     {
-        return (x/32)%3==1 && (y/20)%2==1 && (z/32)%7==2;
+        return y>170 || x<-40;
     }
 
     @Override
     public boolean canBlockFreeze(int x, int y, int z, boolean byWater)
     {
-        return (x/32 + y/32 + 1)%7<=3 && z%2==1;
+    	int id = worldObj.getBlockId(x, y, z);
+        return id==Block.waterMoving.blockID || id==Block.waterStill.blockID || (byWater && (id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID));
     }
 
     @Override
@@ -304,7 +297,7 @@ public class SuperflatEastPlanet extends POPPlanet {
         return 1234;
     }
     
-    public class POPSuperflatEastChunkManager extends WorldChunkManager
+    public class POPSuperflatWestChunkManager extends WorldChunkManager
     {
 
         private double randFromPoint(int x, int z)
@@ -317,26 +310,7 @@ public class SuperflatEastPlanet extends POPPlanet {
         @Override
         public BiomeGenBase getBiomeGenAt(int par1, int par2)
         {
-        	switch (((int)randFromPoint(par1, par2))%10) {
-        	case 0:
-        		return BiomeGenBase.desertHills;
-        	case 1:
-        		return BiomeGenBase.forest;
-        	case 2:	case 3:
-        		return BiomeGenBase.iceMountains;
-        	case 4:
-        		return BiomeGenBase.mushroomIsland;
-        	case 5:
-        		return BiomeGenBase.river;
-        	case 6:
-        		return BiomeGenBase.desert;
-        	case 7:
-        		return BiomeGenBase.plains;
-        	case 8:
-        		return BiomeGenBase.beach;
-        	case 9: default:
-        		return BiomeGenBase.extremeHillsEdge;
-        	}
+        	return BiomeGenBase.desert;
         }
 		
         @Override
@@ -362,9 +336,9 @@ public class SuperflatEastPlanet extends POPPlanet {
             	for (int y2=y; y2<(y+length); y2++)
             			par1ArrayOfFload*/
             if (isDaytime())
-            	Arrays.fill(par1ArrayOfFloat, 0, width * length, 800);
+            	Arrays.fill(par1ArrayOfFloat, 0, width * length, 100);
             else
-            	Arrays.fill(par1ArrayOfFloat, 0, width * length, 2);
+            	Arrays.fill(par1ArrayOfFloat, 0, width * length, 20);
             return par1ArrayOfFloat;
         }
 
@@ -414,9 +388,9 @@ public class SuperflatEastPlanet extends POPPlanet {
         }
     }
     
-    public class POPSuperflatEastChunkProvider extends ChunkProviderGenerate
+    public class POPSuperflatWestChunkProvider extends ChunkProviderGenerate
     {
-        final short topBlockIDHigh = (short) Block.grass.blockID;
+        /*final short topBlockIDHigh = (short) Block.grass.blockID;
         final byte topBlockMetaHigh = 0;
         final short fillBlockIDHigh = (short) Block.anvil.blockID;
         final byte fillBlockMetaHigh = 0;
@@ -427,7 +401,9 @@ public class SuperflatEastPlanet extends POPPlanet {
         final short fillBlockIDLow = (short) Block.stone.blockID;
         final byte fillBlockMetaLow = 0;
         final short lowerBlockIDLow = (short) Block.blockEmerald.blockID;
-        final byte lowerBlockMetaLow = 3;
+        final byte lowerBlockMetaLow = 3;*/
+    	final short blockID = (short) Block.sandStone.blockID;
+    	final byte blockMeta = 0;
 
         private final Random rand;
 
@@ -443,13 +419,13 @@ public class SuperflatEastPlanet extends POPPlanet {
         private final GCCoreMapGenBaseMeta caveGenerator = new GCMoonGenCaves();
 
         // DO NOT CHANGE
-        private static final int MID_HEIGHT = 62;
+        private static final int MID_HEIGHT = 120;
         private static final int CHUNK_SIZE_X = 16;
         private static final int CHUNK_SIZE_Y = 128;
         private static final int CHUNK_SIZE_Z = 16;
-        private static final int CRATER_PROB = 892;
+        private static final int CRATER_PROB = 100;
 
-        public POPSuperflatEastChunkProvider(World par1World, long par2, boolean par4)
+        public POPSuperflatWestChunkProvider(World par1World, long par2, boolean par4)
         {
             super(par1World, par2, par4);
             this.worldObj = par1World;
@@ -466,200 +442,65 @@ public class SuperflatEastPlanet extends POPPlanet {
             this.noiseGen2.frequency = 0.015;
             this.noiseGen3.frequency = 0.01;
             this.noiseGen4.frequency = 0.02;
-            if (chunkZ>0) {
-            	if (((((chunkX/2)+(chunkZ/2))%2==1) ^ ((chunkX/2)>0) ^ ((chunkZ/2)>0))) {
-		            for (int x = 0; x < CHUNK_SIZE_X; x++) {
-		                for (int z = 0; z < CHUNK_SIZE_Z; z++) {
-		                    final double d = this.noiseGen1.getNoise(x + chunkX * 16, z + chunkZ * 16) * 8;
-		                    final double d2 = this.noiseGen2.getNoise(x + chunkX * 16, z + chunkZ * 16) * 24;
-		                    double d3 = this.noiseGen3.getNoise(x + chunkX * 16, z + chunkZ * 16) - 0.1;
-		                    d3 *= 4;
-		
-		                    double yDev = 0;
-		
-		                    if (d3 < 0.0D)
-		                    {
-		                        yDev = d;
-		                    }
-		                    else if (d3 > 1.0D)
-		                    {
-		                        yDev = d2;
-		                    }
-		                    else
-		                    {
-		                        yDev = d + (d2 - d) * d3;
-		                    }
-		                    if (((((chunkX/2)+(chunkZ/2)+2)%7==4) && (Math.abs(this.randFromPoint(chunkX, chunkZ))%178)<4)) {
-			                    for (int y = 0; y < 40; y++)
-			                    {
-		                            idArray[this.getIndex(x, y, z)] = this.lowerBlockIDHigh;
-		                            metaArray[this.getIndex(x, y, z)] = this.lowerBlockMetaHigh;
-			                    }
-			                    for (int y = 40; y < CHUNK_SIZE_Y; y++)
-			                    {
-			                        if (y < MID_HEIGHT + yDev-12)
-			                        {
-				                    	short id = (short) (Math.abs(rand.nextInt())%175);
-			                    		switch (id) {
-			                    		case 55: case 76: case 75: case 93: case 94: case 149: case 150: case 151: case 141: case 142: case 152: case 132: case 131: case 157: case 148: case 147: case 146: case 77: case 69: case 28:
-			                    			id = 0;
-			                    		default:
-			                    			if (Block.blocksList[id]==null)
-			                    				id = 0;
-			                    		}
-			                            idArray[this.getIndex(x, y, z)] = id;
-			                            metaArray[this.getIndex(x, y, z)] = 0;
-			                        } else
-			                        	break;
-			                    }
-		                    } else {
-			                    for (int y = 0; y < CHUNK_SIZE_Y; y++)
-			                    {
-			                        if (y < MID_HEIGHT + yDev)
-			                        {
-			                            idArray[this.getIndex(x, y, z)] = this.lowerBlockIDHigh;
-			                            metaArray[this.getIndex(x, y, z)] = this.lowerBlockMetaHigh;
-			                        } else
-			                        	break;
-			                    }
-		                    }
-		                }
-		            }
-            	} else {
-            		for (int x=0; x<CHUNK_SIZE_X; x++)
-            			for (int z=0; z<CHUNK_SIZE_Z; z++)
-            				for (int y=0; y<MID_HEIGHT; y++)
-            					idArray[this.getIndex(x, y, z)] = (short) Block.waterStill.blockID;
-            	}
-            } else {
-            	if (((((chunkX/2)+(chunkZ/2))%2==1) ^ ((chunkX/2)>0) ^ ((chunkZ/2)>0))) {
-		            for (int x = 0; x < CHUNK_SIZE_X; x++)
-		            {
-		                for (int z = 0; z < CHUNK_SIZE_Z; z++)
-		                {		
-		                    for (int y = 0; y < MID_HEIGHT; y++)
-		                    {
-	                            idArray[this.getIndex(x, y, z)] = this.lowerBlockIDLow;
-	                            metaArray[this.getIndex(x, y, z)] = this.lowerBlockMetaLow;
-		                    }
-		                }
-		            }
-            	} else {
-            		for (int x=0; x<CHUNK_SIZE_X; x++)
-            			for (int z=0; z<CHUNK_SIZE_Z; z++) {
-            				short height;
-            				if (Math.abs(this.randFromPoint(chunkX/2, chunkZ/2))%21==12)
-            					height = CHUNK_SIZE_Y-12;
-            				else
-            					height = MID_HEIGHT-3;
-            				for (int y=0; y<height; y++)
-            					idArray[this.getIndex(x, y, z)] = (short) Block.waterStill.blockID;
-            			}
-            	}
-            }
-        }
+            for (int x = 0; x < CHUNK_SIZE_X; x++) {
+                for (int z = 0; z < CHUNK_SIZE_Z; z++) {
+                    final double d = this.noiseGen1.getNoise(x + chunkX * 16, z + chunkZ * 16) * 8;
+                    final double d2 = this.noiseGen2.getNoise(x + chunkX * 16, z + chunkZ * 16) * 24;
+                    double d3 = this.noiseGen3.getNoise(x + chunkX * 16, z + chunkZ * 16) - 0.1;
+                    d3 *= 4;
 
-        public void replaceBlocksForBiome(int par1, int par2, short[] arrayOfIDs, byte[] arrayOfMeta) {
-		    int chunkX = par1, chunkZ = par2;
-	    	if (((((chunkX/2)+(chunkZ/2))%2==1) ^ ((chunkX/2)>0) ^ ((chunkZ/2)>0))/* && !((((chunkX/2)+(chunkZ/2)+2)%7==4) && (Math.abs(this.randFromPoint(chunkX, chunkZ))%25)<4)*/) {
-                short var14, var15, lowerBlockID;
-                byte var15m, var14m, lowerBlockMeta;
-	    		if (chunkZ>0) {
-	    			var14 = this.topBlockIDHigh;
-	    			var14m = this.topBlockMetaHigh;
-	    			var15 = this.fillBlockIDHigh;
-	    			var15m = this.fillBlockMetaHigh;
-	    			lowerBlockID = this.lowerBlockIDHigh;
-	    			lowerBlockMeta = this.lowerBlockMetaHigh;
-	    		} else {
-	    			var14 = this.topBlockIDLow;
-	    			var14m = this.topBlockMetaLow;
-	    			var15 = this.fillBlockIDLow;
-	    			var15m = this.fillBlockMetaLow;
-	    			lowerBlockID = this.lowerBlockIDLow;
-	    			lowerBlockMeta = this.lowerBlockMetaLow;
-	    		}
-	    		final int var5 = 20;
-	            for (int var8 = 0; var8 < 16; ++var8)
-	            {
-	                for (int var9 = 0; var9 < 16; ++var9)
-	                {
-	                    final int var12 = (int) (this.noiseGen4.getNoise(var8 + par1 * 16, var9 * par2 * 16) / 3.0D + 3.0D + this.rand.nextDouble() * 0.25D);
-	                    int var13 = -1;
+                    double yDev = 0;
 
-	                    for (int var16 = 127; var16 >= 0; --var16)
+                    if (d3 < 0.0D)
+                    {
+                        yDev = d;
+                    }
+                    else if (d3 > 1.0D)
+                    {
+                        yDev = d2;
+                    }
+                    else
+                    {
+                        yDev = d + (d2 - d) * d3;
+                    }
+                    yDev*=MID_HEIGHT*.59;
+                    if (((((chunkX/2)+(chunkZ/2)+2)%7==4) && (Math.abs(this.randFromPoint(chunkX, chunkZ))%178)<4)) {
+	                    for (int y = 0; y < 33; y++)
 	                    {
-	                        final int index = this.getIndex(var8, var16, var9);
-	                        arrayOfMeta[index] = 0;
-
-	                        if (var16 <= 0 + this.rand.nextInt(5))
-	                        {
-	                            arrayOfIDs[index] = (short) Block.bedrock.blockID;
-	                        }
-	                        else
-	                        {
-	                            final int var18 = arrayOfIDs[index];
-	                            if (var18 == 0)
-	                            {
-	                                var13 = -1;
-	                            }
-	                            else if (var18 == lowerBlockID)
-	                            {
-	                                arrayOfMeta[index] = lowerBlockMeta;
-
-	                                if (var13 == -1)
-	                                {
-	                                    if (var12 <= 0)
-	                                    {
-	                                        var14 = 0;
-	                                        var14m = 0;
-	                                        var15 = lowerBlockID;
-	                                        var15m = lowerBlockMeta;
-	                                    }
-	                                    else if (var16 >= var5 - -16 && var16 <= var5 + 1)
-	                                    {
-	                        	    		if (chunkZ>0) {
-	                        	    			var14 = this.topBlockIDHigh;
-	                        	    			var14m = this.topBlockMetaHigh;
-	                        	    			var14 = this.fillBlockIDHigh;
-	                        	    			var14m = this.fillBlockMetaHigh;
-	                        	    		} else {
-	                        	    			var14 = this.topBlockIDLow;
-	                        	    			var14m = this.topBlockMetaLow;
-	                        	    			var14 = this.fillBlockIDLow;
-	                        	    			var14m = this.fillBlockMetaLow;
-	                        	    		}
-	                                        /*var14 = this.topBlockID;
-	                                        var14m = this.topBlockMeta;
-	                                        var14 = this.fillBlockID;
-	                                        var14m = this.fillBlockMeta;*/
-	                                    }
-
-	                                    var13 = var12;
-
-	                                    if (var16 >= var5 - 1)
-	                                    {
-	                                        arrayOfIDs[index] = var14;
-	                                        arrayOfMeta[index] = var14m;
-	                                    }
-	                                    else if (var16 < var5 - 1 && var16 >= var5 - 2)
-	                                    {
-	                                        arrayOfIDs[index] = var15;
-	                                        arrayOfMeta[index] = var15m;
-	                                    }
-	                                }
-	                                else if (var13 > 0)
-	                                {
-	                                    --var13;
-	                                    arrayOfIDs[index] = var15;
-	                                    arrayOfMeta[index] = var15m;
-	                                }
-	                            }
-	                        }
+                            idArray[this.getIndex(x, y, z)] = this.blockID;
+                            metaArray[this.getIndex(x, y, z)] = this.blockMeta;
 	                    }
-	                }
-	            }
-	    	}
+	                    for (int y = 0; y < CHUNK_SIZE_Y; y++)
+	                    {
+	                        if (y < MID_HEIGHT + yDev-12 && y<256)
+	                        {
+		                    	short id;
+	                    		id = (short) (Math.abs(rand.nextInt())%175);
+	                    		switch (id) {
+	                    		case 55: case 76: case 75: case 93: case 94: case 149: case 150: case 151: case 141: case 142: case 152: case 132: case 131: case 157: case 148: case 147: case 146: case 77: case 69: case 28:
+	                    			id = 0;
+	                    		default:
+	                    			if (Block.blocksList[id]==null)
+	                    				id = 0;
+	                    		}
+	                            idArray[this.getIndex(x, y, z)] = id;
+	                            metaArray[this.getIndex(x, y, z)] = 0;
+	                        } else
+	                        	break;
+	                    }
+                    } else {
+	                    for (int y = 0; y < CHUNK_SIZE_Y; y++)
+	                    {
+	                        if (y < MID_HEIGHT + yDev && y<256)
+	                        {
+	                            idArray[this.getIndex(x, y, z)] = this.blockID;
+	                            metaArray[this.getIndex(x, y, z)] = this.blockMeta;
+	                        } else
+	                        	break;
+	                    }
+                    }
+                }
+            }
         }
 
         @Override
@@ -671,13 +512,13 @@ public class SuperflatEastPlanet extends POPPlanet {
             Arrays.fill(ids, (short)0);
             Arrays.fill(meta, (byte)0);
             this.generateTerrain(par1, par2, ids, meta);
-            this.replaceBlocksForBiome(par1, par2, ids, meta);
+            //this.replaceBlocksForBiome(par1, par2, ids, meta);
             this.createCraters(par1, par2, ids, meta);
             this.caveGenerator.generate(this, this.worldObj, par1, par2, ids, meta);
-            if (Math.abs(par1)<6 && Math.abs(par2)<6)
+            if (Math.abs(par1+par2)<5)
             	for (int x=0; x<CHUNK_SIZE_X; x++)
                 	for (int z=0; z<CHUNK_SIZE_Z; z++)
-                		ids[this.getIndex(x, 150, z)] = 20;
+                		ids[this.getIndex(x, 1, z)] = (short) Block.bedrock.blockID;
             final Chunk var4 = new Chunk(this.worldObj, ids, meta, par1, par2);
 
             // if (!var4.isTerrainPopulated &&
@@ -851,7 +692,7 @@ public class SuperflatEastPlanet extends POPPlanet {
 
 	@Override
 	public double getYCoordinateToTeleport() {
-		return 4000;
+		return 2000;
 	}
 
 	@Override
