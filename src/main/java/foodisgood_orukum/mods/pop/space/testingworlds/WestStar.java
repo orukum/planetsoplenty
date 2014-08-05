@@ -1,5 +1,6 @@
-package foodisgood_orukum.mods.pop.space;
+package foodisgood_orukum.mods.pop.space.testingworlds;
 
+import foodisgood_orukum.mods.pop.space.*;
 import foodisgood_orukum.mods.pop.PlanetsOPlenty;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +15,7 @@ public class WestStar extends POPStar {
 
 	@Override
 	public IGalaxy getParentGalaxy() {
-		return POPCelestialObjects.westGalaxy;
+		return POPCelestials.westGalaxy;
 	}
 
 	@Override

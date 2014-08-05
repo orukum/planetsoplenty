@@ -1,5 +1,6 @@
-package foodisgood_orukum.mods.pop.space;
+package foodisgood_orukum.mods.pop.space.testingworlds;
 
+import foodisgood_orukum.mods.pop.space.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 

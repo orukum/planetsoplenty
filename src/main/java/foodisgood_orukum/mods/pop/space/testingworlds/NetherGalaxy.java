@@ -1,5 +1,6 @@
-package foodisgood_orukum.mods.pop.space;
+package foodisgood_orukum.mods.pop.space.testingworlds;
 
+import foodisgood_orukum.mods.pop.space.*;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 
 public class NetherGalaxy extends POPGalaxy {

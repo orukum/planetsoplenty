@@ -1,5 +1,6 @@
 package foodisgood_orukum.mods.pop.space;
 
+import foodisgood_orukum.mods.pop.POPConfigManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.WorldProvider;
 import micdoodle8.mods.galacticraft.api.world.*;
@@ -27,6 +28,48 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
 		solarMultiplier = 1;
 		specialMultiplier = 1;
 	}
+	
+	/**
+	 * Provides a pseudorandom number given both a set of coordinates and a seed, useful for terrain generation.
+	 * @param x the x coordinate
+	 * @param z the z coordinate
+	 * @param seed the seed
+	 * @return a pseudorandom number
+	 */
+    public static double randFromPoint(int x, int z, long seed) {
+        long n;
+        n = x + z * 57;
+        n = n << 13 ^ n;
+        n^=seed;
+        return 1.0 - (n * (n * n * 15731 + 789221) + 1376312589 & 0x7fffffff) / 1073741824.0;
+    }
+	
+	/**
+	 * Provides a pseudorandom number using only a set of coordinates, useful for terrain generation.
+	 * @param x the x coordinate
+	 * @param z the z coordinate
+	 * @return a pseudorandom number
+	 */
+    public static double randFromPoint(int x, int z) {
+        int n;
+        n = x + z * 57;
+        n = n << 13 ^ n;
+        return 1.0 - (n * (n * n * 15731 + 789221) + 1376312589 & 0x7fffffff) / 1073741824.0;
+    }
+	
+	/**
+	 * Provides a pseudorandom number using both a set of coordinates and the current world's seed, useful for terrain generation.
+	 * @param x the x coordinate
+	 * @param z the z coordinate
+	 * @return a pseudorandom number
+	 */
+    public double randFromPointSeed(int x, int z) {
+        long n;
+        n = x + z * 57;
+        n = n << 13 ^ n;
+        n^=this.worldObj.getSeed();
+        return 1.0 - (n * (n * n * 15731 + 789221) + 1376312589 & 0x7fffffff) / 1073741824.0;
+    }
 	
 	/**
 	 * Multiplies the solar multiplier for this planet by a special provided factor
@@ -84,12 +127,26 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
 	}
 	
 	@Override
+	public boolean canRespawnHere() {
+		return !POPConfigManager.forceOverworldRespawn;
+	}
+
+	@Override
+	public int getDimensionID() {
+		return dimensionId;
+	}
+	
+	@Override
 	public double getMovementFactor() {
 		return getPlanetSize()==0 ? 1 : 1/getPlanetSize();
 	}
 	
+	/**
+	 * Returns solar energy multiplier. This should only be called after initSolar() has also been called.
+	 * Final for efficiency. If wanting to override for a planet, override initSolar() instead.
+	 */
 	@Override
-	public double getSolarEnergyMultiplier() {
+	public final double getSolarEnergyMultiplier() {
 		return solarMultiplier;
 	}
 	
@@ -100,7 +157,7 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
 	
 	@Override
 	public float getFallDamageModifier() {
-		return (float) Math.pow(getGravity(), 1.32);
+		return (float) Math.pow(getGravity(), 1.12F);
 	}
 	
 	@Override
@@ -130,8 +187,12 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
 		return this;
 	}
 	
+	/**
+	 * May not be overriden as for GC to work properly, the dimension name must match getName().
+	 * @return getName()
+	 */
 	@Override
-	public String getDimensionName() {
+	public final String getDimensionName() {
 		return getName();
 	}
 

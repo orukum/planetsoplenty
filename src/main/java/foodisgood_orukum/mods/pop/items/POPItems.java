@@ -1,5 +1,6 @@
 package foodisgood_orukum.mods.pop.items;
 
+import foodisgood_orukum.mods.pop.POPConfigManager;
 import micdoodle8.mods.galacticraft.mars.GCMarsConfigManager;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumToolMaterial;
@@ -32,7 +33,7 @@ public class POPItems {
 
     public static void initItems()
     {
-    	spaceshipT4 = new POPItemSpaceshipT4(10000).setUnlocalizedName("rocketT4");
+    	spaceshipT4 = new POPItemSpaceshipT4(POPConfigManager.idItemT4Rocket).setUnlocalizedName("rocketT4");
         /*GCMarsItems.marsItemBasic = new GCMarsItem(GCMarsConfigManager.idItemMarsBasic);
         GCMarsItems.deshPickaxe = new GCMarsItemPickaxe(GCMarsConfigManager.idToolDeshPickaxe, GCMarsItems.TOOLDESH).setUnlocalizedName("deshPick");
         GCMarsItems.deshAxe = new GCMarsItemAxe(GCMarsConfigManager.idToolDeshAxe, GCMarsItems.TOOLDESH).setUnlocalizedName("deshAxe");

@@ -61,8 +61,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.items.*;
-import foodisgood_orukum.mods.pop.space.POPCelestialObjects;
-import foodisgood_orukum.mods.pop.space.SuperflatEastPlanet;
+import foodisgood_orukum.mods.pop.space.*;
 import foodisgood_orukum.mods.pop.entities.*;
 
 /**
@@ -92,11 +91,10 @@ public class PlanetsOPlenty {
     public static POPCreativeTab planetsOPlentyTab;
 
     public static final String TEXTURE_DOMAIN = "planetsoplenty";
-    public static final String TEXTURE_PREFIX = GalacticraftMars.TEXTURE_DOMAIN + ":";
+    public static final String TEXTURE_PREFIX = PlanetsOPlenty.TEXTURE_DOMAIN + ":";
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    public void preInit(FMLPreInitializationEvent event) {
         /*MinecraftForge.EVENT_BUS.register(new GCMarsEvents());
         new GCMarsConfigManager(new File(event.getModConfigurationDirectory(), "Galacticraft/mars.conf"));
 
@@ -115,14 +113,13 @@ public class PlanetsOPlenty {
         GalacticraftMars.proxy.preInit(event);*/
     	POPItems.initItems();
     	PlanetsOPlenty.proxy.preInit(event);
-    	POPCelestialObjects.preInit(event);
+    	POPCelestials.preInit(event);
     	/*IGalaxy testing = POPCelestialObjects.westGalaxy;
     	System.out.println("Hello" + testing.getRGBRingColors().x);*/
     }
 
     @EventHandler
-    public void load(FMLInitializationEvent event)
-    {
+    public void load(FMLInitializationEvent event) {
     	PlanetsOPlenty.planetsOPlentyTab = new POPCreativeTab(CreativeTabs.getNextID(), PlanetsOPlenty.MODID, POPItems.spaceshipT4.itemID, 5);
         PlanetsOPlenty.proxy.init(event);
         /*SchematicRegistry.registerSchematicRecipe(new GCMarsSchematicRocketT2());
@@ -150,9 +147,8 @@ public class PlanetsOPlenty {
 	    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.bedrock, 3), new ItemStack(Block.stone, 2));
 	    	GameRegistry.addShapelessRecipe(new ItemStack(Item.diamond, 64), new ItemStack(Block.dirt));//Temp
     	}
-    	registerGalacticraftNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", 20000001, 150, 1, false);
-
-    	POPCelestialObjects.init(event);
+    	registerGalacticraftNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", POPConfigManager.idEntityT4Rocket, 150, 1, false);
+    	POPCelestials.init(event);
     }
 
     @EventHandler
