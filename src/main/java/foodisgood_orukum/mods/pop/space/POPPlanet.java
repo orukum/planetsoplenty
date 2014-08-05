@@ -14,6 +14,13 @@ public abstract class POPPlanet extends WorldProvider implements IPlanet, IMapOb
 	public double solarMultiplier;
 	double specialMultiplier;
 	
+	public static final float ZERO_G = .0656F,
+			GC_RATIO = -.02F; //Multiply GC_RATIO by number of Gs, add to ZERO_G
+	
+	public static final float getGCGravityFactor(float numGs) {
+		return ZERO_G+GC_RATIO*numGs;
+	}
+	
 	public IMoon[] moons = {};
 	
 	public POPPlanet() {

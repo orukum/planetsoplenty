@@ -125,10 +125,10 @@ public class SuperflatEastPlanet extends POPPlanet {
 	
 	@Override
 	public float getGravity() {
-		float ret = .058F + .3F*((getWorldTime()/70)%20);
+		float ret = .0001F + .3F*((getWorldTime()/96)%10);
 		if (!isDaytime())
 			ret*=2;
-		return -Math.abs(ret)+.06F;
+		return POPPlanet.getGCGravityFactor(ret);
 	}
 	
 	@Override
@@ -489,8 +489,13 @@ public class SuperflatEastPlanet extends POPPlanet {
 		                    {
 		                        yDev = d + (d2 - d) * d3;
 		                    }
-		                    if (((((chunkX/2)+(chunkZ/2)+2)%7==4) && Math.abs(this.randFromPoint(chunkX, chunkZ))%23<3)) {
-			                    for (int y = 0; y < CHUNK_SIZE_Y; y++)
+		                    if (((((chunkX/2)+(chunkZ/2)+2)%7==4) && (Math.abs(this.randFromPoint(chunkX, chunkZ))%26)<2)) {
+			                    for (int y = 0; y < 33; y++)
+			                    {
+		                            idArray[this.getIndex(x, y, z)] = this.lowerBlockIDHigh;
+		                            metaArray[this.getIndex(x, y, z)] = this.lowerBlockMetaHigh;
+			                    }
+			                    for (int y = 33; y < CHUNK_SIZE_Y; y++)
 			                    {
 			                        if (y < MID_HEIGHT + yDev-12)
 			                        {
@@ -557,7 +562,7 @@ public class SuperflatEastPlanet extends POPPlanet {
 
         public void replaceBlocksForBiome(int par1, int par2, short[] arrayOfIDs, byte[] arrayOfMeta) {
 		    int chunkX = par1, chunkZ = par2;
-	    	if (((((chunkX/2)+(chunkZ/2))%2==1) ^ ((chunkX/2)>0) ^ ((chunkZ/2)>0)) && !(((((chunkX/2)+(chunkZ/2)+3)%7==6) && Math.abs(this.randFromPoint(chunkX, chunkZ))%4==3))) {
+	    	if (((((chunkX/2)+(chunkZ/2))%2==1) ^ ((chunkX/2)>0) ^ ((chunkZ/2)>0))/* && !((((chunkX/2)+(chunkZ/2)+2)%7==4) && (Math.abs(this.randFromPoint(chunkX, chunkZ))%25)<4)*/) {
                 short var14, var15, lowerBlockID;
                 byte var15m, var14m, lowerBlockMeta;
 	    		if (chunkZ>0) {
