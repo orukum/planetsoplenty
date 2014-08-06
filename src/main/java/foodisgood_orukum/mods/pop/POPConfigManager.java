@@ -4,7 +4,7 @@ import java.io.File;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.Configuration;
 
-public class POPConfigManager {
+public final class POPConfigManager {
 	public static final String CATEGORY_ENTITIES = "ENTITIES",
 			CATEGORY_DIMENSIONS = "DIMENSIONS";
 	
@@ -46,8 +46,7 @@ public class POPConfigManager {
     //public static boolean enableAluminumOreGen;
     //public static boolean enableSiliconOreGen;
 
-    public static void setDefaultValues(File file)
-    {
+    public static void setDefaultValues(File file) {
         if (!POPConfigManager.loaded)
             POPConfigManager.config = new Configuration(file);
         try {

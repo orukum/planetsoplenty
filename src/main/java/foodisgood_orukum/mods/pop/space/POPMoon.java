@@ -1,19 +1,17 @@
 package foodisgood_orukum.mods.pop.space;
 
 import foodisgood_orukum.mods.pop.POPConfigManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.WorldProvider;
 import micdoodle8.mods.galacticraft.api.world.*;
 
 /**
- * Don't forget to fill in moons!
  * @author foodisgoodyesiam
  *
  */
-public abstract class POPPlanet extends POPWorld implements IPlanet {
-	public IMoon[] moons = null;
-	
-	public POPPlanet() {
+public abstract class POPMoon extends POPWorld implements IMoon {
+	public POPMoon() {
 		super();
 	}
 	
@@ -21,7 +19,7 @@ public abstract class POPPlanet extends POPWorld implements IPlanet {
 	 * Multiplies the solar multiplier for this planet by a special provided factor
 	 * @param solarSpecialFactor the special multiplier for this planet
 	 */
-	protected POPPlanet(double solarSpecialFactor) {
+	protected POPMoon(double solarSpecialFactor) {
 		solarMultiplier = 1;
 		specialMultiplier = solarSpecialFactor;
 	}
@@ -34,13 +32,13 @@ public abstract class POPPlanet extends POPWorld implements IPlanet {
 	public void initSolar(double specialFactor) {
 		if (getParentGalaxy() instanceof POPGalaxy) {
 			POPGalaxy galaxy = (POPGalaxy) getParentGalaxy();
-			if (galaxy.suns.length == 0)
+			if (galaxy.suns == null || galaxy.suns.length == 0)
 				solarMultiplier = .01;
 			else {
 				solarMultiplier = 0;
 				for (POPStar star : galaxy.suns)
 					solarMultiplier+=(star.getBrightness());
-				solarMultiplier*=(this.getDistanceFromCenter()*this.getDistanceFromCenter());
+				solarMultiplier*=(this.getParentPlanet().getMapObject().getDistanceFromCenter()*this.getParentPlanet().getMapObject().getDistanceFromCenter());
 			}
 			solarMultiplier*=specialFactor;
 		} else {

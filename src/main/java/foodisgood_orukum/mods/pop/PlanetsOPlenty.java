@@ -51,10 +51,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -63,6 +60,7 @@ import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.items.*;
 import foodisgood_orukum.mods.pop.space.*;
 import foodisgood_orukum.mods.pop.entities.*;
+import foodisgood_orukum.mods.pop.network.*;
 
 /**
  * Copyright 2014, foodisgoodyesiam and orukum
@@ -71,8 +69,8 @@ import foodisgood_orukum.mods.pop.entities.*;
  * 
  */
 @Mod(name = PlanetsOPlenty.NAME, version = PlanetsOPlenty.VERSION/* + "." + PlanetsOPlenty.LOCALMINVERSION + "." + PlanetsOPlenty.LOCALBUILDVERSION*/, useMetadata = true, modid = PlanetsOPlenty.MODID, dependencies = "required-after:" + GalacticraftCore.MODID + ";required-after:" + GalacticraftMars.MODID + ";")//";after:ICBM|Explosion; after:IC2; after:BuildCraft|Core; after:BuildCraft|Energy;")
-//@NetworkMod(channels = { GalacticraftMars.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = GCCoreConnectionHandler.class, packetHandler = GCCorePacketManager.class)
-public class PlanetsOPlenty {
+@NetworkMod(channels = { PlanetsOPlenty.CHANNELENTITIES }, clientSideRequired = true, serverSideRequired = false, connectionHandler = POPConnectionHandler.class, packetHandler = POPEntityPacketManager.class)
+public final class PlanetsOPlenty {
     public static final String NAME = "Planets O' Plenty";
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
@@ -114,6 +112,7 @@ public class PlanetsOPlenty {
     	POPItems.initItems();
     	PlanetsOPlenty.proxy.preInit(event);
     	POPCelestials.preInit(event);
+        POPConfigManager.setDefaultValues(new File(event.getModConfigurationDirectory(), "POP.cfg"));
     	/*IGalaxy testing = POPCelestialObjects.westGalaxy;
     	System.out.println("Hello" + testing.getRGBRingColors().x);*/
     }
@@ -122,6 +121,7 @@ public class PlanetsOPlenty {
     public void load(FMLInitializationEvent event) {
     	PlanetsOPlenty.planetsOPlentyTab = new POPCreativeTab(CreativeTabs.getNextID(), PlanetsOPlenty.MODID, POPItems.spaceshipT4.itemID, 5);
         PlanetsOPlenty.proxy.init(event);
+        NetworkRegistry.instance().registerChannel(new POPEntityPacketManager(), PlanetsOPlenty.CHANNELENTITIES, Side.CLIENT);
         /*SchematicRegistry.registerSchematicRecipe(new GCMarsSchematicRocketT2());
         SchematicRegistry.registerSchematicRecipe(new GCMarsSchematicCargoRocket());
 
@@ -147,8 +147,18 @@ public class PlanetsOPlenty {
 	    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.bedrock, 3), new ItemStack(Block.stone, 2));
 	    	GameRegistry.addShapelessRecipe(new ItemStack(Item.diamond, 64), new ItemStack(Block.dirt));//Temp
     	}
-    	registerGalacticraftNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", POPConfigManager.idEntityT4Rocket, 150, 1, false);
+    	registerPOPNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", POPConfigManager.idEntityT4Rocket, 150, 1, false);
     	POPCelestials.init(event);
+    }
+    
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+    	NetworkRegistry.instance().registerGuiHandler(this, PlanetsOPlenty.proxy);
+    }
+    
+    @EventHandler
+    public void serverInit(FMLServerStartedEvent event) {
+        NetworkRegistry.instance().registerChannel(new POPPacketHandlerServer(), PlanetsOPlenty.CHANNEL, Side.SERVER);
     }
 
     @EventHandler
@@ -190,18 +200,14 @@ public class PlanetsOPlenty {
         PlanetsOPlenty.proxy.registerRenderInformation();
         //GCMarsRecipeManager.loadRecipes();
     }
-    
-    /**
-     * Here we should just use the methods as already provided in GC or GCMars, not make our own, I think. Hmm, maybe not, though
-     */
 
-    public void registerGalacticraftCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore)
+    public void registerPOPCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore)
     {
         EntityRegistry.registerGlobalEntityID(var0, var1, id, back, fore);
         EntityRegistry.registerModEntity(var0, var1, id, PlanetsOPlenty.instance, 80, 3, true);
     }
 
-    public void registerGalacticraftNonMobEntity(Class<? extends Entity> var0, String var1, int id, int trackingDistance, int updateFreq, boolean sendVel)
+    public void registerPOPNonMobEntity(Class<? extends Entity> var0, String var1, int id, int trackingDistance, int updateFreq, boolean sendVel)
     {
         EntityList.addMapping(var0, var1, id);
         EntityRegistry.registerModEntity(var0, var1, id, PlanetsOPlenty.instance, trackingDistance, updateFreq, sendVel);

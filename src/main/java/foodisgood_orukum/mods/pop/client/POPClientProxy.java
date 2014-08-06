@@ -16,11 +16,14 @@ import micdoodle8.mods.galacticraft.core.client.render.entities.GCCoreRenderSpac
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.*;
 import foodisgood_orukum.mods.pop.client.model.POPModelTier4Rocket;
 import foodisgood_orukum.mods.pop.client.render.items.POPItemRenderSpaceshipT4;
 import foodisgood_orukum.mods.pop.entities.POPEntityRocketT4;
 import foodisgood_orukum.mods.pop.items.POPItems;
+import foodisgood_orukum.mods.pop.network.POPPacketHandlerClient;
 
 /**
  * Copyright 2014, foodisgoodyesiam and orukum
@@ -37,14 +40,12 @@ public class POPClientProxy extends CommonPOPProxy
     private static int tintedGlassRenderID;*/
 	
 	@Override
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    public void preInit(FMLPreInitializationEvent event) {
         //MinecraftForge.EVENT_BUS.register(new GCMarsSounds());
     }
 
     @Override
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         /*TickRegistry.registerTickHandler(new TickHandlerClient(), Side.CLIENT);
         NetworkRegistry.instance().registerChannel(new ClientPacketHandler(), GalacticraftMars.CHANNEL, Side.CLIENT);
         ClientProxyMars.vineRenderID = RenderingRegistry.getNextAvailableRenderId();
@@ -57,6 +58,7 @@ public class POPClientProxy extends CommonPOPProxy
         RenderingRegistry.registerBlockHandler(new GCMarsBlockRendererMachine(ClientProxyMars.machineRenderID));
         ClientProxyMars.tintedGlassRenderID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new GCMarsBlockRendererTintedGlassPane(ClientProxyMars.tintedGlassRenderID));*/
+        NetworkRegistry.instance().registerChannel(new POPPacketHandlerClient(), PlanetsOPlenty.CHANNEL, Side.CLIENT);
     }
 
     @Override

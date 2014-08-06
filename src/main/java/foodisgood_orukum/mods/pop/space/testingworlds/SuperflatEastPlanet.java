@@ -113,11 +113,6 @@ public class SuperflatEastPlanet extends POPPlanet {
 	public ResourceLocation getPlanetSprite() {
 		return new ResourceLocation(PlanetsOPlenty.TEXTURE_DOMAIN, "textures/planets/eastsuperflat.png");
 	}
-
-	@Override
-	public String getPlanetName() {
-		return "Superflat East Test Planet";
-	}
 	
 	@Override
 	public float getGravity() {
@@ -714,15 +709,15 @@ public class SuperflatEastPlanet extends POPPlanet {
             return true;
         }
 
-        @Override
+        /*@Override
         public boolean unloadQueuedChunks() {
             return false;
-        }
+        }*/
 
-        @Override
+        /*@Override
         public int getLoadedChunkCount() {
             return 0;
-        }
+        }*/
 
         private int getIndex(int x, int y, int z) {
             return y << 8 | z << 4 | x;
@@ -756,11 +751,11 @@ public class SuperflatEastPlanet extends POPPlanet {
             //BlockSand.fallInstantly = false;
         }
 
-        @Override
+        /*@Override
         public boolean saveChunks(boolean par1, IProgressUpdate par2IProgressUpdate)
         {
             return true;
-        }
+        }*/
 
         @Override
         public boolean canSave()

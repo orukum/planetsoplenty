@@ -1,0 +1,214 @@
+package foodisgood_orukum.mods.pop.network;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
+
+import cpw.mods.fml.common.network.IPacketHandler;
+import cpw.mods.fml.common.network.Player;
+import foodisgood_orukum.mods.pop.POPLog;
+
+//class abstract final try catch finally throw throws static public private protected null return byte char short int long double float do while for if goto break continue new enum else void interface extends implements boolean import package switch case default
+
+public class POPEntityPacketManager implements IPacketHandler {
+    public enum POPPacketType {
+        UNSPECIFIED, TILEENTITY, ENTITY;
+
+        public static POPPacketType get(int id)  {
+            if (id >= 0 && id < POPPacketType.values().length)
+                return POPPacketType.values()[id];
+            return UNSPECIFIED;
+        }
+    }
+
+    @SuppressWarnings("resource")
+    public static Packet getPacket(String channelName, Entity sender, ArrayList<Object> objs) {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream data = new DataOutputStream(bytes);
+        try {
+            data.writeInt(2);
+
+            data.writeInt(sender.entityId);
+            data = POPEntityPacketManager.encodeDataStream(data, objs);
+
+            final Packet250CustomPayload packet = new Packet250CustomPayload();
+            packet.channel = channelName;
+            packet.data = bytes.toByteArray();
+            packet.length = packet.data.length;
+            data.close();
+            return packet;
+        } catch (final IOException e) {
+            System.out.println("Failed to create packet.");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static DataOutputStream encodeDataStream(DataOutputStream data, ArrayList<Object> sendData) {
+        try {
+            for (final Object dataValue : sendData)
+                if (dataValue instanceof Integer)
+                    data.writeInt((Integer) dataValue);
+                else if (dataValue instanceof Float)
+                    data.writeFloat((Float) dataValue);
+                else if (dataValue instanceof Double)
+                    data.writeDouble((Double) dataValue);
+                else if (dataValue instanceof Byte)
+                    data.writeByte((Byte) dataValue);
+                else if (dataValue instanceof Boolean)
+                    data.writeBoolean((Boolean) dataValue);
+                else if (dataValue instanceof String)
+                    data.writeUTF((String) dataValue);
+                else if (dataValue instanceof Short)
+                    data.writeShort((Short) dataValue);
+                else if (dataValue instanceof Long)
+                    data.writeLong((Long) dataValue);
+                //else if (dataValue instanceof NBTTagCompound)
+                //    PacketManager.writeNBTTagCompound((NBTTagCompound) dataValue, data);
+            return data;
+        } catch (final IOException e) {
+            System.out.println("Packet data encoding failed.");
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    @SuppressWarnings("resource")
+    public static Packet getPacket(String channelName, Entity sender, Object... sendData) {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream data = new DataOutputStream(bytes);
+
+        try {
+            data.writeInt(2);
+            data.writeInt(sender.entityId);
+            data = POPEntityPacketManager.encodeDataStream(data, sendData);
+
+            final Packet250CustomPayload packet = new Packet250CustomPayload();
+            packet.channel = channelName;
+            packet.data = bytes.toByteArray();
+            packet.length = packet.data.length;
+            data.close();
+
+            return packet;
+        } catch (final IOException e) {
+            System.out.println("Failed to create packet.");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static DataOutputStream encodeDataStream(DataOutputStream data, Object... sendData) {
+        try {
+            for (Object dataValue : sendData) {
+                if (dataValue instanceof Integer)
+                    data.writeInt((Integer) dataValue);
+                else if (dataValue instanceof Float)
+                    data.writeFloat((Float) dataValue);
+                else if (dataValue instanceof Double)
+                    data.writeDouble((Double) dataValue);
+                else if (dataValue instanceof Byte)
+                    data.writeByte((Byte) dataValue);
+                else if (dataValue instanceof Boolean)
+                    data.writeBoolean((Boolean) dataValue);
+                else if (dataValue instanceof String)
+                    data.writeUTF((String) dataValue);
+                else if (dataValue instanceof Short)
+                    data.writeShort((Short) dataValue);
+                else if (dataValue instanceof Long)
+                    data.writeLong((Long) dataValue);
+                //else if (dataValue instanceof NBTTagCompound)
+                //    PacketManager.writeNBTTagCompound((NBTTagCompound) dataValue, data);
+                else if (dataValue instanceof ArrayList) {
+                    for (Object subDataValue : (ArrayList<?>) dataValue)
+                        if (subDataValue instanceof Integer)
+                            data.writeInt((Integer) subDataValue);
+                        else if (subDataValue instanceof Float)
+                            data.writeFloat((Float) subDataValue);
+                        else if (subDataValue instanceof Double)
+                            data.writeDouble((Double) subDataValue);
+                        else if (subDataValue instanceof Byte)
+                            data.writeByte((Byte) subDataValue);
+                        else if (subDataValue instanceof Boolean)
+                            data.writeBoolean((Boolean) subDataValue);
+                        else if (subDataValue instanceof String)
+                            data.writeUTF((String) subDataValue);
+                        else if (subDataValue instanceof Short)
+                            data.writeShort((Short) subDataValue);
+                        else if (subDataValue instanceof Long)
+                            data.writeLong((Long) subDataValue);
+                        //else if (subDataValue instanceof NBTTagCompound)
+                        //    PacketManager.writeNBTTagCompound((NBTTagCompound) subDataValue, data);
+                }
+            }
+            return data;
+        } catch (IOException e) {
+            System.out.println("Packet data encoding failed.");
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    @Override
+    public void onPacketData(INetworkManager network, Packet250CustomPayload packet, Player player) {
+        if (packet == null) {
+            POPLog.severe("Packet received as null!");
+            return;
+        }
+        if (packet.data == null) {
+            POPLog.severe("Packet data received as null! ID " + packet.getPacketId());
+            return;
+        }
+
+        try {
+            final ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+            
+            final int packetTypeID = data.readInt();
+
+            if (packetTypeID == 2) {
+                final double id = data.readInt();
+
+                final World world = ((EntityPlayer) player).worldObj;
+
+                if (world != null) {
+                    for (final Object o : world.loadedEntityList) {
+                        if (o instanceof Entity) {
+                            final Entity e = (Entity) o;
+
+                            if (id == e.entityId && e instanceof IPOPPacketReceiver)
+                                ((IPOPPacketReceiver) e).handlePacketData(network, packetTypeID, packet, (EntityPlayer) player, data);
+                        }
+                    }
+                }
+            } else if (packetTypeID == 1) {
+                final int x = data.readInt();
+                final int y = data.readInt();
+                final int z = data.readInt();
+                final World world = ((EntityPlayer) player).worldObj;
+
+                if (world != null) {
+                    final TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+
+                    if (tileEntity != null)
+                        if (tileEntity instanceof IPOPPacketReceiver)
+                            ((IPOPPacketReceiver) tileEntity).handlePacketData(network, packetTypeID, packet, (EntityPlayer) player, data);
+                }
+            }
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -84,11 +84,6 @@ public class SuperflatWestPlanet extends POPPlanet {
 	}
 
 	@Override
-	public int getDimensionID() {
-		return dimensionId;
-	}
-
-	@Override
 	public IGalaxy getParentGalaxy() {
 		return POPCelestials.westGalaxy;
 		//return GalacticraftCore.galaxyMilkyWay;
@@ -117,11 +112,6 @@ public class SuperflatWestPlanet extends POPPlanet {
 	@Override
 	public ResourceLocation getPlanetSprite() {
 		return new ResourceLocation(PlanetsOPlenty.TEXTURE_DOMAIN, "textures/planets/westsuperflat.png");
-	}
-
-	@Override
-	public String getPlanetName() {
-		return getName();
 	}
 	
 	@Override

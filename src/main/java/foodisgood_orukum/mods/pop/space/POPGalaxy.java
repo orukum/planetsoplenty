@@ -34,10 +34,4 @@ public abstract class POPGalaxy implements IGalaxy {
 	public POPGalaxy(POPStar[] sunsArg) {
 		suns = sunsArg;
 	}
-	
-    @Override
-    public abstract Vector3 getRGBRingColors();/*
-    {
-        return new Vector3(0D / 256.0D, 0D / 256.0D, 256.0D / 256.0D);
-    }*/
 }
