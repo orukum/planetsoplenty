@@ -1,29 +1,42 @@
 package foodisgood_orukum.mods.pop.client;
 
 import java.io.ByteArrayInputStream;
+import java.util.EnumSet;
+
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntitySmokeFX;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 import micdoodle8.mods.galacticraft.core.client.fx.GCCoreEntityLaunchFlameFX;
 import micdoodle8.mods.galacticraft.core.client.fx.GCCoreEntityLaunchSmokeFX;
 import micdoodle8.mods.galacticraft.core.client.fx.GCCoreEntityOxygenFX;
 import micdoodle8.mods.galacticraft.core.client.render.entities.GCCoreRenderSpaceship;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.*;
 import foodisgood_orukum.mods.pop.client.model.POPModelTier4Rocket;
 import foodisgood_orukum.mods.pop.client.render.items.POPItemRenderSpaceshipT4;
 import foodisgood_orukum.mods.pop.entities.POPEntityRocketT4;
 import foodisgood_orukum.mods.pop.items.POPItems;
-import foodisgood_orukum.mods.pop.network.POPPacketHandlerClient;
+import foodisgood_orukum.mods.pop.network.*;
+import foodisgood_orukum.mods.pop.network.POPPacketHandlerServer.EnumPacketServer;
 
 /**
  * Copyright 2014, foodisgoodyesiam and orukum
@@ -31,17 +44,68 @@ import foodisgood_orukum.mods.pop.network.POPPacketHandlerClient;
  * All rights reserved.
  * 
  */
-public class POPClientProxy extends CommonPOPProxy
-{
+public class POPClientProxy extends CommonPOPProxy {
     /*private static int vineRenderID;
     private static int eggRenderID;
     private static int treasureRenderID;
     private static int machineRenderID;
     private static int tintedGlassRenderID;*/
+	public KeyBinding explode = null, incCounter = null, sendServerChat = null, changeWorldGen = null, arrowCount = null;
+	
+	public class DebugKeyHandler extends KeyBindingRegistry.KeyHandler {
+		boolean stillPressed = false; 
+		public DebugKeyHandler(KeyBinding[] keyBindings, boolean[] repeat) {
+			super(keyBindings, repeat);
+		}
+
+		@Override
+		public String getLabel() {
+			return "POP Debug Keys";
+		}
+
+		@Override
+		public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
+			//if (isRepeat)
+			//	return;
+			POPLog.info("Planets O Plenty: key has been pressed, sending packet to server");
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			if (explode.isPressed()) {
+				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_EXPLODE.index, player.posX+20*MathHelper.cos(player.rotationYawHead), player.posY, player.posZ+20*MathHelper.sin(player.rotationYawHead)));
+			} else if (incCounter.isPressed()) {
+				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_INC_COUNTER.index));
+			} else if (sendServerChat.isPressed()) {
+				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_SEND_SERVER_CHAT.index));
+			} else if (changeWorldGen.isPressed()) {
+				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_WEST_WORLD_GEN.index));
+			} else if (arrowCount.isPressed())
+				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_ADD_ARROW.index));
+		}
+
+		@Override
+		public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
+			stillPressed = false;
+		}
+
+		@Override
+		public EnumSet<TickType> ticks() {
+			return EnumSet.of(TickType.CLIENT);
+		}
+	}
 	
 	@Override
     public void preInit(FMLPreInitializationEvent event) {
         //MinecraftForge.EVENT_BUS.register(new GCMarsSounds());
+		if (PlanetsOPlenty.debug) {
+			//MinecraftForge.EVENT_BUS.register(new POPClientDebugListener());
+			explode = new KeyBinding("Explode", Keyboard.KEY_P);
+			incCounter = new KeyBinding("Increment Tick", Keyboard.KEY_KANA);
+			sendServerChat = new KeyBinding("Send Server Chat", Keyboard.KEY_KANJI);
+			changeWorldGen = new KeyBinding("Change world gen for West test planet", Keyboard.KEY_YEN);
+			arrowCount = new KeyBinding("Add arrow", Keyboard.KEY_Z);
+			KeyBinding[] keys = {explode, incCounter, sendServerChat, changeWorldGen, arrowCount};
+			boolean[] repeat = {true, true, true, true, true};
+			KeyBindingRegistry.registerKeyBinding(new DebugKeyHandler(keys, repeat));
+		}
     }
 
     @Override
@@ -62,13 +126,12 @@ public class POPClientProxy extends CommonPOPProxy
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event)
-    {
+    public void postInit(FMLPostInitializationEvent event) {
+    	;
     }
 
     @Override
-    public void registerRenderInformation()
-    {
+    public void registerRenderInformation() {
         /*IModelCustom chamberModel = AdvancedModelLoader.loadModel("/assets/galacticraftmars/models/chamber.obj");
         IModelCustom cargoRocketModel = AdvancedModelLoader.loadModel("/assets/galacticraftmars/models/cargoRocket.obj");
         ClientRegistry.bindTileEntitySpecialRenderer(GCMarsTileEntityTreasureChest.class, new GCMarsTileEntityTreasureChestRenderer());
@@ -264,8 +327,7 @@ public class POPClientProxy extends CommonPOPProxy
     }*/
 
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-    {
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tile = world.getBlockTileEntity(x, y, z);
 
         /*if (ID == GCMarsConfigManager.idGuiMachine)

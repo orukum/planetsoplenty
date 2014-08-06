@@ -48,8 +48,8 @@ public class CommonPOPProxy implements IGuiHandler {
     {
         ;
     }
-
-    /// What in the world does this do? edit: I think I get it now
+    //TODO: Take a look at net.minecraftforge.event and cpw.mods.fml.common.event (a few others as well)
+    /// What in the world does this do? edit: I think I get it now (sort of)
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {

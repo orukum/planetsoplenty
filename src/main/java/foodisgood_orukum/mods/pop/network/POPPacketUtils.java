@@ -20,10 +20,10 @@ public class POPPacketUtils {
     public static Packet250CustomPayload createPacket(String channel, EnumPacketServer packetType, Object[] input) {
         if (packetType == null)
             return null;
-        return createPacket(channel, packetType.getIndex(), input);
+        return createPacket(channel, packetType.index, input);
     }
 
-    public static Packet250CustomPayload createPacket(String channel, int packetID, Object[] input) {
+    public static Packet250CustomPayload createPacket(String channel, int packetID, Object... input) {
         final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         final DataOutputStream data = new DataOutputStream(bytes);
         try {

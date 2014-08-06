@@ -61,7 +61,9 @@ public class SuperflatWestPlanet extends POPPlanet {
 		dimensionId = dimension;
 	}
 	
-	public SuperflatWestPlanet() {}
+	public SuperflatWestPlanet() {
+		dimensionId = POPCelestials.superflatWestPlanet.dimensionId;
+	}
 	
 	@Override
 	public String getName() {
@@ -80,7 +82,7 @@ public class SuperflatWestPlanet extends POPPlanet {
 
 	@Override
 	public Class<? extends WorldProvider> getWorldProvider() {
-		return SuperflatEastPlanet.class;
+		return SuperflatWestPlanet.class;
 	}
 
 	@Override
@@ -116,7 +118,7 @@ public class SuperflatWestPlanet extends POPPlanet {
 	
 	@Override
 	public float getGravity() {
-		return POPPlanet.getGCGravityFactor(.0008F);
+		return POPPlanet.getGCGravityFactor(.00008F);
 	}
 	
 	@Override
@@ -226,8 +228,7 @@ public class SuperflatWestPlanet extends POPPlanet {
 	
 	@Override
     @SideOnly(Side.CLIENT)
-    public float getStarBrightness(float par1)
-    {
+    public float getStarBrightness(float par1) {
         final float var2 = this.worldObj.getCelestialAngle(par1);
         float var3 = 1.0F - (MathHelper.cos(var2 * (float) Math.PI * 2.0F) * 2.0F + 0.25F);
 
@@ -240,73 +241,54 @@ public class SuperflatWestPlanet extends POPPlanet {
     }
 
     @Override
-    public void registerWorldChunkManager()
-    {
+    public void registerWorldChunkManager() {
         this.worldChunkMgr = new POPSuperflatWestChunkManager();
     }
 
     @Override
-    public IChunkProvider createChunkGenerator()
-    {
+    public IChunkProvider createChunkGenerator() {
         return new POPSuperflatWestChunkProvider(this.worldObj, this.worldObj.getSeed(), true);
     }
 
     @Override
-    public boolean isSkyColored()
-    {
+    public boolean isSkyColored() {
         return false;
     }
 
     @Override
-    public String getWelcomeMessage()
-    {
+    public String getWelcomeMessage() {
         return "Welcome to West Superflat Test Planet!";
     }
 
     @Override
-    public String getDepartMessage()
-    {
+    public String getDepartMessage() {
         return "Goodbye!";
     }
 
     @Override
-    public boolean canSnowAt(int x, int y, int z)
-    {
+    public boolean canSnowAt(int x, int y, int z) {
         return y>170 || x<-40;
     }
 
     @Override
-    public boolean canBlockFreeze(int x, int y, int z, boolean byWater)
-    {
+    public boolean canBlockFreeze(int x, int y, int z, boolean byWater) {
     	int id = worldObj.getBlockId(x, y, z);
         return id==Block.waterMoving.blockID || id==Block.waterStill.blockID || (byWater && (id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID));
     }
 
     @Override
-    public int getHeight()
-    {
+    public int getHeight() {
         return 1234;
     }
     
-    public class POPSuperflatWestChunkManager extends WorldChunkManager
-    {
-
-        private double randFromPoint(int x, int z)
-        {
-            int n;
-            n = x + z * 57;
-            n = n << 13 ^ n;
-            return 1.0 - (n * (n * n * 15731 + 789221) + 1376312589 & 0x7fffffff) / 1073741824.0;
-        }
+    public class POPSuperflatWestChunkManager extends WorldChunkManager {
         @Override
-        public BiomeGenBase getBiomeGenAt(int par1, int par2)
-        {
+        public BiomeGenBase getBiomeGenAt(int par1, int par2) {
         	return BiomeGenBase.desert;
         }
 		
         @Override
-        public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5)
-        {
+        public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
             /*if (par1ArrayOfBiomeGenBase == null || par1ArrayOfBiomeGenBase.length < par4 * par5)
             {
                 par1ArrayOfBiomeGenBase = new BiomeGenBase[par4 * par5];
@@ -317,13 +299,10 @@ public class SuperflatWestPlanet extends POPPlanet {
         }
 
         @Override
-        public float[] getTemperatures(float[] par1ArrayOfFloat, int x, int y, int width, int length)
-        {
+        public float[] getTemperatures(float[] par1ArrayOfFloat, int x, int y, int width, int length) {
             if (par1ArrayOfFloat == null || par1ArrayOfFloat.length < width * length)
-            {
                 par1ArrayOfFloat = new float[width * length];
-            }/*
-            for (int x2=x; x2<(x+width); x2++)
+            /*for (int x2=x; x2<(x+width); x2++)
             	for (int y2=y; y2<(y+length); y2++)
             			par1ArrayOfFload*/
             if (isDaytime())
@@ -334,20 +313,16 @@ public class SuperflatWestPlanet extends POPPlanet {
         }
 
         @Override
-        public float[] getRainfall(float[] par1ArrayOfFloat, int par2, int par3, int par4, int par5)
-        {
+        public float[] getRainfall(float[] par1ArrayOfFloat, int par2, int par3, int par4, int par5) {
             if (par1ArrayOfFloat == null || par1ArrayOfFloat.length < par4 * par5)
-            {
                 par1ArrayOfFloat = new float[par4 * par5];
-            }
 
             Arrays.fill(par1ArrayOfFloat, 0, par4 * par5, 2);
             return par1ArrayOfFloat;
         }
 
         @Override
-        public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5)
-        {
+        public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
             /*if (par1ArrayOfBiomeGenBase == null || par1ArrayOfBiomeGenBase.length < par4 * par5)
             {
                 par1ArrayOfBiomeGenBase = new BiomeGenBase[par4 * par5];
@@ -358,8 +333,7 @@ public class SuperflatWestPlanet extends POPPlanet {
         }
 
         @Override
-        public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5, boolean par6)
-        {
+        public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5, boolean par6) {
             return this.loadBlockGeneratorData(par1ArrayOfBiomeGenBase, par2, par3, par4, par5);
         }
 
@@ -372,15 +346,15 @@ public class SuperflatWestPlanet extends POPPlanet {
 
         @SuppressWarnings("rawtypes")
         @Override
-        public boolean areBiomesViable(int par1, int par2, int par3, List par4List)
-        {
+        public boolean areBiomesViable(int par1, int par2, int par3, List par4List) {
         	return true;
             //return par4List.contains(GCMoonBiomeGenBase.moonFlat);
         }
     }
     
-    public class POPSuperflatWestChunkProvider extends ChunkProviderGenerate
-    {
+	public static short blockID = (short) Block.sandStone.blockID;
+    
+    public class POPSuperflatWestChunkProvider extends ChunkProviderGenerate {
         /*final short topBlockIDHigh = (short) Block.grass.blockID;
         final byte topBlockMetaHigh = 0;
         final short fillBlockIDHigh = (short) Block.anvil.blockID;
@@ -393,7 +367,6 @@ public class SuperflatWestPlanet extends POPPlanet {
         final byte fillBlockMetaLow = 0;
         final short lowerBlockIDLow = (short) Block.blockEmerald.blockID;
         final byte lowerBlockMetaLow = 3;*/
-    	final short blockID = (short) Block.sandStone.blockID;
     	final byte blockMeta = 0;
 
         private final Random rand;
@@ -410,14 +383,13 @@ public class SuperflatWestPlanet extends POPPlanet {
         private final GCCoreMapGenBaseMeta caveGenerator = new GCMoonGenCaves();
 
         // DO NOT CHANGE
-        private static final int MID_HEIGHT = 120;
+        private static final int MID_HEIGHT = 100;
         private static final int CHUNK_SIZE_X = 16;
-        private static final int CHUNK_SIZE_Y = 128;
+        private static final int CHUNK_SIZE_Y = 256;
         private static final int CHUNK_SIZE_Z = 16;
         private static final int CRATER_PROB = 100;
 
-        public POPSuperflatWestChunkProvider(World par1World, long par2, boolean par4)
-        {
+        public POPSuperflatWestChunkProvider(World par1World, long par2, boolean par4) {
             super(par1World, par2, par4);
             this.worldObj = par1World;
             this.rand = new Random(par2);
@@ -427,8 +399,7 @@ public class SuperflatWestPlanet extends POPPlanet {
             this.noiseGen4 = new Gradient(this.rand.nextLong(), 1, 0.25);
         }
 
-        public void generateTerrain(int chunkX, int chunkZ, short[] idArray, byte[] metaArray)
-        {
+        public void generateTerrain(int chunkX, int chunkZ, short[] idArray, byte[] metaArray) {
             this.noiseGen1.frequency = 0.0125;
             this.noiseGen2.frequency = 0.015;
             this.noiseGen3.frequency = 0.01;
@@ -443,19 +414,13 @@ public class SuperflatWestPlanet extends POPPlanet {
                     double yDev = 0;
 
                     if (d3 < 0.0D)
-                    {
                         yDev = d;
-                    }
                     else if (d3 > 1.0D)
-                    {
                         yDev = d2;
-                    }
                     else
-                    {
                         yDev = d + (d2 - d) * d3;
-                    }
-                    yDev*=MID_HEIGHT*.59;
-                    if (((((chunkX/2)+(chunkZ/2)+2)%7==4) && (Math.abs(this.randFromPoint(chunkX, chunkZ))%178)<4)) {
+                    yDev*=MID_HEIGHT*.1;
+                    /*if (((((chunkX/2)+(chunkZ/2)+2)%7==4) && (Math.abs(this.randFromPoint(chunkX, chunkZ))%178)<4)) {
 	                    for (int y = 0; y < 33; y++)
 	                    {
                             idArray[this.getIndex(x, y, z)] = this.blockID;
@@ -479,24 +444,21 @@ public class SuperflatWestPlanet extends POPPlanet {
 	                        } else
 	                        	break;
 	                    }
-                    } else {
-	                    for (int y = 0; y < CHUNK_SIZE_Y; y++)
-	                    {
-	                        if (y < MID_HEIGHT + yDev && y<256)
-	                        {
-	                            idArray[this.getIndex(x, y, z)] = this.blockID;
+                    } else {*/
+	                    for (int y = 0; y < CHUNK_SIZE_Y; y++) {
+	                        if (((y < (MID_HEIGHT + yDev*((Math.sqrt((chunkX*16+x)*(chunkX*16+x)+(chunkZ*16+z)*(chunkZ*16+z))>40000) ? 40000 : Math.sqrt((chunkX*16+x)*(chunkX*16+x)+(chunkZ*16+z)*(chunkZ*16+z)))/900F)) && y<256) || (chunkX<-10 && chunkZ>10 && y<MID_HEIGHT-40)) {
+	                            idArray[this.getIndex(x, y, z)] = blockID;
 	                            metaArray[this.getIndex(x, y, z)] = this.blockMeta;
 	                        } else
 	                        	break;
 	                    }
-                    }
                 }
             }
         }
+       
 
         @Override
-        public Chunk provideChunk(int par1, int par2)
-        {
+        public Chunk provideChunk(int par1, int par2) {
             this.rand.setSeed(par1 * 341873128712L + par2 * 132897987541L);
             final short[] ids = new short[32768 * 2];
             final byte[] meta = new byte[32768 * 2];
@@ -506,10 +468,10 @@ public class SuperflatWestPlanet extends POPPlanet {
             //this.replaceBlocksForBiome(par1, par2, ids, meta);
             this.createCraters(par1, par2, ids, meta);
             this.caveGenerator.generate(this, this.worldObj, par1, par2, ids, meta);
-            if (Math.abs(par1+par2)<5)
+            //if (Math.abs(par1+par2)<5)
             	for (int x=0; x<CHUNK_SIZE_X; x++)
                 	for (int z=0; z<CHUNK_SIZE_Z; z++)
-                		ids[this.getIndex(x, 1, z)] = (short) Block.bedrock.blockID;
+                		ids[this.getIndex(x, 0, z)] = (short) Block.bedrock.blockID;
             final Chunk var4 = new Chunk(this.worldObj, ids, meta, par1, par2);
 
             // if (!var4.isTerrainPopulated &&
@@ -526,85 +488,62 @@ public class SuperflatWestPlanet extends POPPlanet {
         	if (chunkX<8)
         		return;
             for (int cx = chunkX - 2; cx <= chunkX + 2; cx++)
-            {
                 for (int cz = chunkZ - 2; cz <= chunkZ + 2; cz++)
-                {
                     for (int x = 0; x < CHUNK_SIZE_X; x++)
-                    {
                         for (int z = 0; z < CHUNK_SIZE_Z; z++)
-                        {
-                            if (Math.abs(this.randFromPoint(cx * 16 + x, (cz * 16 + z) * 1000)) < this.noiseGen4.getNoise(x * CHUNK_SIZE_X + x, cz * CHUNK_SIZE_Z + z) / CRATER_PROB)
-                            {
+                            if (Math.abs(this.randFromPoint(cx * 16 + x, (cz * 16 + z) * 1000)) < this.noiseGen4.getNoise(x * CHUNK_SIZE_X + x, cz * CHUNK_SIZE_Z + z) / CRATER_PROB) {
                                 final Random random = new Random(cx * 16 + x + (cz * 16 + z) * 5000);
                                 final GCCoreCraterSize cSize = GCCoreCraterSize.sizeArray[random.nextInt(GCCoreCraterSize.sizeArray.length)];
                                 final int size = random.nextInt(cSize.MAX_SIZE - cSize.MIN_SIZE) + cSize.MIN_SIZE;
                                 this.makeCrater(cx * 16 + x, cz * 16 + z, chunkX * 16, chunkZ * 16, size, chunkArray, metaArray);
                             }
-                        }
-                    }
-                }
-            }
         }
 
-        public void makeCrater(int craterX, int craterZ, int chunkX, int chunkZ, int size, short[] chunkArray, byte[] metaArray)
-        {
+        public void makeCrater(int craterX, int craterZ, int chunkX, int chunkZ, int size, short[] chunkArray, byte[] metaArray) {
             for (int x = 0; x < CHUNK_SIZE_X; x++)
-            {
-                for (int z = 0; z < CHUNK_SIZE_Z; z++)
-                {
+                for (int z = 0; z < CHUNK_SIZE_Z; z++) {
                     double xDev = craterX - (chunkX + x);
                     double zDev = craterZ - (chunkZ + z);
-                    if (xDev * xDev + zDev * zDev < size * size)
-                    {
+                    if (xDev * xDev + zDev * zDev < size * size) {
                         xDev /= size;
                         zDev /= size;
                         final double sqrtY = xDev * xDev + zDev * zDev;
                         double yDev = sqrtY * sqrtY * 6;
                         yDev = 5 - yDev;
                         int helper = 0;
-                        for (int y = 127; y > 0; y--)
-                        {
-                            if (chunkArray[this.getIndex(x, y, z)] != 0 && helper <= yDev)
-                            {
+                        for (int y = 127; y > 0; y--) {
+                            if (chunkArray[this.getIndex(x, y, z)] != 0 && helper <= yDev) {
                                 chunkArray[this.getIndex(x, y, z)] = 0;
                                 metaArray[this.getIndex(x, y, z)] = 0;
                                 helper++;
                             }
                             if (helper > yDev)
-                            {
                                 break;
-                            }
                         }
                     }
                 }
-            }
         }
 
         @Override
-        public boolean chunkExists(int par1, int par2)
-        {
+        public boolean chunkExists(int par1, int par2) {
             return true;
         }
 
         @Override
-        public boolean unloadQueuedChunks()
-        {
+        public boolean unloadQueuedChunks() {
             return false;
         }
 
         @Override
-        public int getLoadedChunkCount()
-        {
+        public int getLoadedChunkCount() {
             return 0;
         }
 
-        private int getIndex(int x, int y, int z)
-        {
+        private int getIndex(int x, int y, int z) {
             return y << 8 | z << 4 | x;
         }
 
-        private double randFromPoint(int x, int z)
-        {
+        private double randFromPoint(int x, int z) {
             int n;
             n = x + z * 57;
             n = n << 13 ^ n;
@@ -612,8 +551,7 @@ public class SuperflatWestPlanet extends POPPlanet {
         }
 
         @Override
-        public void populate(IChunkProvider par1IChunkProvider, int par2, int par3)
-        {
+        public void populate(IChunkProvider par1IChunkProvider, int par2, int par3) {
             BlockSand.fallInstantly = false;
             /*final int var4 = par2 * 16;
             final int var5 = par3 * 16;
@@ -633,20 +571,17 @@ public class SuperflatWestPlanet extends POPPlanet {
         }
 
         @Override
-        public boolean saveChunks(boolean par1, IProgressUpdate par2IProgressUpdate)
-        {
+        public boolean saveChunks(boolean par1, IProgressUpdate par2IProgressUpdate) {
             return true;
         }
 
         @Override
-        public boolean canSave()
-        {
+        public boolean canSave() {
             return true;
         }
 
         @Override
-        public String makeString()
-        {
+        public String makeString() {
         	//TODO: What in the world does this do?
         	return "RandomLevelSource";
             //return GCMoonConfigManager.generateOtherMods ? "RandomLevelSource" : "MoonLevelSource";
@@ -654,26 +589,21 @@ public class SuperflatWestPlanet extends POPPlanet {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int i, int j, int k)
-        {
-            if (par1EnumCreatureType == EnumCreatureType.monster)
-            {
+        public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int i, int j, int k) {
+            if (par1EnumCreatureType == EnumCreatureType.monster) {
                 final List monsters = new ArrayList();
                 monsters.add(new SpawnListEntry(GCCoreEntityZombie.class, 8, 2, 3));
                 monsters.add(new SpawnListEntry(GCCoreEntitySpider.class, 8, 2, 3));
                 monsters.add(new SpawnListEntry(GCCoreEntitySkeleton.class, 8, 2, 3));
                 monsters.add(new SpawnListEntry(GCCoreEntityCreeper.class, 8, 2, 3));
                 return monsters;
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
 
         @Override
-        public void recreateStructures(int par1, int par2)
-        {
+        public void recreateStructures(int par1, int par2) {
             /*if (!GCMoonConfigManager.disableMoonVillageGen)
             {
                 //this.villageGenerator.generate(this, this.worldObj, par1, par2, (byte[]) null);

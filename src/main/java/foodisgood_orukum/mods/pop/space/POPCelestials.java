@@ -5,6 +5,7 @@ import net.minecraftforge.common.DimensionManager;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.mars.dimension.GCMarsTeleportType;
 import micdoodle8.mods.galacticraft.moon.dimension.GCMoonTeleportType;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import foodisgood_orukum.mods.pop.POPConfigManager;
@@ -65,10 +66,12 @@ public class POPCelestials {
 		if (PlanetsOPlenty.debug && !superflatEastPlanet.autoRegister()) {
 			DimensionManager.registerProviderType(superflatEastPlanet.getDimensionID(), superflatEastPlanet.getWorldProvider(), false);
 			DimensionManager.registerDimension(superflatEastPlanet.getDimensionID(), superflatEastPlanet.getDimensionID());
+			FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(superflatEastPlanet.getDimensionID());
 		}
 		if (PlanetsOPlenty.debug && !superflatWestPlanet.autoRegister()) {
 			DimensionManager.registerProviderType(superflatWestPlanet.getDimensionID(), superflatWestPlanet.getWorldProvider(), false);
 			DimensionManager.registerDimension(superflatWestPlanet.getDimensionID(), superflatWestPlanet.getDimensionID());
+			FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(superflatWestPlanet.getDimensionID());
 		}
 	}
 }

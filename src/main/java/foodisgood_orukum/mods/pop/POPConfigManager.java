@@ -61,7 +61,7 @@ public final class POPConfigManager {
         	POPConfigManager.idEntityT4Rocket = POPConfigManager.config.get(CATEGORY_ENTITIES, "idEntityT4Rocket", 20000).getInt(20000);
         	
         	// ITEMS
-        	POPConfigManager.idItemT4Rocket = POPConfigManager.config.get(Configuration.CATEGORY_ITEM, "idItemT4Rocket", 16500).getInt(16500);
+        	POPConfigManager.idItemT4Rocket = POPConfigManager.config.get(Configuration.CATEGORY_ITEM, "idItemT4Rocket", 10256).getInt(10256);
             /*
             GCCoreConfigManager.idDimensionOverworldOrbit = GCCoreConfigManager.configuration.get("DIMENSIONS", "idDimensionOverworldOrbit", -27).getInt(-27);
 

@@ -1,6 +1,7 @@
 package foodisgood_orukum.mods.pop.space;
 
 import foodisgood_orukum.mods.pop.POPConfigManager;
+import foodisgood_orukum.mods.pop.space.testingworlds.SuperflatEastPlanet;
 import micdoodle8.mods.galacticraft.api.world.ICelestialBody;
 import micdoodle8.mods.galacticraft.api.world.ICelestialBodyRenderer;
 import micdoodle8.mods.galacticraft.api.world.IExitHeight;
@@ -55,6 +56,11 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
         n^=seed;
         return 1.0 - (n * (n * n * 15731 + 789221) + 1376312589 & 0x7fffffff) / 1073741824.0;
     }
+
+	@Override
+	public Class<? extends WorldProvider> getWorldProvider() {
+		return this.getClass();
+	}
 	
 	/**
 	 * Provides a pseudorandom number using only a set of coordinates, useful for terrain generation.
@@ -169,6 +175,13 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
     public String getSaveFolder()
     {
         return "POP_DIM_" + dimensionId;
+    }
+	
+    @Override
+    public void setDimension(int var1)
+    {
+        this.dimensionId = var1;
+        super.setDimension(var1);
     }
 
 	@Override

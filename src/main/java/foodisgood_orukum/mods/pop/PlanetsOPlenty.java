@@ -69,13 +69,13 @@ import foodisgood_orukum.mods.pop.network.*;
  * 
  */
 @Mod(name = PlanetsOPlenty.NAME, version = PlanetsOPlenty.VERSION/* + "." + PlanetsOPlenty.LOCALMINVERSION + "." + PlanetsOPlenty.LOCALBUILDVERSION*/, useMetadata = true, modid = PlanetsOPlenty.MODID, dependencies = "required-after:" + GalacticraftCore.MODID + ";required-after:" + GalacticraftMars.MODID + ";")//";after:ICBM|Explosion; after:IC2; after:BuildCraft|Core; after:BuildCraft|Energy;")
-@NetworkMod(channels = { PlanetsOPlenty.CHANNELENTITIES }, clientSideRequired = true, serverSideRequired = false, connectionHandler = POPConnectionHandler.class, packetHandler = POPEntityPacketManager.class)
+@NetworkMod(channels = { PlanetsOPlenty.CHANNELENTITIES, PlanetsOPlenty.CHANNEL }, clientSideRequired = true, serverSideRequired = true, connectionHandler = POPConnectionHandler.class, packetHandler = POPEntityPacketManager.class)
 public final class PlanetsOPlenty {
     public static final String NAME = "Planets O' Plenty";
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
-    public static final String CHANNELENTITIES = "PlanetsOPlentyEntities";
-    public static final String VERSION = "-1.0000000000000000000000000056";
+    public static final String CHANNELENTITIES = "POPEntities";
+    public static final String VERSION = "-1.0000000000000000000000000063";
     public static final boolean debug = true;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
@@ -93,6 +93,7 @@ public final class PlanetsOPlenty {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        POPConfigManager.setDefaultValues(new File(event.getModConfigurationDirectory(), "POP.cfg"));
         /*MinecraftForge.EVENT_BUS.register(new GCMarsEvents());
         new GCMarsConfigManager(new File(event.getModConfigurationDirectory(), "Galacticraft/mars.conf"));
 
@@ -112,7 +113,6 @@ public final class PlanetsOPlenty {
     	POPItems.initItems();
     	PlanetsOPlenty.proxy.preInit(event);
     	POPCelestials.preInit(event);
-        POPConfigManager.setDefaultValues(new File(event.getModConfigurationDirectory(), "POP.cfg"));
     	/*IGalaxy testing = POPCelestialObjects.westGalaxy;
     	System.out.println("Hello" + testing.getRGBRingColors().x);*/
     }
@@ -162,8 +162,7 @@ public final class PlanetsOPlenty {
     }
 
     @EventHandler
-    public void serverStarting(FMLServerStartingEvent event)
-    {
+    public void serverStarting(FMLServerStartingEvent event) {
         //NetworkRegistry.instance().registerChannel(new GCMarsPacketHandlerServer(), GalacticraftMars.CHANNEL, Side.SERVER);
     }
 
@@ -194,21 +193,18 @@ public final class PlanetsOPlenty {
     }*/
 
     @EventHandler
-    public void postLoad(FMLPostInitializationEvent event)
-    {
+    public void postLoad(FMLPostInitializationEvent event) {
         PlanetsOPlenty.proxy.postInit(event);
         PlanetsOPlenty.proxy.registerRenderInformation();
         //GCMarsRecipeManager.loadRecipes();
     }
 
-    public void registerPOPCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore)
-    {
+    public void registerPOPCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore) {
         EntityRegistry.registerGlobalEntityID(var0, var1, id, back, fore);
         EntityRegistry.registerModEntity(var0, var1, id, PlanetsOPlenty.instance, 80, 3, true);
     }
 
-    public void registerPOPNonMobEntity(Class<? extends Entity> var0, String var1, int id, int trackingDistance, int updateFreq, boolean sendVel)
-    {
+    public void registerPOPNonMobEntity(Class<? extends Entity> var0, String var1, int id, int trackingDistance, int updateFreq, boolean sendVel) {
         EntityList.addMapping(var0, var1, id);
         EntityRegistry.registerModEntity(var0, var1, id, PlanetsOPlenty.instance, trackingDistance, updateFreq, sendVel);
     }

@@ -11,12 +11,13 @@ public class POPExtendedPlayer implements IExtendedEntityProperties {
 	
 	public final EntityPlayer player;
 	
-	public int example;
+	public int increment;
 	//Store info here about what planets this player has discovered, etc
 	
 	public POPExtendedPlayer(EntityPlayer playerArg) {
 		this.player = playerArg;
 		//Initialize other variables here
+		increment = 0;
 	}
 	
 	public static final void register(EntityPlayer playerArg) {
@@ -24,17 +25,21 @@ public class POPExtendedPlayer implements IExtendedEntityProperties {
 	}
 	
 	public static final POPExtendedPlayer get(EntityPlayer player) {
+		if (player.getExtendedProperties(EXT_PROP_NAME)==null) {
+			register(player);
+			POPLog.severe("[Planets O Plenty] Player " + player.username + " failed to have extended properties registered when joining server? Registering now in get()");
+		}
 		return (POPExtendedPlayer) player.getExtendedProperties(EXT_PROP_NAME);
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-		example = compound.getInteger("Example");
+		increment = compound.getInteger("DEBUG_Increment");
 	}
 
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
-		compound.setInteger("Example", example);
+		compound.setInteger("DEBUG_Increment", increment);
 	}
 
 	@Override

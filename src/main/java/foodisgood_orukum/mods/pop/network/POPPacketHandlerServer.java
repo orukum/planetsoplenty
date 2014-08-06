@@ -1,5 +1,6 @@
 package foodisgood_orukum.mods.pop.network;
 
+import java.util.List;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 
@@ -26,14 +27,16 @@ import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.PacketUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.*;
+import net.minecraft.entity.player.*;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.network.packet.Packet9Respawn;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.WorldProvider;
@@ -42,7 +45,8 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-import foodisgood_orukum.mods.pop.POPLog;
+import foodisgood_orukum.mods.pop.*;
+import foodisgood_orukum.mods.pop.space.testingworlds.SuperflatWestPlanet;
 
 public class POPPacketHandlerServer implements IPacketHandler {
     public static enum EnumPacketServer {
@@ -89,23 +93,32 @@ public class POPPacketHandlerServer implements IPacketHandler {
                     Integer.class,
                     Integer.class,
                     String.class),
-        UPDATE_SHIP_MOTION_Y(26, Integer.class, Boolean.class);*/;
-
-        private int index;
-        private Class<?>[] decodeAs;
+        UPDATE_SHIP_MOTION_Y(26, Integer.class, Boolean.class);*/
+    	DEBUG_EXPLODE(0, Double.class, Double.class, Double.class),
+    	DEBUG_WEST_WORLD_GEN(1),
+    	DEBUG_INC_COUNTER(2),
+    	DEBUG_SEND_SERVER_CHAT(3),
+    	DEBUG_ADD_ARROW(4);
+    	
+        public int index;
+        public Class<?>[] decodeAs;
 
         private EnumPacketServer(int index, Class<?>... decodeAs) {
             this.index = index;
             this.decodeAs = decodeAs;
         }
-
-        public int getIndex() {
-            return this.index;
-        }
-
-        public Class<?>[] getDecodeClasses() {
-            return this.decodeAs;
-        }
+    }
+    
+    public static final void tellAllPlayers(ChatMessageComponent chat) {
+    	for (String s : MinecraftServer.getServer().getConfigurationManager().getAllUsernames())
+    		MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(s).sendChatToPlayer(chat);
+    }
+    
+    public static final void tellAllPlayers(String text) {
+    	ChatMessageComponent chat = new ChatMessageComponent();
+    	chat.addText(text);
+    	for (String s : MinecraftServer.getServer().getConfigurationManager().getAllUsernames())
+    		MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(s).sendChatToPlayer(chat);
     }
 
     @Override
@@ -119,7 +132,7 @@ public class POPPacketHandlerServer implements IPacketHandler {
             return;
         }
         final DataInputStream data = new DataInputStream(new ByteArrayInputStream(packet.data));
-        final int packetType = PacketUtil.readPacketID(data);
+        final int packetType = POPPacketUtils.readPacketID(data);
 
         final EntityPlayerMP player = (EntityPlayerMP) p;
         //final GCCorePlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player);
@@ -127,9 +140,56 @@ public class POPPacketHandlerServer implements IPacketHandler {
         Object[] packetReadout = null;
         EnumPacketServer packetInfo = EnumPacketServer.values()[packetType];
 
-        if (packetInfo.getDecodeClasses() != null && packetInfo.getDecodeClasses().length > 0)
-            packetReadout = PacketUtil.readPacketData(data, packetInfo.getDecodeClasses());
-        
+        if (packetInfo.decodeAs != null && packetInfo.decodeAs.length > 0)
+            packetReadout = POPPacketUtils.readPacketData(data, packetInfo.decodeAs);
+        switch (packetInfo) {
+        case DEBUG_WEST_WORLD_GEN:
+        	if (PlanetsOPlenty.debug)
+	        	if (SuperflatWestPlanet.blockID==Block.sandStone.blockID)
+	        		SuperflatWestPlanet.blockID = (short) Block.blockDiamond.blockID;
+	        	else
+	        		SuperflatWestPlanet.blockID = (short) Block.sandStone.blockID;
+        	break;
+        case DEBUG_INC_COUNTER:
+        	if (PlanetsOPlenty.debug && player!=null)
+        		POPExtendedPlayer.get(player).increment++;
+        	break;
+        case DEBUG_EXPLODE:
+        	if (PlanetsOPlenty.debug && player!=null) {
+        		double x = (Double) packetReadout[0];
+        		double y = (Double) packetReadout[1];
+        		double z = (Double) packetReadout[2];
+        		player.worldObj.createExplosion(player, x, y, z, 20F, true);
+        	}
+        	break;
+        default:
+        	if (player!=null)
+        		player.sendChatToPlayer(new ChatMessageComponent().addText("Error processing request? Unkown packet index"));
+        		//player.sendChatMessage("Error processing request? Unknown packet index"));
+    		POPLog.severe("Error processing request? Unkown packet index");
+    		break;
+        case DEBUG_ADD_ARROW:
+        	if (PlanetsOPlenty.debug) {
+        		tellAllPlayers((player==null ? "NULL" : player.username) + ':');
+        		tellAllPlayers("Yaw:      " + player.rotationYaw);
+        		tellAllPlayers("Head yaw: " + player.rotationYawHead);
+        		tellAllPlayers("Pitch:      " + player.rotationPitch);
+        		player.setArrowCountInEntity(player.getArrowCountInEntity()+1);
+        	}
+        	break;
+        case DEBUG_SEND_SERVER_CHAT:
+        	if (PlanetsOPlenty.debug) {
+	        	ChatMessageComponent chat = new ChatMessageComponent();
+	        	if (player==null)
+	        		chat.addText("User NULL attempts to send chat message but fails, since he doesn't exist");
+	        	else
+	        		chat.addText("User " + player.username + " announces he has incremented his counter " + POPExtendedPlayer.get(player).increment + " times.");
+	        	//for (EntityPlayer b : (EntityPlayer[])MinecraftServer.getServer().getConfigurationManager().playerEntityList.toArray())
+	        	//	b.sendChatToPlayer(chat);
+	        	tellAllPlayers(chat);
+        	}
+        }
+        POPLog.info("Planets O Plenty server recieved client packet with ID " + packetType);
         /*switch (packetInfo)
         {
         case OPEN_TANK_GUI:

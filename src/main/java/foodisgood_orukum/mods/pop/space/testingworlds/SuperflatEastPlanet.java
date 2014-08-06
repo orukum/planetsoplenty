@@ -79,11 +79,6 @@ public class SuperflatEastPlanet extends POPPlanet {
 	}
 
 	@Override
-	public Class<? extends WorldProvider> getWorldProvider() {
-		return SuperflatEastPlanet.class;
-	}
-
-	@Override
 	public IGalaxy getParentGalaxy() {
 		return POPCelestials.eastGalaxy;
 		//return GalacticraftCore.galaxyMilkyWay;
@@ -136,15 +131,8 @@ public class SuperflatEastPlanet extends POPPlanet {
 	public float getSoundVolReductionAmount() {
 		return .875F;
 	}
-	
-    /*@Override
-    public void setDimension(int var1)
-    {
-        this.dimensionId = var1;
-        super.setDimension(var1);
-    }
 
-    @Override
+    /*@Override
     protected void generateLightBrightnessTable()
     {
         final float var1 = 0.0F;
@@ -447,16 +435,13 @@ public class SuperflatEastPlanet extends POPPlanet {
 		                    {
 		                        yDev = d + (d2 - d) * d3;
 		                    }
-		                    if (((((chunkX/2)+(chunkZ/2)+2)%7==4) && (Math.abs(this.randFromPoint(chunkX, chunkZ))%178)<4)) {
-			                    for (int y = 0; y < 40; y++)
-			                    {
+		                    if (((((chunkX/2)+(chunkZ/2)+2)%7==4) && (Math.abs(randFromPointSeed(chunkX, chunkZ))%197)==3)) {
+			                    for (int y = 0; y < 40; y++) {
 		                            idArray[this.getIndex(x, y, z)] = this.lowerBlockIDHigh;
 		                            metaArray[this.getIndex(x, y, z)] = this.lowerBlockMetaHigh;
 			                    }
-			                    for (int y = 40; y < CHUNK_SIZE_Y; y++)
-			                    {
-			                        if (y < MID_HEIGHT + yDev-12)
-			                        {
+			                    for (int y = 40; y < CHUNK_SIZE_Y; y++) {
+			                        if (y < MID_HEIGHT + yDev-12) {
 				                    	short id = (short) (Math.abs(rand.nextInt())%175);
 			                    		switch (id) {
 			                    		case 55: case 76: case 75: case 93: case 94: case 149: case 150: case 151: case 141: case 142: case 152: case 132: case 131: case 157: case 148: case 147: case 146: case 77: case 69: case 28:
@@ -471,10 +456,8 @@ public class SuperflatEastPlanet extends POPPlanet {
 			                        	break;
 			                    }
 		                    } else {
-			                    for (int y = 0; y < CHUNK_SIZE_Y; y++)
-			                    {
-			                        if (y < MID_HEIGHT + yDev)
-			                        {
+			                    for (int y = 0; y < CHUNK_SIZE_Y; y++) {
+			                        if (y < MID_HEIGHT + yDev) {
 			                            idArray[this.getIndex(x, y, z)] = this.lowerBlockIDHigh;
 			                            metaArray[this.getIndex(x, y, z)] = this.lowerBlockMetaHigh;
 			                        } else
@@ -491,12 +474,9 @@ public class SuperflatEastPlanet extends POPPlanet {
             	}
             } else {
             	if (((((chunkX/2)+(chunkZ/2))%2==1) ^ ((chunkX/2)>0) ^ ((chunkZ/2)>0))) {
-		            for (int x = 0; x < CHUNK_SIZE_X; x++)
-		            {
-		                for (int z = 0; z < CHUNK_SIZE_Z; z++)
-		                {		
-		                    for (int y = 0; y < MID_HEIGHT; y++)
-		                    {
+		            for (int x = 0; x < CHUNK_SIZE_X; x++) {
+		                for (int z = 0; z < CHUNK_SIZE_Z; z++) {		
+		                    for (int y = 0; y < MID_HEIGHT; y++) {
 	                            idArray[this.getIndex(x, y, z)] = this.lowerBlockIDLow;
 	                            metaArray[this.getIndex(x, y, z)] = this.lowerBlockMetaLow;
 		                    }
@@ -538,44 +518,32 @@ public class SuperflatEastPlanet extends POPPlanet {
 	    			lowerBlockMeta = this.lowerBlockMetaLow;
 	    		}
 	    		final int var5 = 20;
-	            for (int var8 = 0; var8 < 16; ++var8)
-	            {
-	                for (int var9 = 0; var9 < 16; ++var9)
-	                {
+	            for (int var8 = 0; var8 < 16; ++var8) {
+	                for (int var9 = 0; var9 < 16; ++var9) {
 	                    final int var12 = (int) (this.noiseGen4.getNoise(var8 + par1 * 16, var9 * par2 * 16) / 3.0D + 3.0D + this.rand.nextDouble() * 0.25D);
 	                    int var13 = -1;
 
-	                    for (int var16 = 127; var16 >= 0; --var16)
-	                    {
+	                    for (int var16 = 127; var16 >= 0; --var16) {
 	                        final int index = this.getIndex(var8, var16, var9);
 	                        arrayOfMeta[index] = 0;
 
-	                        if (var16 <= 0 + this.rand.nextInt(5))
-	                        {
+	                        if (var16 <= 0 + this.rand.nextInt(5)) {
 	                            arrayOfIDs[index] = (short) Block.bedrock.blockID;
-	                        }
-	                        else
-	                        {
+	                        } else {
 	                            final int var18 = arrayOfIDs[index];
-	                            if (var18 == 0)
-	                            {
+	                            if (var18 == 0) {
 	                                var13 = -1;
 	                            }
-	                            else if (var18 == lowerBlockID)
-	                            {
+	                            else if (var18 == lowerBlockID) {
 	                                arrayOfMeta[index] = lowerBlockMeta;
 
-	                                if (var13 == -1)
-	                                {
-	                                    if (var12 <= 0)
-	                                    {
+	                                if (var13 == -1) {
+	                                    if (var12 <= 0) {
 	                                        var14 = 0;
 	                                        var14m = 0;
 	                                        var15 = lowerBlockID;
 	                                        var15m = lowerBlockMeta;
-	                                    }
-	                                    else if (var16 >= var5 - -16 && var16 <= var5 + 1)
-	                                    {
+	                                    } else if (var16 >= var5 - -16 && var16 <= var5 + 1) {
 	                        	    		if (chunkZ>0) {
 	                        	    			var14 = this.topBlockIDHigh;
 	                        	    			var14m = this.topBlockMetaHigh;
@@ -595,19 +563,14 @@ public class SuperflatEastPlanet extends POPPlanet {
 
 	                                    var13 = var12;
 
-	                                    if (var16 >= var5 - 1)
-	                                    {
+	                                    if (var16 >= var5 - 1) {
 	                                        arrayOfIDs[index] = var14;
 	                                        arrayOfMeta[index] = var14m;
-	                                    }
-	                                    else if (var16 < var5 - 1 && var16 >= var5 - 2)
-	                                    {
+	                                    } else if (var16 < var5 - 1 && var16 >= var5 - 2) {
 	                                        arrayOfIDs[index] = var15;
 	                                        arrayOfMeta[index] = var15m;
 	                                    }
-	                                }
-	                                else if (var13 > 0)
-	                                {
+	                                } else if (var13 > 0) {
 	                                    --var13;
 	                                    arrayOfIDs[index] = var15;
 	                                    arrayOfMeta[index] = var15m;
@@ -651,53 +614,37 @@ public class SuperflatEastPlanet extends POPPlanet {
         	if (chunkX<8)
         		return;
             for (int cx = chunkX - 2; cx <= chunkX + 2; cx++)
-            {
                 for (int cz = chunkZ - 2; cz <= chunkZ + 2; cz++)
-                {
                     for (int x = 0; x < CHUNK_SIZE_X; x++)
-                    {
                         for (int z = 0; z < CHUNK_SIZE_Z; z++)
-                        {
-                            if (Math.abs(this.randFromPoint(cx * 16 + x, (cz * 16 + z) * 1000)) < this.noiseGen4.getNoise(x * CHUNK_SIZE_X + x, cz * CHUNK_SIZE_Z + z) / CRATER_PROB)
-                            {
+                            if (Math.abs(this.randFromPoint(cx * 16 + x, (cz * 16 + z) * 1000)) < this.noiseGen4.getNoise(x * CHUNK_SIZE_X + x, cz * CHUNK_SIZE_Z + z) / CRATER_PROB) {
                                 final Random random = new Random(cx * 16 + x + (cz * 16 + z) * 5000);
                                 final GCCoreCraterSize cSize = GCCoreCraterSize.sizeArray[random.nextInt(GCCoreCraterSize.sizeArray.length)];
                                 final int size = random.nextInt(cSize.MAX_SIZE - cSize.MIN_SIZE) + cSize.MIN_SIZE;
                                 this.makeCrater(cx * 16 + x, cz * 16 + z, chunkX * 16, chunkZ * 16, size, chunkArray, metaArray);
                             }
-                        }
-                    }
-                }
-            }
         }
 
         public void makeCrater(int craterX, int craterZ, int chunkX, int chunkZ, int size, short[] chunkArray, byte[] metaArray) {
-            for (int x = 0; x < CHUNK_SIZE_X; x++)
-            {
-                for (int z = 0; z < CHUNK_SIZE_Z; z++)
-                {
+            for (int x = 0; x < CHUNK_SIZE_X; x++) {
+                for (int z = 0; z < CHUNK_SIZE_Z; z++) {
                     double xDev = craterX - (chunkX + x);
                     double zDev = craterZ - (chunkZ + z);
-                    if (xDev * xDev + zDev * zDev < size * size)
-                    {
+                    if (xDev * xDev + zDev * zDev < size * size) {
                         xDev /= size;
                         zDev /= size;
                         final double sqrtY = xDev * xDev + zDev * zDev;
                         double yDev = sqrtY * sqrtY * 6;
                         yDev = 5 - yDev;
                         int helper = 0;
-                        for (int y = 127; y > 0; y--)
-                        {
-                            if (chunkArray[this.getIndex(x, y, z)] != 0 && helper <= yDev)
-                            {
+                        for (int y = 127; y > 0; y--) {
+                            if (chunkArray[this.getIndex(x, y, z)] != 0 && helper <= yDev) {
                                 chunkArray[this.getIndex(x, y, z)] = 0;
                                 metaArray[this.getIndex(x, y, z)] = 0;
                                 helper++;
                             }
                             if (helper > yDev)
-                            {
                                 break;
-                            }
                         }
                     }
                 }
