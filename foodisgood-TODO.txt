@@ -1,0 +1,12 @@
+-Need to fix direction of explosion
+-Appears to be adding another channel every time I quit and rejoin the game
+	(don't forget to fix for entity channel, as well)
+-Extended player data does not persist through saves or death
+-Terrain in Superflat West Test Planet is capping itself at y=128
+
+	Other things to do next time:
+-Add lava world
+-add ocean world?
+-Add another world, perhaps, with ocean (even up to nearly the build limit) but a glass (or my own block!) floor and possibly somewhat normal world underneath
+-Maybe: Add landing type for that? To use for water-covered worlds
+-Add my own kind of block, one that's impervious and invisible, but that the player (and only the player) can pass through
