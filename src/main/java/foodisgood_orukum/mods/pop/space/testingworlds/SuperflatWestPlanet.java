@@ -459,6 +459,7 @@ public class SuperflatWestPlanet extends POPPlanet {
 
         @Override
         public Chunk provideChunk(int par1, int par2) {
+        	//Chunk temp = super.provideChunk(par1, par2);
             this.rand.setSeed(par1 * 341873128712L + par2 * 132897987541L);
             final short[] ids = new short[32768 * 2];
             final byte[] meta = new byte[32768 * 2];

@@ -18,3 +18,5 @@
 -Look into terrain generation in general, try making a planet that's my own generator entirely (useful for making our own biomes later)
 -Look into how to send mails? (asking an admin to look at X log file or something for error that had been caught or something)
 -Figure out how to efficiently do certain things... like update a player's knowledge of a planet (like the fact that one actually had a surface like I described above below the magma (they can usze this to update their Star Atlases by hand
+-Perhaps add a larger oxygen tank as part of the mod?
+-And/or a scuba set for use on ocean worlds, using the same oxygen framework?
