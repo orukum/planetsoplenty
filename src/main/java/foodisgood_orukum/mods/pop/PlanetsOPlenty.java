@@ -3,40 +3,9 @@ package foodisgood_orukum.mods.pop;
 import java.io.File;
 
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
-import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
-import micdoodle8.mods.galacticraft.api.recipe.SchematicRegistry;
-import micdoodle8.mods.galacticraft.api.world.IGalaxy;
-import micdoodle8.mods.galacticraft.core.GCLog;
+import micdoodle8.mods.galacticraft.api.recipe.*;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.GCCoreItems;
-import micdoodle8.mods.galacticraft.core.network.GCCoreConnectionHandler;
-import micdoodle8.mods.galacticraft.core.network.GCCorePacketManager;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.mars.blocks.GCMarsBlocks;
-import micdoodle8.mods.galacticraft.mars.dimension.GCMarsTeleportType;
-import micdoodle8.mods.galacticraft.mars.dimension.GCMarsWorldProvider;
-import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntityCargoRocket;
-import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntityCreeperBoss;
-import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntityLandingBalloons;
-import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntityProjectileTNT;
-import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntityRocketT2;
-import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntitySlimeling;
-import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntitySludgeling;
-import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntityTerraformBubble;
-import micdoodle8.mods.galacticraft.mars.items.GCMarsItems;
-import micdoodle8.mods.galacticraft.mars.network.GCMarsPacketHandlerServer;
-import micdoodle8.mods.galacticraft.mars.recipe.GCMarsRecipeManager;
-import micdoodle8.mods.galacticraft.mars.schematic.GCMarsSchematicCargoRocket;
-import micdoodle8.mods.galacticraft.mars.schematic.GCMarsSchematicRocketT2;
-import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityCryogenicChamber;
-import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityDungeonSpawner;
-import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityLaunchController;
-import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntitySlimelingEgg;
-import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityTerraformer;
-import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityTreasureChest;
 import micdoodle8.mods.galacticraft.mars.GalacticraftMars;
-import micdoodle8.mods.galacticraft.moon.dimension.GCMoonTeleportType;
-import micdoodle8.mods.galacticraft.moon.items.GCMoonItem;
 import net.minecraft.block.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -45,17 +14,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.*;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.network.*;
+import cpw.mods.fml.common.registry.*;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.items.*;
 import foodisgood_orukum.mods.pop.space.*;
@@ -76,7 +42,7 @@ public final class PlanetsOPlenty {
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "POPEntities";
-    public static final String VERSION = "-1.0000000000000000000000000065";
+    public static final String VERSION = "-1.0000000000000000000000000066";
     public static final boolean debug = true;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
@@ -94,6 +60,8 @@ public final class PlanetsOPlenty {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+    	if (debug)
+    		POPLog.info("POP: preInit()");
         POPConfigManager.setDefaultValues(new File(event.getModConfigurationDirectory(), "POP.cfg"));
         POPBlocks.initBlocks();
         POPBlocks.registerBlocks();
@@ -122,6 +90,8 @@ public final class PlanetsOPlenty {
 
     @EventHandler
     public void load(FMLInitializationEvent event) {
+    	if (debug)
+    		POPLog.info("POP: load()");
     	PlanetsOPlenty.planetsOPlentyTab = new POPCreativeTab(CreativeTabs.getNextID(), PlanetsOPlenty.MODID, POPItems.spaceshipT4.itemID, 5);
         PlanetsOPlenty.proxy.init(event);
         NetworkRegistry.instance().registerChannel(new POPEntityPacketManager(), PlanetsOPlenty.CHANNELENTITIES, Side.CLIENT);
@@ -156,16 +126,22 @@ public final class PlanetsOPlenty {
     
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+    	if (debug)
+    		POPLog.info("POP: postInit()");
     	NetworkRegistry.instance().registerGuiHandler(this, PlanetsOPlenty.proxy);
     }
     
     @EventHandler
     public void serverInit(FMLServerStartedEvent event) {
+    	if (debug)
+    		POPLog.info("POP: serverInit()");
         NetworkRegistry.instance().registerChannel(new POPPacketHandlerServer(), PlanetsOPlenty.CHANNEL, Side.SERVER);
     }
 
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
+    	if (debug)
+    		POPLog.info("POP: serverStarting()");
         //NetworkRegistry.instance().registerChannel(new GCMarsPacketHandlerServer(), GalacticraftMars.CHANNEL, Side.SERVER);
     }
 
@@ -203,11 +179,15 @@ public final class PlanetsOPlenty {
     }
 
     public void registerPOPCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore) {
+        //if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+         //   LanguageRegistry.instance().addStringLocalization("entity." + var1 + ".name", StatCollector.translateToLocal("entity.GalacticraftCore." + var1 + ".name"));
         EntityRegistry.registerGlobalEntityID(var0, var1, id, back, fore);
         EntityRegistry.registerModEntity(var0, var1, id, PlanetsOPlenty.instance, 80, 3, true);
     }
 
     public void registerPOPNonMobEntity(Class<? extends Entity> var0, String var1, int id, int trackingDistance, int updateFreq, boolean sendVel) {
+        /*if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+            LanguageRegistry.instance().addStringLocalization("entity." + var1 + ".name", StatCollector.translateToLocal("entity.GalacticraftCore." + var1 + ".name"));*/
         EntityList.addMapping(var0, var1, id);
         EntityRegistry.registerModEntity(var0, var1, id, PlanetsOPlenty.instance, trackingDistance, updateFreq, sendVel);
     }

@@ -166,6 +166,10 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
 		return getName();
 	}
 
+    protected static final int getIndex(int x, int y, int z) {
+        return y << 8 | z << 4 | x;
+    }
+    
 	@Override
 	public final String getPlanetName() {
 		return getName();

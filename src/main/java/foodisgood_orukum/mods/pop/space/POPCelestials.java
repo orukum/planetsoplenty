@@ -3,6 +3,7 @@ package foodisgood_orukum.mods.pop.space;
 import net.minecraft.world.WorldProviderHell;
 import net.minecraftforge.common.DimensionManager;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
+import micdoodle8.mods.galacticraft.api.world.IMoon;
 import micdoodle8.mods.galacticraft.mars.dimension.GCMarsTeleportType;
 import micdoodle8.mods.galacticraft.moon.dimension.GCMoonTeleportType;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -23,6 +24,7 @@ public class POPCelestials {
 	public static SuperflatWestPlanet superflatWestPlanet;
 	public static NetherPlanet netherPlanet;
 	public static LavaPlanet lavaPlanet;
+	public static LavaCeilingPlanet lavaCeilingPlanet;
 	
 	public static void preInit(FMLPreInitializationEvent event) {
 		if (PlanetsOPlenty.debug) {
@@ -45,10 +47,14 @@ public class POPCelestials {
 			netherPlanet = new NetherPlanet();
 			superflatWestPlanet = new SuperflatWestPlanet(currentDimension++);
 			lavaPlanet = new LavaPlanet(currentDimension++);
+			lavaCeilingPlanet = new LavaCeilingPlanet(currentDimension++);
+			superflatWestPlanet.moons = new IMoon[1];
+			superflatWestPlanet.moons[0] = lavaCeilingPlanet;
 			
 			superflatEastPlanet.initSolar(1);
 			superflatWestPlanet.initSolar(1);
 			lavaPlanet.initSolar(1);
+			lavaCeilingPlanet.initSolar(1);
 	
 			GalacticraftRegistry.registerGalaxy(westGalaxy);
 			GalacticraftRegistry.registerGalaxy(eastGalaxy);
@@ -60,9 +66,11 @@ public class POPCelestials {
 			GalacticraftRegistry.registerCelestialBody(superflatWestPlanet);
 			GalacticraftRegistry.registerCelestialBody(netherPlanet);
 			GalacticraftRegistry.registerCelestialBody(lavaPlanet);
+			GalacticraftRegistry.registerCelestialBody(lavaCeilingPlanet);
 			GalacticraftRegistry.registerTeleportType(SuperflatEastPlanet.class, new GCMoonTeleportType());
 			GalacticraftRegistry.registerTeleportType(WorldProviderHell.class, new GCMoonTeleportType());
 			GalacticraftRegistry.registerTeleportType(SuperflatWestPlanet.class, new GCMarsTeleportType());
+			GalacticraftRegistry.registerTeleportType(LavaPlanet.class, new GCMarsTeleportType());//Temp
 			GalacticraftRegistry.registerTeleportType(LavaPlanet.class, new GCMarsTeleportType());//Temp
 		}
 	}

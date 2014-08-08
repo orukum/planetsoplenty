@@ -21,7 +21,7 @@ import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import foodisgood_orukum.mods.pop.POPLog;
 
-//class abstract final try catch finally throw throws static public private protected null return byte char short int long double float do while for if goto break continue new enum else void interface extends implements boolean import package switch case default
+//class abstract final try catch finally throw throws static public private protected null return byte char short int long double float do while for if goto break continue new enum else void interface extends implements boolean import package switch case default native assert const instanceof strictfp super synchronized this transient volatile
 
 public class POPEntityPacketManager implements IPacketHandler {
     public enum POPPacketType {

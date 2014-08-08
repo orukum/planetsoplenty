@@ -13,8 +13,8 @@
 -Figure out how lighting works and try to make it so that the above water world and the below lava world's subsuraces are treated like normal... and not like they are at light level 0. (one option is just to disable 
 -Look at OpenBlocks source to see how to make a block not touchable by players while still being solid
 -Update this list
--Finish the registerBlocks method in POPBlocks
--Add sky rendering components in POPWorld dealing with stars
+-Add sky rendering components in POPWorld dealing with stars, moons, other planets
+-Add atmospheres
 
 	Longer term:
 -Look into terrain generation in general, try making a planet that's my own generator entirely (useful for making our own biomes later)

@@ -138,7 +138,7 @@ public class POPPacketHandlerServer implements IPacketHandler {
         //final GCCorePlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player);
 
         Object[] packetReadout = null;
-        EnumPacketServer packetInfo = EnumPacketServer.values()[packetType];
+        final EnumPacketServer packetInfo = EnumPacketServer.values()[packetType];
 
         if (packetInfo.decodeAs != null && packetInfo.decodeAs.length > 0)
             packetReadout = POPPacketUtils.readPacketData(data, packetInfo.decodeAs);
@@ -156,9 +156,9 @@ public class POPPacketHandlerServer implements IPacketHandler {
         	break;
         case DEBUG_EXPLODE:
         	if (PlanetsOPlenty.debug && player!=null) {
-        		double x = (Double) packetReadout[0];
-        		double y = (Double) packetReadout[1];
-        		double z = (Double) packetReadout[2];
+        		final double x = (Double) packetReadout[0];
+        		final double y = (Double) packetReadout[1];
+        		final double z = (Double) packetReadout[2];
         		player.worldObj.createExplosion(player, x, y, z, 20F, true);
         	}
         	break;
@@ -173,7 +173,7 @@ public class POPPacketHandlerServer implements IPacketHandler {
         		tellAllPlayers((player==null ? "NULL" : player.username) + ':');
         		tellAllPlayers("Yaw:      " + player.rotationYaw);
         		tellAllPlayers("Head yaw: " + player.rotationYawHead);
-        		tellAllPlayers("Pitch:      " + player.rotationPitch);
+        		tellAllPlayers("Pitch:    " + player.rotationPitch);
         		player.setArrowCountInEntity(player.getArrowCountInEntity()+1);
         	}
         	break;
@@ -183,7 +183,7 @@ public class POPPacketHandlerServer implements IPacketHandler {
 	        	if (player==null)
 	        		chat.addText("User NULL attempts to send chat message but fails, since he doesn't exist");
 	        	else
-	        		chat.addText("User " + player.username + " announces he has incremented his counter " + POPExtendedPlayer.get(player).increment + " times.");
+	        		chat.addText("User " + player.username + " announces they have incremented counter " + POPExtendedPlayer.get(player).increment + " times.");
 	        	//for (EntityPlayer b : (EntityPlayer[])MinecraftServer.getServer().getConfigurationManager().playerEntityList.toArray())
 	        	//	b.sendChatToPlayer(chat);
 	        	tellAllPlayers(chat);

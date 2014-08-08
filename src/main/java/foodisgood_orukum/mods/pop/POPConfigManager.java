@@ -19,7 +19,9 @@ public final class POPConfigManager {
     	idMercuryStill,
     	idSkyBoundingBlock,
     	idSpecialLavaStill,
-    	idSpecialLavaFlow;
+    	idSpecialLavaFlow,
+    	idInvisibleBlock,
+    	idSpecialStone;
     
     // ITEMS
     public static int idItemT4Rocket;
@@ -60,7 +62,7 @@ public final class POPConfigManager {
         	POPConfigManager.forceOverworldRespawn = POPConfigManager.config.get(Configuration.CATEGORY_GENERAL, "Force Overworld Spawn", false, "By default, if you die you'll respawn on the POP dimension you died on. If this is set to true, you will respawn in the overworld. Equivalent to Galacticraft config option of same name.").getBoolean(false);
         	
         	// DIMENSIONS
-        	POPConfigManager.idDimensionRangeStart = POPConfigManager.config.get(CATEGORY_DIMENSIONS, "idDimensionRangeStart", 10000, "The beginning of range of dimension IDs to reserve for POP.").getInt();//TODO: Somehow make this handle changes in IDs? If feasible. Also look into dynamically handling dimension registering, like I assume Mystcraft does.
+        	POPConfigManager.idDimensionRangeStart = POPConfigManager.config.get(CATEGORY_DIMENSIONS, "idDimensionRangeStart", 10000, "The beginning of range of dimension IDs to reserve for POP.").getInt(10000);//TODO: Somehow make this handle changes in IDs? If feasible. Also look into dynamically handling dimension registering, like I assume Mystcraft does.
         	
         	// ENTITIES
         	POPConfigManager.idEntityT4Rocket = POPConfigManager.config.get(CATEGORY_ENTITIES, "idEntityT4Rocket", 20000).getInt(20000);
@@ -69,11 +71,13 @@ public final class POPConfigManager {
         	POPConfigManager.idItemT4Rocket = POPConfigManager.config.get(Configuration.CATEGORY_ITEM, "idItemT4Rocket", 10256).getInt(10256);
         	
         	// BLOCKS
-        	POPConfigManager.idMercuryStill = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idMercuryStill", 3000).getInt(3000);
+        	POPConfigManager.idMercuryStill = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idMercuryStill", 3000, "Must be less than " + Short.MAX_VALUE).getInt(3000);
         	POPConfigManager.idMercuryFlowing = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idMercuryFlow", 3001).getInt(3001);
         	POPConfigManager.idSpecialLavaFlow = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialLavaFlow", 3002).getInt(3002);
-        	POPConfigManager.idSpecialLavaStill = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialLavaStill", 3003).getInt(3003);
-        	POPConfigManager.idSkyBoundingBlock = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSkyBoundingBlock", 3004).getInt(3004);
+        	POPConfigManager.idSpecialLavaStill = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialLavaStill", 3003, "Must be less than " + Short.MAX_VALUE).getInt(3003);
+        	POPConfigManager.idSkyBoundingBlock = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSkyBoundingBlock", 3004, "Must be less than " + Short.MAX_VALUE).getInt(3004);
+        	POPConfigManager.idInvisibleBlock = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idInvisibleBlock", 3005, "Must be less than " + Short.MAX_VALUE).getInt(3005);
+        	POPConfigManager.idSpecialStone = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialStoneBlock", 3006, "Must be less than " + Short.MAX_VALUE).getInt(3006);
             /*
             GCCoreConfigManager.idDimensionOverworldOrbit = GCCoreConfigManager.configuration.get("DIMENSIONS", "idDimensionOverworldOrbit", -27).getInt(-27);
 

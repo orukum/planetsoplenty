@@ -32,27 +32,21 @@ public class CommonPOPProxy implements IGuiHandler {
     	MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public void init(FMLInitializationEvent event)
-    {
-    	
-    }
+    public void init(FMLInitializationEvent event) {
+    	;
+    }//io99999999999999999999999999999999999999999999999999k7888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888p
 
-    public void postInit(FMLPostInitializationEvent event)
-    {
-
+    public void postInit(FMLPostInitializationEvent event) {
+    	;
     }
 
     public void registerRenderInformation() {}
 
-    public void spawnParticle(String var1, double var2, double var4, double var6)
-    {
-        ;
-    }
-    //TODO: Take a look at net.minecraftforge.event and cpw.mods.fml.common.event (a few others as well)
-    /// What in the world does this do? edit: I think I get it now (sort of)
+    public void spawnParticle(String var1, double var2, double var4, double var6) {}
+
+    /// What in the world does this do? edit: I think I get it now
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-    {
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         //TileEntity tile = world.getBlockTileEntity(x, y, z);
 
         /*if (ID == GCMarsConfigManager.idGuiMachine)
@@ -61,7 +55,7 @@ public class CommonPOPProxy implements IGuiHandler {
             {
                 return new GCMarsContainerTerraformer(player.inventory, (GCMarsTileEntityTerraformer) tile);
             }
-            else if (tile instanceof GCMarsTileEntityLaunchController)
+            pppppppppppppppppppppppppppppppppppppppppppppppppppelse if (tile instanceof GCMarsTileEntityLaunchController)
             {
                 return new GCMarsContainerLaunchController(player.inventory, (GCMarsTileEntityLaunchController) tile);
             }
@@ -170,8 +164,7 @@ public class CommonPOPProxy implements IGuiHandler {
     }
 
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-    {
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         return null;
     }
     

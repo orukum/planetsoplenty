@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -16,6 +17,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.EnumHelperClient;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import micdoodle8.mods.galacticraft.core.client.fx.GCCoreEntityLaunchFlameFX;
@@ -50,24 +52,27 @@ public class POPClientProxy extends CommonPOPProxy {
     private static int treasureRenderID;
     private static int machineRenderID;
     private static int tintedGlassRenderID;*/
+	public static EnumRarity popItemRarity = EnumHelperClient.addRarity("POPRarity", 7, "Exoplanetary");
+	
 	public KeyBinding explode = null, incCounter = null, sendServerChat = null, changeWorldGen = null, arrowCount = null;
 	
 	public class DebugKeyHandler extends KeyBindingRegistry.KeyHandler {
 		boolean stillPressed = false; 
 		public DebugKeyHandler(KeyBinding[] keyBindings, boolean[] repeat) {
 			super(keyBindings, repeat);
+			POPLog.info("POP: new DebugKeyHandler()");
 		}
 
 		@Override
-		public String getLabel() {
+		public final String getLabel() {
 			return "POP Debug Keys";
 		}
 
 		@Override
-		public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
+		public final void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
 			//if (isRepeat)
 			//	return;
-			POPLog.info("Planets O Plenty: key has been pressed, sending packet to server");
+			POPLog.info("Planets O Plenty: debug key has been pressed, sending packet to server");
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			if (explode.isPressed()) {
 				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_EXPLODE.index, player.posX-20*MathHelper.sin(player.rotationYawHead*((float)Math.PI)/180F)*MathHelper.cos(player.rotationPitch*((float)Math.PI)/180F), player.posY-20*MathHelper.sin(player.rotationPitch*((float)Math.PI)/180F), player.posZ+20*MathHelper.cos(player.rotationYawHead*((float)Math.PI)/180F)*MathHelper.cos(player.rotationPitch*((float)Math.PI)/180F)));
@@ -82,18 +87,18 @@ public class POPClientProxy extends CommonPOPProxy {
 		}
 
 		@Override
-		public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
+		public final void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
 			stillPressed = false;
 		}
 
 		@Override
-		public EnumSet<TickType> ticks() {
+		public final EnumSet<TickType> ticks() {
 			return EnumSet.of(TickType.CLIENT);
 		}
 	}
 	
 	@Override
-    public void preInit(FMLPreInitializationEvent event) {
+    public final void preInit(FMLPreInitializationEvent event) {
         //MinecraftForge.EVENT_BUS.register(new GCMarsSounds());
 		if (PlanetsOPlenty.debug) {
 			//MinecraftForge.EVENT_BUS.register(new POPClientDebugListener());
@@ -109,7 +114,7 @@ public class POPClientProxy extends CommonPOPProxy {
     }
 
     @Override
-    public void init(FMLInitializationEvent event) {
+    public final void init(FMLInitializationEvent event) {
         /*TickRegistry.registerTickHandler(new TickHandlerClient(), Side.CLIENT);
         NetworkRegistry.instance().registerChannel(new ClientPacketHandler(), GalacticraftMars.CHANNEL, Side.CLIENT);
         ClientProxyMars.vineRenderID = RenderingRegistry.getNextAvailableRenderId();
@@ -126,12 +131,12 @@ public class POPClientProxy extends CommonPOPProxy {
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {
+    public final void postInit(FMLPostInitializationEvent event) {
     	;
     }
 
     @Override
-    public void registerRenderInformation() {
+    public final void registerRenderInformation() {
         /*IModelCustom chamberModel = AdvancedModelLoader.loadModel("/assets/galacticraftmars/models/chamber.obj");
         IModelCustom cargoRocketModel = AdvancedModelLoader.loadModel("/assets/galacticraftmars/models/cargoRocket.obj");
         ClientRegistry.bindTileEntitySpecialRenderer(GCMarsTileEntityTreasureChest.class, new GCMarsTileEntityTreasureChestRenderer());
@@ -156,7 +161,7 @@ public class POPClientProxy extends CommonPOPProxy {
     }
 
     @Override
-    public void spawnParticle(String var1, double var2, double var4, double var6)
+    public final void spawnParticle(String var1, double var2, double var4, double var6)
     {
         /*final Minecraft var14 = FMLClientHandler.instance().getClient();
 
@@ -327,7 +332,7 @@ public class POPClientProxy extends CommonPOPProxy {
     }*/
 
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+    public final Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tile = world.getBlockTileEntity(x, y, z);
 
         /*if (ID == GCMarsConfigManager.idGuiMachine)

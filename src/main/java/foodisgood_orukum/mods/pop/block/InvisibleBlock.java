@@ -1,24 +1,21 @@
 package foodisgood_orukum.mods.pop.block;
 
 import foodisgood_orukum.mods.pop.PlanetsOPlenty;
-import foodisgood_orukum.mods.pop.block.material.MercuryMaterial;
+import foodisgood_orukum.mods.pop.block.material.MaterialBoundary;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.world.*;
-import net.minecraft.item.*;
-import cpw.mods.fml.relauncher.*;
 
-public class MercuryBlockFlowing extends BlockFlowing {
-    protected MercuryBlockFlowing(int id) {
-		super(id, MercuryMaterial.mercury);
-		setHardness(1F);
-		setUnlocalizedName("Mercury");
-		setTextureName("lava_flow");//TODO: This is just temp of course
+public class InvisibleBlock extends Block {
+    protected InvisibleBlock(int id) {
+		super(id, new MaterialBoundary());
+		setBlockUnbreakable();
+		setUnlocalizedName("Invisible Boundary");
+		setLightOpacity(0);
 	}
     
     /*@Override
@@ -36,20 +33,20 @@ public class MercuryBlockFlowing extends BlockFlowing {
     	return true;
     }
 
-    /*@Override
+    @Override
     public boolean canCreatureSpawn(EnumCreatureType type, World world, int x, int y, int z) {
-    	return true;
-    }*/
+    	return false;
+    }
     
-    /*@Override
+    @Override
     public boolean canEntityDestroy(World world, int x, int y, int z, Entity entity) {
     	return false;
-    }*/
+    }
     
-    /*@Override
+    @Override
     public boolean canSilkHarvest() {
     	return false;
-    }*/
+    }
     
     /*@Override
     public ItemStack createStackedBlock(int par1) {
@@ -74,11 +71,6 @@ public class MercuryBlockFlowing extends BlockFlowing {
     /*@Override
     public float getBlockBrightness(IBlockAccess access, int x, int y, int z) {
     
-    }*/
-    
-    /*@Override
-    public float getBlockHardness(World world, int x, int y, int z) {
-    	
     }*/
     
     @Override
@@ -110,16 +102,6 @@ public class MercuryBlockFlowing extends BlockFlowing {
     public String getTextureName() {
     	
     }*/
-    
-    @Override
-    public boolean isBeaconBase(World worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ) {
-    	return true;
-    }
-    
-    @Override
-    public boolean isLadder(World world, int x, int y, int z, EntityLivingBase entity) {
-    	return true;//TODO: This is just to see what happens
-    }
     
     /*@Override
     public boolean isBlockFoliage(World world, int x, int y, int z) {
