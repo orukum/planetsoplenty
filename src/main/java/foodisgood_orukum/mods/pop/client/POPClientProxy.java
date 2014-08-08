@@ -70,7 +70,7 @@ public class POPClientProxy extends CommonPOPProxy {
 			POPLog.info("Planets O Plenty: key has been pressed, sending packet to server");
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			if (explode.isPressed()) {
-				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_EXPLODE.index, player.posX+20*MathHelper.cos(player.rotationYawHead), player.posY, player.posZ+20*MathHelper.sin(player.rotationYawHead)));
+				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_EXPLODE.index, player.posX-20*MathHelper.sin(player.rotationYawHead*((float)Math.PI)/180F)*MathHelper.cos(player.rotationPitch*((float)Math.PI)/180F), player.posY-20*MathHelper.sin(player.rotationPitch*((float)Math.PI)/180F), player.posZ+20*MathHelper.cos(player.rotationYawHead*((float)Math.PI)/180F)*MathHelper.cos(player.rotationPitch*((float)Math.PI)/180F)));
 			} else if (incCounter.isPressed()) {
 				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_INC_COUNTER.index));
 			} else if (sendServerChat.isPressed()) {

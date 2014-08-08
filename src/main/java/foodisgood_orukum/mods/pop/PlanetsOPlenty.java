@@ -59,6 +59,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.items.*;
 import foodisgood_orukum.mods.pop.space.*;
+import foodisgood_orukum.mods.pop.block.POPBlocks;
 import foodisgood_orukum.mods.pop.entities.*;
 import foodisgood_orukum.mods.pop.network.*;
 
@@ -68,14 +69,14 @@ import foodisgood_orukum.mods.pop.network.*;
  * All rights reserved.
  * 
  */
-@Mod(name = PlanetsOPlenty.NAME, version = PlanetsOPlenty.VERSION/* + "." + PlanetsOPlenty.LOCALMINVERSION + "." + PlanetsOPlenty.LOCALBUILDVERSION*/, useMetadata = true, modid = PlanetsOPlenty.MODID, dependencies = "required-after:" + GalacticraftCore.MODID + ";required-after:" + GalacticraftMars.MODID + ";")//";after:ICBM|Explosion; after:IC2; after:BuildCraft|Core; after:BuildCraft|Energy;")
+@Mod(name = PlanetsOPlenty.NAME, version = PlanetsOPlenty.VERSION/* + "." + PlanetsOPlenty.LOCALMINVERSION + "." + PlanetsOPlenty.LOCALBUILDVERSION*/, useMetadata = true, modid = PlanetsOPlenty.MODID, dependencies = "required-after:" + GalacticraftCore.MODID + ";required-after:" + GalacticraftMars.MODID + ";after:ICBM|Explosion;after:IC2;after:BuildCraft|Core;after:BuildCraft|Energy;after:BiomesOPlenty;")
 @NetworkMod(channels = { PlanetsOPlenty.CHANNELENTITIES, PlanetsOPlenty.CHANNEL }, clientSideRequired = true, serverSideRequired = true, connectionHandler = POPConnectionHandler.class, packetHandler = POPEntityPacketManager.class)
 public final class PlanetsOPlenty {
     public static final String NAME = "Planets O' Plenty";
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "POPEntities";
-    public static final String VERSION = "-1.0000000000000000000000000063";
+    public static final String VERSION = "-1.0000000000000000000000000065";
     public static final boolean debug = true;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
@@ -94,6 +95,8 @@ public final class PlanetsOPlenty {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         POPConfigManager.setDefaultValues(new File(event.getModConfigurationDirectory(), "POP.cfg"));
+        POPBlocks.initBlocks();
+        POPBlocks.registerBlocks();
         /*MinecraftForge.EVENT_BUS.register(new GCMarsEvents());
         new GCMarsConfigManager(new File(event.getModConfigurationDirectory(), "Galacticraft/mars.conf"));
 

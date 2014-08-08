@@ -53,7 +53,7 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
         long n;
         n = x + z * 57;
         n = n << 13 ^ n;
-        n^=seed;
+        n^=seed^(seed);
         return 1.0 - (n * (n * n * 15731 + 789221) + 1376312589 & 0x7fffffff) / 1073741824.0;
     }
 
@@ -81,11 +81,11 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
 	 * @param z the z coordinate
 	 * @return a pseudorandom number
 	 */
-    public double randFromPointSeed(int x, int z) {
+    public final double randFromPointSeed(int x, int z) {
         long n;
         n = x + z * 57;
         n = n << 13 ^ n;
-        n^=this.worldObj.getSeed();
+        n^=this.worldObj.getSeed()^(worldObj.getSeed()%dimensionId)^(dimensionId<<9);
         return 1.0 - (n * (n * n * 15731 + 789221) + 1376312589 & 0x7fffffff) / 1073741824.0;
     }
     

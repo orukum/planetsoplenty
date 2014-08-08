@@ -15,7 +15,12 @@ public final class POPConfigManager {
     public static int idDimensionRangeStart;
     
     // BLOCKS
-
+    public static int idMercuryFlowing,
+    	idMercuryStill,
+    	idSkyBoundingBlock,
+    	idSpecialLavaStill,
+    	idSpecialLavaFlow;
+    
     // ITEMS
     public static int idItemT4Rocket;
 
@@ -62,6 +67,13 @@ public final class POPConfigManager {
         	
         	// ITEMS
         	POPConfigManager.idItemT4Rocket = POPConfigManager.config.get(Configuration.CATEGORY_ITEM, "idItemT4Rocket", 10256).getInt(10256);
+        	
+        	// BLOCKS
+        	POPConfigManager.idMercuryStill = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idMercuryStill", 3000).getInt(3000);
+        	POPConfigManager.idMercuryFlowing = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idMercuryFlow", 3001).getInt(3001);
+        	POPConfigManager.idSpecialLavaFlow = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialLavaFlow", 3002).getInt(3002);
+        	POPConfigManager.idSpecialLavaStill = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialLavaStill", 3003).getInt(3003);
+        	POPConfigManager.idSkyBoundingBlock = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSkyBoundingBlock", 3004).getInt(3004);
             /*
             GCCoreConfigManager.idDimensionOverworldOrbit = GCCoreConfigManager.configuration.get("DIMENSIONS", "idDimensionOverworldOrbit", -27).getInt(-27);
 

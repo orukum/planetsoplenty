@@ -22,6 +22,7 @@ public class POPCelestials {
 	public static SuperflatEastPlanet superflatEastPlanet;
 	public static SuperflatWestPlanet superflatWestPlanet;
 	public static NetherPlanet netherPlanet;
+	public static LavaPlanet lavaPlanet;
 	
 	public static void preInit(FMLPreInitializationEvent event) {
 		if (PlanetsOPlenty.debug) {
@@ -43,9 +44,11 @@ public class POPCelestials {
 			superflatEastPlanet = new SuperflatEastPlanet(currentDimension++);
 			netherPlanet = new NetherPlanet();
 			superflatWestPlanet = new SuperflatWestPlanet(currentDimension++);
+			lavaPlanet = new LavaPlanet(currentDimension++);
 			
 			superflatEastPlanet.initSolar(1);
 			superflatWestPlanet.initSolar(1);
+			lavaPlanet.initSolar(1);
 	
 			GalacticraftRegistry.registerGalaxy(westGalaxy);
 			GalacticraftRegistry.registerGalaxy(eastGalaxy);
@@ -56,9 +59,11 @@ public class POPCelestials {
 			GalacticraftRegistry.registerCelestialBody(superflatEastPlanet);
 			GalacticraftRegistry.registerCelestialBody(superflatWestPlanet);
 			GalacticraftRegistry.registerCelestialBody(netherPlanet);
+			GalacticraftRegistry.registerCelestialBody(lavaPlanet);
 			GalacticraftRegistry.registerTeleportType(SuperflatEastPlanet.class, new GCMoonTeleportType());
 			GalacticraftRegistry.registerTeleportType(WorldProviderHell.class, new GCMoonTeleportType());
 			GalacticraftRegistry.registerTeleportType(SuperflatWestPlanet.class, new GCMarsTeleportType());
+			GalacticraftRegistry.registerTeleportType(LavaPlanet.class, new GCMarsTeleportType());//Temp
 		}
 	}
 	
