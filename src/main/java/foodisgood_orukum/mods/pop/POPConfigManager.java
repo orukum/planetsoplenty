@@ -227,8 +227,7 @@ public final class POPConfigManager {
             GCCoreConfigManager.enableTinOreGen = GCCoreConfigManager.configuration.get(Configuration.CATEGORY_GENERAL, "Enable Tin Ore Gen", true, "If this is enabled, tin ore will generate on the overworld.").getBoolean(true);
             GCCoreConfigManager.enableAluminumOreGen = GCCoreConfigManager.configuration.get(Configuration.CATEGORY_GENERAL, "Enable Aluminum Ore Gen", true, "If this is enabled, aluminum ore will generate on the overworld.").getBoolean(true);
             GCCoreConfigManager.enableSiliconOreGen = GCCoreConfigManager.configuration.get(Configuration.CATEGORY_GENERAL, "Enable Silicon Ore Gen", true, "If this is enabled, silicon ore will generate on the overworld.").getBoolean(true);*/
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             POPLog.severe("Problem loading Planets O' Plenty config (" + file.getName() + "): " + e.getMessage()); 
         } finally {
             if (POPConfigManager.config.hasChanged())
