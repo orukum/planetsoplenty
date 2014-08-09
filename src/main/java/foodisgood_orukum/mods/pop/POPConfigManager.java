@@ -71,13 +71,14 @@ public final class POPConfigManager {
         	POPConfigManager.idItemT4Rocket = POPConfigManager.config.get(Configuration.CATEGORY_ITEM, "idItemT4Rocket", 10256).getInt(10256);
         	
         	// BLOCKS
-        	POPConfigManager.idMercuryStill = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idMercuryStill", 3000, "Must be less than " + Short.MAX_VALUE).getInt(3000);
-        	POPConfigManager.idMercuryFlowing = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idMercuryFlow", 3001).getInt(3001);
-        	POPConfigManager.idSpecialLavaFlow = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialLavaFlow", 3002).getInt(3002);
-        	POPConfigManager.idSpecialLavaStill = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialLavaStill", 3003, "Must be less than " + Short.MAX_VALUE).getInt(3003);
-        	POPConfigManager.idSkyBoundingBlock = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSkyBoundingBlock", 3004, "Must be less than " + Short.MAX_VALUE).getInt(3004);
-        	POPConfigManager.idInvisibleBlock = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idInvisibleBlock", 3005, "Must be less than " + Short.MAX_VALUE).getInt(3005);
-        	POPConfigManager.idSpecialStone = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialStoneBlock", 3006, "Must be less than " + Short.MAX_VALUE).getInt(3006);
+        	//POPConfigManager.idMercuryStill = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idMercuryStill", 3000).getInt(3000);
+        	POPConfigManager.idMercuryFlowing = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idMercuryFlow", 3000, "ID following this one will also be reserved").getInt(3001);//, "Must be less than " + Short.MAX_VALUE
+        	idMercuryStill = idMercuryFlowing+1;//Based on crashes I had and looking at the source files, the flowing version of a liquid has to have the id immediately preceeding the still one
+        	POPConfigManager.idSpecialLavaFlow = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialLavaFlow", 3002, "ID following this one will also be reserved").getInt(3002);
+        	idSpecialLavaStill = idSpecialLavaFlow+1;
+        	POPConfigManager.idSkyBoundingBlock = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSkyBoundingBlock", 3004).getInt(3004);
+        	POPConfigManager.idInvisibleBlock = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idInvisibleBlock", 3005).getInt(3005);
+        	POPConfigManager.idSpecialStone = POPConfigManager.config.get(Configuration.CATEGORY_BLOCK, "idSpecialStoneBlock", 3006).getInt(3006);
             /*
             GCCoreConfigManager.idDimensionOverworldOrbit = GCCoreConfigManager.configuration.get("DIMENSIONS", "idDimensionOverworldOrbit", -27).getInt(-27);
 

@@ -98,7 +98,8 @@ public class POPPacketHandlerServer implements IPacketHandler {
     	DEBUG_WEST_WORLD_GEN(1),
     	DEBUG_INC_COUNTER(2),
     	DEBUG_SEND_SERVER_CHAT(3),
-    	DEBUG_ADD_ARROW(4);
+    	DEBUG_ADD_ARROW(4),
+    	DEBUG_EXCEPTION_NOTIFY(5, String.class);
     	
         public int index;
         public Class<?>[] decodeAs;
@@ -187,6 +188,14 @@ public class POPPacketHandlerServer implements IPacketHandler {
 	        	//for (EntityPlayer b : (EntityPlayer[])MinecraftServer.getServer().getConfigurationManager().playerEntityList.toArray())
 	        	//	b.sendChatToPlayer(chat);
 	        	tellAllPlayers(chat);
+        	}
+        	break;
+        case DEBUG_EXCEPTION_NOTIFY:
+        	if (PlanetsOPlenty.debug) {
+        		ChatMessageComponent chat = new ChatMessageComponent();
+        		chat.addText("\u00a7c" + (String) packetReadout[0]);
+        		tellAllPlayers(player.username + ":");
+        		tellAllPlayers(chat);
         	}
         }
         POPLog.info("Planets O Plenty server recieved client packet with ID " + packetType);

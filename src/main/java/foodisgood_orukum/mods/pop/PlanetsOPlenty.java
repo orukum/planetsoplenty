@@ -23,6 +23,7 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.registry.*;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import foodisgood_orukum.mods.pop.items.*;
 import foodisgood_orukum.mods.pop.space.*;
 import foodisgood_orukum.mods.pop.block.POPBlocks;
@@ -42,7 +43,7 @@ public final class PlanetsOPlenty {
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "POPEntities";
-    public static final String VERSION = "-1.0000000000000000000000000066";
+    public static final String VERSION = "-1.0000000000000000000000000068";
     public static final boolean debug = true;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
@@ -129,13 +130,15 @@ public final class PlanetsOPlenty {
     	if (debug)
     		POPLog.info("POP: postInit()");
     	NetworkRegistry.instance().registerGuiHandler(this, PlanetsOPlenty.proxy);
+        NetworkRegistry.instance().registerChannel(new POPPacketHandlerServer(), PlanetsOPlenty.CHANNEL, Side.SERVER);
     }
     
     @EventHandler
+    //@SideOnly(value=Side.SERVER)
     public void serverInit(FMLServerStartedEvent event) {
     	if (debug)
     		POPLog.info("POP: serverInit()");
-        NetworkRegistry.instance().registerChannel(new POPPacketHandlerServer(), PlanetsOPlenty.CHANNEL, Side.SERVER);
+    	//NetworkRegistry.instance().registerChannel(new POPPacketHandlerServer(), PlanetsOPlenty.CHANNEL, Side.SERVER);
     }
 
     @EventHandler

@@ -400,7 +400,7 @@ public class SuperflatWestPlanet extends POPPlanet {
         }
 
         public void generateTerrain(int chunkX, int chunkZ, short[] idArray, byte[] metaArray) {
-            this.noiseGen1.frequency = 0.0125;
+            this.noiseGen1.frequency = chunkZ>10 ? .4 : .0125;
             this.noiseGen2.frequency = 0.015;
             this.noiseGen3.frequency = 0.01;
             this.noiseGen4.frequency = 0.02;

@@ -71,7 +71,7 @@ public class POPCelestials {
 			GalacticraftRegistry.registerTeleportType(WorldProviderHell.class, new GCMoonTeleportType());
 			GalacticraftRegistry.registerTeleportType(SuperflatWestPlanet.class, new GCMarsTeleportType());
 			GalacticraftRegistry.registerTeleportType(LavaPlanet.class, new GCMarsTeleportType());//Temp
-			GalacticraftRegistry.registerTeleportType(LavaPlanet.class, new GCMarsTeleportType());//Temp
+			GalacticraftRegistry.registerTeleportType(LavaCeilingPlanet.class, new GCMarsTeleportType());//Temp
 		}
 	}
 	

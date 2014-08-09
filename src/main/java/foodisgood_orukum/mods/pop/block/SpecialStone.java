@@ -8,6 +8,11 @@ import net.minecraft.world.World;
 public class SpecialStone extends BlockStone {
 	public SpecialStone(int id) {
 		super(id);
+		setUnlocalizedName("stone2");
+		setHardness(1.5F);
+		setResistance(10.0F);
+		setStepSound(soundStoneFootstep);
+		setTextureName("stone");
 	}
 	
 	@Override

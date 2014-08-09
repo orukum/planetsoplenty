@@ -16,6 +16,7 @@ public class InvisibleBlock extends Block {
 		setBlockUnbreakable();
 		setUnlocalizedName("Invisible Boundary");
 		setLightOpacity(0);
+		setResistance(9000000F);
 	}
     
     /*@Override
@@ -32,6 +33,11 @@ public class InvisibleBlock extends Block {
     public boolean getBlocksMovement(IBlockAccess access, int x, int y, int z) {
     	return true;
     }
+    
+    @Override
+    public boolean isAirBlock(World world, int x, int y, int z) {
+    	return true;
+    }
 
     @Override
     public boolean canCreatureSpawn(EnumCreatureType type, World world, int x, int y, int z) {
@@ -44,8 +50,20 @@ public class InvisibleBlock extends Block {
     }
     
     @Override
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+    
+    @Override
     public boolean canSilkHarvest() {
     	return false;
+    }
+    
+    @Override
+    public boolean isOpaqueCube()
+    {
+        return false;
     }
     
     /*@Override

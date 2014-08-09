@@ -1,7 +1,7 @@
--Need to fix direction of explosion
 -Appears to be adding another channel every time I quit and rejoin the game
 	(don't forget to fix for entity channel, as well)
 -Extended player data does not persist through saves or death
+-Bugs with mercury for whatever reason, probably because there's a still but no moving version
 
 	Other things to do next time:
 -Add lava world
@@ -15,6 +15,8 @@
 -Update this list
 -Add sky rendering components in POPWorld dealing with stars, moons, other planets
 -Add atmospheres
+-Hmm, clouds are semitransparent, like sky blocks? That should be usefuly knowledge
+-Building on that: Try making own cloud generator instead of using Sky-like blocks for world ceiling
 
 	Longer term:
 -Look into terrain generation in general, try making a planet that's my own generator entirely (useful for making our own biomes later)
@@ -35,7 +37,10 @@ East yaw: 270 (+x)
 Up pitch: -
 
 
+Fixed problems:
+-Need to fix direction of explosion
 
-Old:
+
+Old ideas:
 -Check if OpenBlocks is present, if it is, then add type of world covered in inverted sky blocks below an ocean of magma, with relatively sparse tower structures to allow access to subsurface world
 -What is MapColor? //Solved: Color used to represent block on a map

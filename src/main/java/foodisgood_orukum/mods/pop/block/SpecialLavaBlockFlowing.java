@@ -10,7 +10,7 @@ public class SpecialLavaBlockFlowing extends BlockFlowing {
 		setHardness(0F);
 		setLightValue(1.0F);
 		setTextureName("lava_flow");
-		setUnlocalizedName("lava2");
+		setUnlocalizedName("lava2_flow");
 		disableStats();
 	}
 	

@@ -1,21 +1,29 @@
 package foodisgood_orukum.mods.pop.space.testingworlds;
 
 import foodisgood_orukum.mods.pop.block.POPBlocks;
+import foodisgood_orukum.mods.pop.network.POPPacketHandlerServer;
+import foodisgood_orukum.mods.pop.network.POPPacketUtils;
 import foodisgood_orukum.mods.pop.space.*;
+import foodisgood_orukum.mods.pop.POPLog;
 import foodisgood_orukum.mods.pop.PlanetsOPlenty;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderGenerate;
 import net.minecraftforge.common.DimensionManager;
 import micdoodle8.mods.galacticraft.api.world.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -48,6 +56,7 @@ import net.minecraft.world.biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderGenerate;
+import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraftforge.common.ForgeDirection;    
 
 import java.util.Arrays;
@@ -81,7 +90,7 @@ public class LavaCeilingPlanet extends POPMoon {
 	
 	@Override
 	public String getName() {
-		return "Debug Lava Moon";
+		return "Lava Moon Debug";
 	}
 
 	@Override
@@ -137,7 +146,7 @@ public class LavaCeilingPlanet extends POPMoon {
 	
 	@Override
 	public double getMeteorFrequency() {
-		return 31.3D;
+		return .3D;
 	}
 	
 	@Override
@@ -256,7 +265,10 @@ public class LavaCeilingPlanet extends POPMoon {
 
     @Override
     public void registerWorldChunkManager() {
-        this.worldChunkMgr = new POPDebugLavaMoonChunkManager();
+    	if (Loader.isModLoaded("BiomesOPlenty"))
+    		this.worldChunkMgr = new POPDebugLavaMoonChunkManager(worldObj.getSeed()^dimensionId, WorldType.parseWorldType("BIOMESOP"));
+    	else
+    		this.worldChunkMgr = new POPDebugLavaMoonChunkManager(worldObj.getSeed()^dimensionId, WorldType.DEFAULT);
     }
 
     @Override
@@ -295,10 +307,14 @@ public class LavaCeilingPlanet extends POPMoon {
     }
     
     public class POPDebugLavaMoonChunkManager extends WorldChunkManager {
+    	public POPDebugLavaMoonChunkManager(long seed, WorldType type) {
+    		super (seed, type);
+    	}
+    	
     	@Override
         public float[] getTemperatures(float[] par1ArrayOfFloat, int x, int y, int width, int length) {
-        	if (y<LAVA_START_HEIGHT)
-        		return super.getTemperatures(par1ArrayOfFloat, x, y, width, length);
+        	//if (y<LAVA_START_HEIGHT)
+        	//	return super.getTemperatures(par1ArrayOfFloat, x, y, width, length);
             if (par1ArrayOfFloat == null || par1ArrayOfFloat.length < width * length)
                 par1ArrayOfFloat = new float[width * length];
             /*for (int x2=x; x2<(x+width); x2++)
@@ -329,12 +345,12 @@ public class LavaCeilingPlanet extends POPMoon {
             return par4List.contains(GCMoonBiomeGenBase.moonFlat) ? new ChunkPosition(par1 - par3 + par5Random.nextInt(par3 * 2 + 1), 0, par2 - par3 + par5Random.nextInt(par3 * 2 + 1)) : null;
         }*/
 
-        @SuppressWarnings("rawtypes")
+        /*@SuppressWarnings("rawtypes")
         @Override
         public boolean areBiomesViable(int par1, int par2, int par3, List par4List) {
         	return true;
             //return par4List.contains(GCMoonBiomeGenBase.moonFlat);
-        }
+        }*/
     }
     
 	public short blockID = (short) POPBlocks.specialStone.blockID;
@@ -355,6 +371,7 @@ public class LavaCeilingPlanet extends POPMoon {
     	final byte blockMeta = 0;
 
         private final Random rand;
+    	private final MapGenVillage villages;
 
         private final NoiseModule noiseGen1;
         private final NoiseModule noiseGen2;
@@ -374,13 +391,24 @@ public class LavaCeilingPlanet extends POPMoon {
         private static final int CHUNK_SIZE_Z = 16;
         private static final int CRATER_PROB = 100;
         private static final int LAVA_DEPTH = 30;
+        
+        private ChunkProviderGenerate bopGenerator = null;
 
         public POPDebugLavaMoonChunkProvider(World par1World, long par2, boolean par4) {
             super(par1World, par2, par4);
+            villages = new MapGenVillage();
+        	if (Loader.isModLoaded("BiomesOPlenty"))
+				try {
+					bopGenerator = (ChunkProviderGenerate) Class.forName("biomesoplenty.world.ChunkProviderBOP").getConstructor(World.class, long.class, boolean.class).newInstance(par1World, par2, par4);
+				} catch (Exception e) {
+					POPLog.severe("Error with loading BOP chunk provider");
+					e.printStackTrace();
+					PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, POPPacketHandlerServer.EnumPacketServer.DEBUG_EXCEPTION_NOTIFY.index, e.getMessage()));
+				}
             this.worldObj = par1World;
             this.rand = new Random(par2);
             this.noiseGen1 = new Gradient(this.rand.nextLong(), 4, 0.25);
-            this.noiseGen2 = new Gradient(this.rand.nextLong(), 4, 0.25);
+            this.noiseGen2 = new Gradient(this.rand.nextLong(), 4, 1.25);
             this.noiseGen3 = new Gradient(this.rand.nextLong(), 1, 0.25);
             this.noiseGen4 = new Gradient(this.rand.nextLong(), 1, 0.25);
         }
@@ -408,7 +436,7 @@ public class LavaCeilingPlanet extends POPMoon {
                     else
                         yDev = d + (d2 - d) * d3;
                     yDev*=10*Math.sqrt((1730)*(1730)+(456)*(456))/832F;
-                    yDev-=100;
+                    yDev-=50;
                     for (int y = LAVA_START_HEIGHT+1; y < CHUNK_SIZE_Y; y++) {
                         if ((y < (MID_HEIGHT + yDev) && y<220)) {
                             idArray[getIndex(x, y, z)] = blockID;
@@ -422,7 +450,11 @@ public class LavaCeilingPlanet extends POPMoon {
        
         @Override
         public Chunk provideChunk(int par1, int par2) {
-        	Chunk chunk = super.provideChunk(par1,  par2);
+        	final Chunk chunk;
+        	if (bopGenerator!=null)
+        		chunk = bopGenerator.provideChunk(par1, par2);
+        	else
+        		chunk = super.provideChunk(par1,  par2);
             this.rand.setSeed(par1 * 341873128712L + par2 * 132897987541L);
             final short[] ids = new short[32768*2];
             final byte[] meta = new byte[32768*2];
@@ -441,18 +473,21 @@ public class LavaCeilingPlanet extends POPMoon {
 		                    meta[getIndex(x, y, z)] = 0;
 		                }
             	}
-            // if (!var4.isTerrainPopulated &&
+            for (int x=0; x<CHUNK_SIZE_X; x++)
+                for (int z=0; z<CHUNK_SIZE_Z; z++)
+                    for (int y=0; y<CHUNK_SIZE_Y; y++)
+                    	if (chunk.getBlockID(x, y, z)!=0) {
+                    		//chunk.setBlockIDWithMetadata(x, y, z, ids[getIndex(x, y, z)], meta[getIndex(x, y, z)]);
+                    		ids[getIndex(x, y, z)] = (short) chunk.getBlockID(x, y, z);
+                    		meta[getIndex(x, y, z)] = (byte) chunk.getBlockMetadata(x, y, z);
+                    	}
+            final Chunk var4 = new Chunk(this.worldObj, ids, meta, par1, par2);
             // GCCoreConfigManager.disableExternalModGen)
             // {
             // var4.isTerrainPopulated = true;
             // }
-            for (int x=0; x<CHUNK_SIZE_X; x++)
-                for (int z=0; z<CHUNK_SIZE_Z; z++)
-                    for (int y=LAVA_START_HEIGHT; y<CHUNK_SIZE_Y; y++)
-                    	if (chunk.getBlockID(x, y, z)==0 && ids[getIndex(x, y, z)]!=0)
-                    		chunk.setBlockIDWithMetadata(x, y, z, ids[getIndex(x, y, z)], meta[getIndex(x, y, z)]);
-            chunk.generateSkylightMap();
-            return chunk;
+            var4.generateSkylightMap();
+            return var4;
         }
 
         public void createCraters(int chunkX, int chunkZ, short[] chunkArray, byte[] metaArray) {
@@ -496,22 +531,10 @@ public class LavaCeilingPlanet extends POPMoon {
         }
 
         @Override
-        public boolean chunkExists(int par1, int par2) {
-            return true;
-        }
-
-        @Override
-        public boolean unloadQueuedChunks() {
-            return false;
-        }
-
-        @Override
-        public int getLoadedChunkCount() {
-            return 0;
-        }
-
-        @Override
         public void populate(IChunkProvider par1IChunkProvider, int par2, int par3) {
+        	super.populate(par1IChunkProvider, par2, par3);
+        	if (bopGenerator!=null)
+        		bopGenerator.populate(par1IChunkProvider, par2, par3);
             BlockSand.fallInstantly = false;
             /*final int var4 = par2 * 16;
             final int var5 = par3 * 16;
@@ -530,23 +553,6 @@ public class LavaCeilingPlanet extends POPMoon {
             //BlockSand.fallInstantly = false;
         }
 
-        @Override
-        public boolean saveChunks(boolean par1, IProgressUpdate par2IProgressUpdate) {
-            return true;
-        }
-
-        @Override
-        public boolean canSave() {
-            return true;
-        }
-
-        @Override
-        public String makeString() {
-        	//TODO: What in the world does this do?
-        	return "RandomLevelSource";
-            //return GCMoonConfigManager.generateOtherMods ? "RandomLevelSource" : "MoonLevelSource";
-        }
-
         /*@SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int i, int j, int k) {
@@ -562,13 +568,10 @@ public class LavaCeilingPlanet extends POPMoon {
             }
         }*/
 
-        /*@Override
+        @Override
         public void recreateStructures(int par1, int par2) {
-            /*if (!GCMoonConfigManager.disableMoonVillageGen)
-            {
-                //this.villageGenerator.generate(this, this.worldObj, par1, par2, (byte[]) null);
-            }* /
-        }*/
+            this.villages.generate(this, this.worldObj, par1, par2, (byte[]) null);
+        }
     }
 
 	@Override
