@@ -1,5 +1,7 @@
 package foodisgood_orukum.mods.pop.space;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import foodisgood_orukum.mods.pop.POPConfigManager;
 import foodisgood_orukum.mods.pop.space.testingworlds.SuperflatEastPlanet;
 import micdoodle8.mods.galacticraft.api.world.ICelestialBody;
@@ -40,6 +42,8 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
 		specialMultiplier = specialSolarFactor;
 		dimensionId = dimensionID;
 		tidallyLocked = false;
+		//setCloudRenderer(null);
+		//setSkyRenderer(null);
 	}
 	
 	/**
@@ -130,6 +134,18 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
 	}
 	
 	@Override
+	@SideOnly(value=Side.CLIENT)
+	public float getStarBrightness(float t) {
+		return 1F;
+	}
+	
+	/*@Override
+	@SideOnly(value=Side.CLIENT)
+	public float getStarBrightnessBody(float t) {
+		return 1F;
+	}*/
+	
+	@Override
 	public IMapObject getMapObject() {
 		return this;
 	}
@@ -146,7 +162,7 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
 	
 	@Override
 	public double getFuelUsageMultiplier() {
-		return Math.sqrt(getGravity());
+		return getGravity();
 	}
 	
 	@Override
