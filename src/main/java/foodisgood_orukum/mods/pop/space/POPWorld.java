@@ -3,14 +3,7 @@ package foodisgood_orukum.mods.pop.space;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import foodisgood_orukum.mods.pop.POPConfigManager;
-import foodisgood_orukum.mods.pop.space.testingworlds.SuperflatEastPlanet;
-import micdoodle8.mods.galacticraft.api.world.ICelestialBody;
-import micdoodle8.mods.galacticraft.api.world.ICelestialBodyRenderer;
-import micdoodle8.mods.galacticraft.api.world.IExitHeight;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.api.world.IMapObject;
-import micdoodle8.mods.galacticraft.api.world.IPlanet;
-import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
+import micdoodle8.mods.galacticraft.api.world.*;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.WorldProvider;
 
@@ -23,6 +16,7 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
 	public double solarMultiplier;
 	double specialMultiplier;
 	public boolean tidallyLocked;
+	public transient boolean rendererLoaded = false;
 	
 	public static final float ZERO_G = .0656F,
 			GC_RATIO = -.02F; //Multiply GC_RATIO by number of Gs, add to ZERO_G

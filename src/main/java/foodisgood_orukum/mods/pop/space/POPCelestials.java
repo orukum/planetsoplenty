@@ -11,6 +11,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import foodisgood_orukum.mods.pop.POPConfigManager;
 import foodisgood_orukum.mods.pop.PlanetsOPlenty;
+import foodisgood_orukum.mods.pop.client.POPSkyProvider;
+import foodisgood_orukum.mods.pop.dimension.POPDebugTeleportType;
 import foodisgood_orukum.mods.pop.space.testingworlds.*;
 
 public class POPCelestials {
@@ -67,11 +69,12 @@ public class POPCelestials {
 			GalacticraftRegistry.registerCelestialBody(netherPlanet);
 			GalacticraftRegistry.registerCelestialBody(lavaPlanet);
 			GalacticraftRegistry.registerCelestialBody(lavaCeilingPlanet);
-			GalacticraftRegistry.registerTeleportType(SuperflatEastPlanet.class, new GCMoonTeleportType());
-			GalacticraftRegistry.registerTeleportType(WorldProviderHell.class, new GCMoonTeleportType());
-			GalacticraftRegistry.registerTeleportType(SuperflatWestPlanet.class, new GCMarsTeleportType());
-			GalacticraftRegistry.registerTeleportType(LavaPlanet.class, new GCMarsTeleportType());//Temp
-			GalacticraftRegistry.registerTeleportType(LavaCeilingPlanet.class, new GCMarsTeleportType());//Temp
+			
+			GalacticraftRegistry.registerTeleportType(SuperflatEastPlanet.class, new POPDebugTeleportType());
+			GalacticraftRegistry.registerTeleportType(WorldProviderHell.class, new GCMarsTeleportType());
+			GalacticraftRegistry.registerTeleportType(SuperflatWestPlanet.class, new POPDebugTeleportType());
+			GalacticraftRegistry.registerTeleportType(LavaPlanet.class, new POPDebugTeleportType());
+			GalacticraftRegistry.registerTeleportType(LavaCeilingPlanet.class, new POPDebugTeleportType());
 		}
 	}
 	

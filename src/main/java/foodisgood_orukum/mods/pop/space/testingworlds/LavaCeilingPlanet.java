@@ -392,14 +392,14 @@ public class LavaCeilingPlanet extends POPMoon {
         private static final int CRATER_PROB = 100;
         private static final int LAVA_DEPTH = 30;
         
-        private ChunkProviderGenerate bopGenerator = null;
+        private IChunkProvider bopGenerator = null;
 
         public POPDebugLavaMoonChunkProvider(World par1World, long par2, boolean par4) {
             super(par1World, par2, par4);
             villages = new MapGenVillage();
         	if (Loader.isModLoaded("BiomesOPlenty"))
 				try {
-					bopGenerator = (ChunkProviderGenerate) Class.forName("biomesoplenty.world.ChunkProviderBOP").getConstructor(World.class, long.class, boolean.class).newInstance(par1World, par2, par4);
+					bopGenerator = (IChunkProvider) Class.forName("biomesoplenty.world.ChunkProviderBOP").getConstructor(World.class, long.class, boolean.class).newInstance(par1World, par2, par4);
 				} catch (Exception e) {
 					POPLog.severe("Error with loading BOP chunk provider");
 					e.printStackTrace();

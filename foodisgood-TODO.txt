@@ -19,6 +19,7 @@
 -Building on that: Try making own cloud generator instead of using Sky-like blocks for world ceiling
 -Add more about horizons to match planet's size
 -update getStarBrightness, it's used in POPSkyRenderer
+-Add my own very small entity of some kind
 
 	Longer term:
 -Look into terrain generation in general, try making a planet that's my own generator entirely (useful for making our own biomes later)
