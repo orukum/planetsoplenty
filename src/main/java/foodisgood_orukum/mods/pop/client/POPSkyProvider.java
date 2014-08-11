@@ -13,9 +13,11 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.util.*;
 import net.minecraftforge.client.IRenderHandler;
 
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import foodisgood_orukum.mods.pop.POPLog;
 import foodisgood_orukum.mods.pop.space.*;
 
 public class POPSkyProvider extends IRenderHandler {
@@ -36,37 +38,185 @@ public class POPSkyProvider extends IRenderHandler {
 	public int glSkyList;
 	public int glSkyList2;
 	
+	/**
+	 * Stored here for efficiency, rather than use instanceof every frame. This is distance of popWorld from distance of galaxy, regardless of whether it is a moon or not
+	 */
+	public final float popWorldDistance;
+	
 	public final POPWorld popWorld;
 	
-	public final float distanceToStar(int starIndex) {
-		return 1F;//TODO: temp
+	/*/**
+	 * Returns angle of specified star from center of galaxy
+	 * @param starIndex index of star 
+	 * @return angle in degrees, counterclockwise from directly at right...
+	 * /
+	public final float centerAngleS(int starIndex) {
+		return (MathHelper.floor_float(suns[starIndex].getPhaseShift() + Sys.getTime() / (720F * 1 * suns[starIndex].getStretchValue())) % 2880)*360F/2880F;
+		//TODO: test
+	}*/
+	
+	/*/**
+	 * Returns angle of specified planet from center of galaxy
+	 * @param planetIndex index of planet
+	 * @return angle in degrees
+	 * /
+	public final float centerAngleP(int planetIndex) {
+		return 0F;
+		//TODO: temp
+	}*/
+	
+	/*/**
+	 * Returns angle of this planet from center of galaxy
+	 * @return angle in degrees
+	 * /
+	public final float centerAngle() {
+		return (MathHelper.floor_float(popWorld.getPhaseShift() + Sys.getTime() / (720F * 1 * popWorld.getStretchValue())) % 2880)*360F/2880F;
+		//TODO: temp
+	}*/
+	
+	/**
+	 * Calculates current angle from center of given object, in radians
+	 * @param phaseShift result of getPhaseShift
+	 * @param stretchValue result of getStretchValue
+	 * @return the angle, in radians
+	 */
+	public final float centerAngleRad(float phaseShift, float stretchValue) {
+		return (MathHelper.floor_float((phaseShift + Sys.getTime() / (720F * 1 * stretchValue))*100F) % 288000)*(360F/288000F)*((float)Math.PI)/180F;
+	}
+	
+	/**
+	 * Calculates current angle from center of given object, in degrees
+	 * @param phaseShift result of getPhaseShift
+	 * @param stretchValue result of getStretchValue
+	 * @return the angle, in degrees
+	 */
+	public final float centerAngleDegree(float phaseShift, float stretchValue) {
+		return (MathHelper.floor_float((phaseShift + Sys.getTime() / (720F * 1 * stretchValue))*100F) % 288000)*360F/288000F;
+	}
+	
+	/*/**
+	 * Returns angle of specified moon from planet it is orbiting
+	 * @param moonIndex index of moon
+	 * @return angle in degrees
+	 * /
+	public final float centerAngleM(int moonIndex) {
+		return 0F;
+		//TODO: temp
+	}*/
+	
+	/**
+	 * Calculates distance to given star
+	 * @param starIndex index of star
+	 * @param worldAngle current angle of popWorld about the galactic center in radians, passed in for efficiency
+	 * @return
+	 */
+	public final float distanceToStar(int starIndex, float worldAngle) {
+		final float starD = suns[starIndex].getDistanceFromCenter();
+		return MathHelper.sqrt_float(popWorldDistance*popWorldDistance+starD*starD-2F*popWorldDistance*starD*MathHelper.cos(worldAngle-centerAngleRad(suns[starIndex].getPhaseShift(), suns[starIndex].getStretchValue())));
+		//TODO: test
+	}
+	
+	/**
+	 * Calculates distance to given planet
+	 * @param planetIndex index of planet
+	 * @param worldAngle current angle of popWorld (or parent planet) about the galactic center in radians, passed in for efficiency
+	 * @return
+	 */
+	public final float distanceToPlanet(int planetIndex, float worldAngle) {
+		final float starD = otherPlanets[planetIndex].getMapObject().getDistanceFromCenter();
+		return MathHelper.sqrt_float(popWorldDistance*popWorldDistance+starD*starD-2F*popWorldDistance*starD*MathHelper.cos(worldAngle-centerAngleRad(otherPlanets[planetIndex].getMapObject().getPhaseShift(), otherPlanets[planetIndex].getMapObject().getStretchValue())));
+		//TODO: test
+	}
+	
+	
+	
+	/**
+	 * Calculates distance to given other moon (used only if this world is a moon)
+	 * @param moonIndex index of other moon
+	 * @param worldAngle current angle of popWorld about parent planet in radians, passed in for efficiency
+	 * @return
+	 */
+	public final float distanceToMoon(int moonIndex, float worldAngle) {
+		final float starD = moons[moonIndex].getMapObject().getDistanceFromCenter();
+		final float myD = popWorld.getDistanceFromCenter();
+		return MathHelper.sqrt_float(myD*myD+starD*starD-2F*myD*starD*MathHelper.cos(worldAngle-centerAngleRad(moons[moonIndex].getMapObject().getPhaseShift(), moons[moonIndex].getMapObject().getStretchValue())));
+		//TODO: test
+	}
+	
+	/**
+	 * The angle from the center of the galaxy at which the parent planet of this moon appears.
+	 * @param galaxyAngle the current angle of popWorld's parent from center of galaxy, in radians
+	 * @return the angle, in degrees
+	 */
+	public final float angleParent(float galaxyAngle) {
+		final float sAngle = centerAngleRad(parent.getMapObject().getPhaseShift(), parent.getMapObject().getStretchValue());
+		final float y = popWorldDistance*MathHelper.sin(galaxyAngle-sAngle);
+		final float hyp = popWorld.getDistanceFromCenter();
+		float ret = ((float) Math.asin( y/hyp ))*180F/((float)Math.PI);
+		if (MathHelper.abs(galaxyAngle-sAngle)<Math.asin(popWorld.getDistanceFromCenter()/popWorldDistance))
+			ret+=180F;
+		return ret;
+		//TODO: test this
 	}
 	
 	/**
 	 * The angle from the center of the galaxy at which a given star appears.
 	 * @param starIndex the index of the sun whose angle should be compared
-	 * @param galaxyAngle the result of getCelestialAngle for popWorld
+	 * @param galaxyAngle the current angle of popWorld from center of galaxy, in radians
+	 * @return the angle, in degrees
 	 */
 	public final float angleS(int starIndex, float galaxyAngle) {
-		return 0F; //TODO: temp
+		final float sAngle = centerAngleRad(suns[starIndex].getPhaseShift(), suns[starIndex].getStretchValue());
+		final float y = suns[starIndex].getDistanceFromCenter()*MathHelper.sin(galaxyAngle-sAngle);
+		final float hyp = distanceToStar(starIndex, galaxyAngle);
+		float ret = ((float) Math.asin( y/hyp ))*180F/((float)Math.PI);
+		/*if (angle<-180) {
+			do {
+				angle+=180F;
+			} while (angle<-180F);
+		} else if (angle>180F) {
+			do {
+				angle-=180F;
+			} while (angle>180F);
+		}*/
+		if (suns[starIndex].getDistanceFromCenter()>popWorldDistance && MathHelper.abs(galaxyAngle-sAngle)<Math.asin(popWorldDistance/(suns[starIndex].getDistanceFromCenter())) || false)
+			ret+=180F;
+		return ret;
+		//TODO: test this
 	}
 	
 	/**
 	 * The angle from the center of the galaxy at which a given planet appears.
 	 * @param planetIndex the index of the planet whose angle should be returned
-	 * @param galaxyAngle the result of getCelestialAngle for popWorld
+	 * @param galaxyAngle the current angle of popWorld from center of galaxy, in radians
 	 */
 	public final float angleP(int planetIndex, float galaxyAngle) {
-		return 0F; //TODO: temp
+		final float pAngle = centerAngleRad(otherPlanets[planetIndex].getMapObject().getPhaseShift(), otherPlanets[planetIndex].getMapObject().getStretchValue());
+		final float y = otherPlanets[planetIndex].getMapObject().getDistanceFromCenter()*MathHelper.sin(galaxyAngle-pAngle);
+		final float hyp = distanceToPlanet(planetIndex, galaxyAngle);
+		float ret = ((float) Math.asin( y/hyp ))*180F/((float)Math.PI);
+		if (otherPlanets[planetIndex].getMapObject().getDistanceFromCenter()>popWorldDistance && (MathHelper.abs(galaxyAngle-pAngle)<Math.asin(popWorldDistance/(otherPlanets[planetIndex].getMapObject().getDistanceFromCenter()))))
+			ret+=180F;
+		return ret;
+		//TODO: test this
 	}
 	
 	/**
-	 * The angle from the center of the galaxy at which a given moon appears
-	 * @param planetIndex the index of the moon whose angle should be returned
-	 * @param galaxyAngle the result of getCelestialAngle for popWorld
+	 * The angle from the center of the galaxy at which another given moon appears. (Only for use if popWorld is a moon)
+	 * @param moonIndex the index of the moon whose angle should be returned
+	 * @param parentGalaxyAngle the current angle of popWorld's parent from center of galaxy, in radians
+	 * @return the angle, in degrees
 	 */
-	public final float angleM(int planetIndex, float galaxyAngle) {
-		return 0F; //TODO: temp
+	public final float angleM(int moonIndex, float parentGalaxyAngle) {
+		final float worldAngle = centerAngleRad(popWorld.getPhaseShift(), popWorld.getStretchValue());
+		final float mAngle = centerAngleRad(moons[moonIndex].getMapObject().getPhaseShift(), moons[moonIndex].getMapObject().getStretchValue());
+		final float y = moons[moonIndex].getMapObject().getDistanceFromCenter()*MathHelper.sin(worldAngle-mAngle);
+		final float hyp = distanceToMoon(moonIndex, centerAngleRad(popWorld.getPhaseShift(), popWorld.getStretchValue()));
+		float ret = ((float) Math.asin( y/hyp ))*180F/((float)Math.PI);
+		if (moons[moonIndex].getMapObject().getDistanceFromCenter()>popWorld.getDistanceFromCenter() && (MathHelper.abs(worldAngle-mAngle)<Math.asin(popWorld.getDistanceFromCenter()/(moons[moonIndex].getMapObject().getDistanceFromCenter()))))
+			ret+=180F;
+		return ret+parentGalaxyAngle-angleParent(parentGalaxyAngle);
+		//TODO: test this
 	}
 	
 	//protected static final strictfp synchronized void foo() {}
@@ -77,6 +227,7 @@ public class POPSkyProvider extends IRenderHandler {
 	 */
 	public POPSkyProvider(POPWorld worldObj) {
 		popWorld = worldObj;
+		POPLog.info("POP Sky provider initialized for " + popWorld.getName() + ", with ID " + popWorld.dimensionId);
 		starSeed = popWorld.getSeed() ^ popWorld.getDimensionID();
 		if (popWorld.getParentGalaxy() instanceof POPGalaxy) {
 			galaxy = (POPGalaxy) popWorld.getParentGalaxy();
@@ -95,9 +246,11 @@ public class POPSkyProvider extends IRenderHandler {
 			if (popWorld instanceof POPMoon) {
 				parent = ((POPMoon)popWorld).getParentPlanet();
 				parentTexture = parent.getMapObject().getSlotRenderer().getPlanetSprite();
+				popWorldDistance = parent.getMapObject().getDistanceFromCenter();
 			} else {
 				parent = null;
 				parentTexture = null;
+				popWorldDistance = popWorld.getDistanceFromCenter();
 			}
 			for (int i=0; i<bodies.size(); i++)
 				if (bodies.get(i).getMapObject().getParentGalaxy()==galaxy && bodies.get(i)!=popWorld) {
@@ -143,6 +296,7 @@ public class POPSkyProvider extends IRenderHandler {
 			moonTextures = null;
 			parent = null;
 			parentTexture = null;
+			popWorldDistance = popWorld.getDistanceFromCenter();
 		}
 		GL11.glPushMatrix();
 		GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);
@@ -183,7 +337,6 @@ public class POPSkyProvider extends IRenderHandler {
 
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
-
 		float var10;
 		float var11;
 		float var12;
@@ -216,11 +369,11 @@ public class POPSkyProvider extends IRenderHandler {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		RenderHelper.disableStandardItemLighting();
 
-		final float skyColor0 = popWorld.getStarBrightness(partialTicks);
+		final float starBrightness = popWorld.getStarBrightness(partialTicks);
 
-		if (skyColor0 > 0.0F) {
+		if (starBrightness > 0.0F) {
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, skyColor0);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, starBrightness);
 			GL11.glCallList(this.starGLCallList);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 		}
@@ -254,14 +407,20 @@ public class POPSkyProvider extends IRenderHandler {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
 		GL11.glPushMatrix();
-
+		//TODO: Drawing order should be: Other galaxy, then other planets, then suns, then moons, then (if applicable) parent planet
+		//Compare this, the Mars sky provider, and the Moon sky provider to see differences
 		// Suns:
-		if (suns==null || suns.length==1)
+		if (suns==null || suns.length==1) {
 			if (sunTextures!=null) {
 				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-				var12 = ((suns[0].getDistanceFromCenter()==0) ? 30.0F : 30.0F*((float)Math.atan(suns[0].getSize()/(distanceToStar(0)*19.8F)))/(3F*((float)Math.PI)/180F));//Treating it like the normal sun is 30 degrees across, not sure if that's true
+				if (suns[0].getDistanceFromCenter()==0) {
+					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F + angleS(0, world.getCelestialAngle(partialTicks)), 1.0F, 0.0F, 0.0F);
+					var12 = ((suns[0].getDistanceFromCenter()==0) ? 30.0F : 30.0F*((float)Math.atan(suns[0].getSize()/(distanceToStar(0)*19.8F)))/(3F*((float)Math.PI)/180F));//Treating it like the normal sun is 30 degrees across, not sure if that's true					
+				} else {
+					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+					var12 = 30F*suns[0].getSize();
+				}
 				FMLClientHandler.instance().getClient().renderEngine.bindTexture(sunTextures[0]);//Note: Another option might possibly be to actually vary their heights in the sky... TODO: Consider this
 				tesselator.startDrawingQuads();
 				tesselator.addVertexWithUV(-var12, 150.0D, -var12, 0.0D, 0.0D);
@@ -274,9 +433,9 @@ public class POPSkyProvider extends IRenderHandler {
 		
 				GL11.glPushMatrix();
 			}
-		else if (suns.length>1) {
-			int order[] = new int[suns.length];//TODO: Hmm, allocating memory might be a bit slow. I'll want to try other methods
-			float[] distances = new float[suns.length];
+		} else if (suns.length>1) {
+			int order[] = {0, 0, 0, 0, 0, 0};
+			float[] distances = {0F, 0F, 0F, 0F, 0F, 0F};
 			for (int i=0; i<suns.length; i++)
 				distances[i] = distanceToStar(i);
 			switch (suns.length) {
@@ -316,7 +475,7 @@ public class POPSkyProvider extends IRenderHandler {
 				break;
 			default:
 				//TODO: Some kind of default sorting? This is temporary, most likely (though there aren't likely to be a whole lot of planets with >3 suns anyways)
-				for (int i=0; i<suns.length; i++)
+				for (int i=0; i< (suns.length>6 ? 6 : suns.length); i++)
 					order[i] = i;
 				break;
 			case 2:
@@ -329,12 +488,16 @@ public class POPSkyProvider extends IRenderHandler {
 				}
 			}
 			int x = order[0];
-			for (int i=0; i<suns.length; x=order[++i]) {
+			for (int i=0; i<(suns.length>6 ? 6 : suns.length); x=order[++i]) {
 				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);//TODO: Adjust angle
-				//var12 = 30.0F; //Looks like this is half of the size.
-				var12 = ((suns[x].getDistanceFromCenter()==0) ? 30.0F : 30.0F*((float)Math.atan(suns[x].getSize()/(distances[x]*19.8F)))/(3F*((float)Math.PI)/180F));//Treating it like the normal sun is 3 degrees across, not sure if that's true
+				if (suns[0].getDistanceFromCenter()==0) {
+					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F + angleS(x, world.getCelestialAngle(partialTicks)), 1.0F, 0.0F, 0.0F);
+					var12 = ((suns[x].getDistanceFromCenter()==0) ? 30.0F : 30.0F*((float)Math.atan(suns[x].getSize()/(distanceToStar(0)*19.8F)))/(3F*((float)Math.PI)/180F));//Treating it like the normal sun is 30 degrees across, not sure if that's true					
+				} else {
+					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+					var12 = 30F*suns[x].getSize();
+				}
 				FMLClientHandler.instance().getClient().renderEngine.bindTexture(sunTextures[x]);
 				tesselator.startDrawingQuads();
 				tesselator.addVertexWithUV(-var12, 150.0D, -var12, 0.0D, 0.0D);
@@ -363,13 +526,14 @@ public class POPSkyProvider extends IRenderHandler {
 			tesselator.addVertexWithUV(var12, -100.0D, -var12, 1, 0);
 			tesselator.addVertexWithUV(-var12, -100.0D, -var12, 0, 0);
 			tesselator.draw();
-		
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);//TODO: I have to figure out if these should be in the if statement or not. If second sun renders funny, they probably should be outside
-			GL11.glEnable(GL11.GL_FOG);
+			//That set of four lines below was here originally
 			GL11.glPopMatrix();
 		}
+		
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);//TODO: I have to figure out if these should be in the if statement or not. If second sun renders funny, they probably should be outside
+		GL11.glEnable(GL11.GL_FOG);
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor3f(0.0F, 0.0F, 0.0F);
@@ -377,8 +541,7 @@ public class POPSkyProvider extends IRenderHandler {
 		//TODO: What in the world is this doing? I need to figure out what's part of drawing the Earth, and what isn't (perhaps I hsould compare the Moon and Mars sky providers...) (Also, my guess is this is the skybox...)
 		//TODO: Once I've figured out that, add in rendering of moons. Make sure they're after all planet-related stuff is done
 		//TODO: Hmm, figure out if I can use display lists anywhere to make this more efficient? (after all, drawing the planet this is orbiting, if this is a moon, won't vary by much
-		if (skyColor5 < 0.0D)
-		{
+		if (skyColor5 < 0.0D) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0.0F, 12.0F, 0.0F);
 			GL11.glCallList(this.glSkyList2);
@@ -426,16 +589,14 @@ public class POPSkyProvider extends IRenderHandler {
 		final Tessellator tesselator = Tessellator.instance;
 		tesselator.startDrawingQuads();
 
-		for (int var3 = 0; var3 < (true ? 35000 : 6000); ++var3) //TODO: Change number of stars based on thickness of atmosphere, also fix below, there are a few more references to this condition
-		{
+		for (int var3 = 0; var3 < (true ? 35000*3 : 6000); ++var3) {//TODO: Change number of stars based on thickness of atmosphere, also fix below, there are a few more references to this condition
 			double var4 = rand.nextFloat() * 2.0F - 1.0F;
 			double var6 = rand.nextFloat() * 2.0F - 1.0F;
 			double var8 = rand.nextFloat() * 2.0F - 1.0F;
 			final double var10 = 0.15F + rand.nextFloat() * 0.1F;
 			double var12 = var4 * var4 + var6 * var6 + var8 * var8;
 
-			if (var12 < 1.0D && var12 > 0.01D)
-			{
+			if (var12 < 1.0D && var12 > 0.01D) {
 				var12 = 1.0D / Math.sqrt(var12);
 				var4 *= var12;
 				var6 *= var12;
@@ -453,8 +614,7 @@ public class POPSkyProvider extends IRenderHandler {
 				final double var34 = Math.sin(var32);
 				final double var36 = Math.cos(var32);
 
-				for (int var38 = 0; var38 < 4; ++var38)
-				{
+				for (int var38 = 0; var38 < 4; ++var38) {
 					final double var39 = 0.0D;
 					final double var41 = ((var38 & 2) - 1) * var10;
 					final double var43 = ((var38 + 1 & 2) - 1) * var10;
@@ -468,7 +628,6 @@ public class POPSkyProvider extends IRenderHandler {
 				}
 			}
 		}
-
 		tesselator.draw();
 	}
 
@@ -482,14 +641,10 @@ public class POPSkyProvider extends IRenderHandler {
 		float var3 = 1.0F - (MathHelper.sin(var2 * (float) Math.PI * 2.0F) * 2.0F + 0.25F);
 
 		if (var3 < 0.0F)
-		{
 			var3 = 0.0F;
-		}
 
 		if (var3 > 1.0F)
-		{
 			var3 = 1.0F;
-		}
 
 		return var3 * var3 * 1F;
 	}
