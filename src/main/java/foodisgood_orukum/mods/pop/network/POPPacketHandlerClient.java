@@ -54,7 +54,6 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.POPLog;
 import foodisgood_orukum.mods.pop.PlanetsOPlenty;
-import foodisgood_orukum.mods.pop.client.POPClientProxy.FoodisgoodKeyHandler;
 import foodisgood_orukum.mods.pop.client.POPClientProxy;
 
 public class POPPacketHandlerClient implements IPacketHandler {
@@ -93,7 +92,7 @@ public class POPPacketHandlerClient implements IPacketHandler {
         UPDATE_LANDER(29),
         UPDATE_PARACHEST(30),
         UPDATE_WIRE_BOUNDS(31, Integer.class, Integer.class, Integer.class)*/
-    	FOODISGOOD_REGISTER(0);
+    	POPLOG(0, Boolean.class, String.class);
 
         public int index;
         public Class<?>[] decodeAs;
@@ -130,13 +129,14 @@ public class POPPacketHandlerClient implements IPacketHandler {
         Class<?>[] decodeAs = packetType.decodeAs;
         Object[] packetReadout = POPPacketUtils.readPacketData(data, decodeAs);
         switch (packetType) {
-        case FOODISGOOD_REGISTER:
-			if (((POPClientProxy)PlanetsOPlenty.proxy).foodisgood==null)
-				((POPClientProxy)PlanetsOPlenty.proxy).foodisgood = new KeyBinding("Transform", Keyboard.KEY_Z);
-			KeyBinding[] keys = {((POPClientProxy)PlanetsOPlenty.proxy).foodisgood};
-			boolean[] repeat = {true};
-			KeyBindingRegistry.registerKeyBinding(((POPClientProxy)PlanetsOPlenty.proxy).new FoodisgoodKeyHandler(keys, repeat));
-			POPLog.info("Player is foodisgoodyesiam!");
+        default:
+        	POPLog.severe("Unknown packet type recieved? Index is " + packetType.index);
+        	break;
+        case POPLOG:
+        	if (((Boolean)packetReadout[0]).booleanValue())
+        		POPLog.severe("From server: " + (String)packetReadout[1]);
+        	else
+        		POPLog.info("From server: " + (String)packetReadout[1]);
         }
         /*switch (packetType)
         {

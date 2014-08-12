@@ -53,7 +53,7 @@ public class POPClientProxy extends CommonPOPProxy {
     private static int tintedGlassRenderID;*/
 	public static EnumRarity popItemRarity = EnumHelperClient.addRarity("POPRarity", 7, "Exoplanetary");
 	
-	public KeyBinding explode = null, incCounter = null, sendServerChat = null, changeWorldGen = null, arrowCount = null, foodisgood = null;
+	public KeyBinding explode = null, incCounter = null, sendServerChat = null, changeWorldGen = null, arrowCount = null;
 	
 	public class DebugKeyHandler extends KeyBindingRegistry.KeyHandler {
 		boolean stillPressed = false; 
@@ -83,36 +83,6 @@ public class POPClientProxy extends CommonPOPProxy {
 				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_WEST_WORLD_GEN.index));
 			} else if (arrowCount.isPressed())
 				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_ADD_ARROW.index));
-		}
-
-		@Override
-		public final void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
-			stillPressed = false;
-		}
-
-		@Override
-		public final EnumSet<TickType> ticks() {
-			return EnumSet.of(TickType.CLIENT);
-		}
-	}
-	
-	public class FoodisgoodKeyHandler extends KeyBindingRegistry.KeyHandler {
-		boolean stillPressed = false; 
-		public FoodisgoodKeyHandler(KeyBinding[] keyBindings, boolean[] repeat) {
-			super(keyBindings, repeat);
-			POPLog.info("POP: new FoodisgoodKeyHandler()");
-		}
-
-		@Override
-		public final String getLabel() {
-			return "Foodisgood keys";
-		}
-
-		@Override
-		public final void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
-			//EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			if (foodisgood.isPressed())
-				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.FOODISGOOD_TRANSFORM.index));
 		}
 
 		@Override

@@ -12,8 +12,7 @@ public class POPItemBlock extends ItemBlock {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public EnumRarity getRarity(ItemStack stack)
-    {
+    public EnumRarity getRarity(ItemStack stack) {
         return POPClientProxy.popItemRarity;
     }
 }

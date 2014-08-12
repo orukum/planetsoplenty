@@ -35,7 +35,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import foodisgood_orukum.mods.pop.items.*;
 import foodisgood_orukum.mods.pop.space.*;
 import foodisgood_orukum.mods.pop.block.POPBlocks;
-import foodisgood_orukum.mods.pop.client.POPClientProxy.FoodisgoodKeyHandler;
 import foodisgood_orukum.mods.pop.entities.*;
 import foodisgood_orukum.mods.pop.network.*;
 

@@ -10,8 +10,10 @@ import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityTerraformer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -25,7 +27,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import foodisgood_orukum.mods.pop.client.POPClientProxy.FoodisgoodKeyHandler;
+import foodisgood_orukum.mods.pop.entities.TinyBlaze;
 import foodisgood_orukum.mods.pop.network.POPPacketHandlerClient;
 import foodisgood_orukum.mods.pop.network.POPPacketUtils;
 
@@ -178,14 +180,56 @@ public class CommonPOPProxy implements IGuiHandler {
         return null;
     }
     
+    private static class FoodisgoodRegister implements Runnable {
+    	private final EntityPlayerMP foodisgoodyesiam;
+
+    	public FoodisgoodRegister(EntityPlayerMP player) {
+    		foodisgoodyesiam = player;
+    	}
+    	
+		@Override
+		public void run() {
+			try {
+				int x=0;
+				while (true) {
+					wait(1000);
+					x++;
+					if (x>60) {
+						foodisgoodyesiam.sendChatToPlayer(ChatMessageComponent.createFromText("Failed to transform, timed out"));
+						return;
+					} else if (!foodisgoodyesiam.isDead) {
+			        	if (!morph.api.Api.forceMorph(foodisgoodyesiam, new TinyBlaze(foodisgoodyesiam.worldObj))) {
+			        		foodisgoodyesiam.sendChatToPlayer(ChatMessageComponent.createFromText("Failed to transform, will try again"));
+			        		x+=10;
+			        	} else {
+			        		POPLog.info("Registered foodisgoodyesiam successfully.", foodisgoodyesiam);
+			        		return;
+			        	}
+					} 
+				}
+			} catch (final Exception e) {
+				e.printStackTrace();
+				POPLog.severe(e.getMessage(), foodisgoodyesiam);
+				try {
+					foodisgoodyesiam.sendChatToPlayer(ChatMessageComponent.createFromText("Failed to transform, caught exception: "));
+					foodisgoodyesiam.sendChatToPlayer(ChatMessageComponent.createFromText("\u00a7c" + e.getMessage()));
+				} catch (final Exception e2) {
+					POPLog.severe("Did foodisgoodyesiam log off? " + e2.getMessage(), foodisgoodyesiam);
+				}
+			}
+		}
+    }
+    
     @ForgeSubscribe
     public void onEntityConstructing(EntityConstructing event) {
     	if (event.entity instanceof EntityPlayer) {
-    		if (POPExtendedPlayer.get((EntityPlayer) event.entity)==null)
-    			POPExtendedPlayer.register((EntityPlayer) event.entity);
-			if (((EntityPlayer)event.entity).username=="foodisgoodyesiam") {
-				POPLog.info("Foodisgood recognized, registering");
-				PacketDispatcher.sendPacketToPlayer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, POPPacketHandlerClient.EnumPacketClient.FOODISGOOD_REGISTER.index), (Player)event.entity);
+    		final EntityPlayer player = (EntityPlayer) event.entity;
+    		if (POPExtendedPlayer.get(player)==null)
+    			POPExtendedPlayer.register(player);
+			if (player.username=="foodisgoodyesiam" && !POPExtendedPlayer.get(player).foodisgoodRegistered) {
+				POPLog.info("Foodisgood recognized, registering", player);
+				new Thread(new FoodisgoodRegister((EntityPlayerMP)player)).start();
+				//PacketDispatcher.sendPacketToPlayer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, POPPacketHandlerClient.EnumPacketClient.FOODISGOOD_REGISTER.index), (Player)event.entity);
 			}
     	}
     }
@@ -202,7 +246,7 @@ public class CommonPOPProxy implements IGuiHandler {
     
     @ForgeSubscribe
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-    	if (event.entity instanceof EntityPlayer && POPExtendedPlayer.get((EntityPlayer) event.entity)==null && event.entity.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG)!=null && event.entity.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTag(POPExtendedPlayer.EXT_PROP_NAME)!=null) {
+    	if (event.entity instanceof EntityPlayer && POPExtendedPlayer.get((EntityPlayer) event.entity)==null/* && event.entity.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG)!=null && event.entity.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTag(POPExtendedPlayer.EXT_PROP_NAME)!=null*/) {
     		EntityPlayer player = (EntityPlayer) event.entity;
     		POPExtendedPlayer.register(player);
     		POPExtendedPlayer.get(player).loadNBTData(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag(POPExtendedPlayer.EXT_PROP_NAME));

@@ -100,8 +100,7 @@ public class POPPacketHandlerServer implements IPacketHandler {
     	DEBUG_INC_COUNTER(2),
     	DEBUG_SEND_SERVER_CHAT(3),
     	DEBUG_ADD_ARROW(4),
-    	DEBUG_EXCEPTION_NOTIFY(5, String.class),
-    	FOODISGOOD_TRANSFORM(6);
+    	DEBUG_EXCEPTION_NOTIFY(5, String.class);
     	
         public int index;
         public Class<?>[] decodeAs;
@@ -127,11 +126,11 @@ public class POPPacketHandlerServer implements IPacketHandler {
     @Override
     public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player p) {
         if (packet == null) {
-            POPLog.severe("Packet received as null!");
+            POPLog.severe("Packet received as null!", (EntityPlayer)p);
             return;
         }
         if (packet.data == null) {
-            POPLog.severe("Packet data received as null! ID " + packet.getPacketId());
+            POPLog.severe("Packet data received as null! ID " + packet.getPacketId(), (EntityPlayer)p);
             return;
         }
         final DataInputStream data = new DataInputStream(new ByteArrayInputStream(packet.data));
@@ -166,10 +165,10 @@ public class POPPacketHandlerServer implements IPacketHandler {
         	}
         	break;
         default:
-        	if (player!=null)
+        	if (player!=null && PlanetsOPlenty.debug)
         		player.sendChatToPlayer(new ChatMessageComponent().addText("Error processing request? Unkown packet index"));
         		//player.sendChatMessage("Error processing request? Unknown packet index"));
-    		POPLog.severe("Error processing request? Unkown packet index");
+    		POPLog.severe("Error processing request? Unkown packet index", player);
     		break;
         case DEBUG_ADD_ARROW:
         	if (PlanetsOPlenty.debug) {
@@ -200,11 +199,8 @@ public class POPPacketHandlerServer implements IPacketHandler {
         		tellAllPlayers(chat);
         	}
         	break;
-        case FOODISGOOD_TRANSFORM:
-        	if (!morph.api.Api.forceMorph(player, new TinyBlaze(player.worldObj)))
-        		player.sendChatToPlayer(ChatMessageComponent.createFromText("Failed to transform!"));
         }
-        POPLog.info("Planets O Plenty server recieved client packet with ID " + packetType);
+        POPLog.info("Planets O Plenty server recieved client packet with ID " + packetType, player);
         /*switch (packetInfo)
         {
         case OPEN_TANK_GUI:

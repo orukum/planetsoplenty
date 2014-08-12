@@ -23,11 +23,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TinyBlaze extends EntityBlaze {
     public TinyBlaze(World par1World) {
         super(par1World);
-        this.isImmuneToFire = true;
+        //this.isImmuneToFire = true;
         this.experienceValue = 10;
-        setSize(height/100, width/100);
+        setSize(height/20, width/20);
     }
 
+    @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setAttribute(9.0D);
@@ -49,6 +50,7 @@ public class TinyBlaze extends EntityBlaze {
             this.motionY *= 0.7D;
     }
 
+    @Override
     protected void entityInit() {
         super.entityInit();
         //this.dataWatcher.addObject(16, new Byte((byte)0));
@@ -69,7 +71,7 @@ public class TinyBlaze extends EntityBlaze {
         return false;
     }
 
-    @Override
+    /*@Override
     protected String getHurtSound() {
         return "mob.blaze.hit";
     }
@@ -83,7 +85,7 @@ public class TinyBlaze extends EntityBlaze {
     @SideOnly(Side.CLIENT)
     public int getBrightnessForRender(float par1) {
         return 18000000;
-    }
+    }*/
 
     @Override
     protected void attackEntity(Entity par1Entity, float par2)
@@ -109,8 +111,8 @@ public class TinyBlaze extends EntityBlaze {
         }
     }
     
-    @Override
-    protected final void fall(float par1) {}
+    /*@Override
+    protected final void fall(float par1) {}*/
     
     @Override
     protected void dropFewItems(boolean par1, int par2) {
@@ -122,10 +124,10 @@ public class TinyBlaze extends EntityBlaze {
         }
     }
 
-    @Override
+    /*@Override
     protected int getDropItemId() {
         return Item.blazeRod.itemID;
-    }
+    }*/
     
     /*@Override
     public boolean func_70845_n() {
@@ -147,8 +149,8 @@ public class TinyBlaze extends EntityBlaze {
         this.dataWatcher.updateObject(16, Byte.valueOf(b0));
     }*/
     
-    @Override
+    /*@Override
     protected boolean isValidLightLevel() {
         return true;
-    }
+    }*/
 }
