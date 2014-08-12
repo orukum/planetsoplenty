@@ -43,6 +43,7 @@ public final class POPConfigManager {
     
     // ENTITIES
     public static int idEntityT4Rocket;
+    public static int idEntityTinyBlaze;
 
     // GENERAL
     //public static String[] sealableIDs;
@@ -66,6 +67,7 @@ public final class POPConfigManager {
         	
         	// ENTITIES
         	POPConfigManager.idEntityT4Rocket = POPConfigManager.config.get(CATEGORY_ENTITIES, "idEntityT4Rocket", 20000).getInt(20000);
+        	POPConfigManager.idEntityTinyBlaze = POPConfigManager.config.get(CATEGORY_ENTITIES, "idEntityTinyBlaze", 20001).getInt(20001);
         	
         	// ITEMS
         	POPConfigManager.idItemT4Rocket = POPConfigManager.config.get(Configuration.CATEGORY_ITEM, "idItemT4Rocket", 10256).getInt(10256);

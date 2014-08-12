@@ -29,6 +29,7 @@ import micdoodle8.mods.galacticraft.core.util.WorldUtil;*/
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -42,13 +43,19 @@ import net.minecraftforge.common.DimensionManager;
 
 import org.lwjgl.input.Keyboard;
 
+
+
 //import universalelectricity.prefab.tile.TileEntityConductor;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.POPLog;
+import foodisgood_orukum.mods.pop.PlanetsOPlenty;
+import foodisgood_orukum.mods.pop.client.POPClientProxy.FoodisgoodKeyHandler;
+import foodisgood_orukum.mods.pop.client.POPClientProxy;
 
 public class POPPacketHandlerClient implements IPacketHandler {
     Minecraft mc = FMLClientHandler.instance().getClient();
@@ -85,22 +92,15 @@ public class POPPacketHandlerClient implements IPacketHandler {
         OPEN_PARACHEST_GUI(28, Integer.class, Integer.class, Integer.class),
         UPDATE_LANDER(29),
         UPDATE_PARACHEST(30),
-        UPDATE_WIRE_BOUNDS(31, Integer.class, Integer.class, Integer.class)*/;
+        UPDATE_WIRE_BOUNDS(31, Integer.class, Integer.class, Integer.class)*/
+    	FOODISGOOD_REGISTER(0);
 
-        private int index;
-        private Class<?>[] decodeAs;
+        public int index;
+        public Class<?>[] decodeAs;
 
         private EnumPacketClient(int index, Class<?>... decodeAs) {
             this.index = index;
             this.decodeAs = decodeAs;
-        }
-
-        public int getIndex() {
-            return this.index;
-        }
-
-        public Class<?>[] getDecodeClasses() {
-            return this.decodeAs;
         }
     }
 
@@ -127,9 +127,17 @@ public class POPPacketHandlerClient implements IPacketHandler {
 
         EnumPacketClient packetType = EnumPacketClient.values()[POPPacketUtils.readPacketID(data)];
 
-        Class<?>[] decodeAs = packetType.getDecodeClasses();
+        Class<?>[] decodeAs = packetType.decodeAs;
         Object[] packetReadout = POPPacketUtils.readPacketData(data, decodeAs);
-
+        switch (packetType) {
+        case FOODISGOOD_REGISTER:
+			if (((POPClientProxy)PlanetsOPlenty.proxy).foodisgood==null)
+				((POPClientProxy)PlanetsOPlenty.proxy).foodisgood = new KeyBinding("Transform", Keyboard.KEY_Z);
+			KeyBinding[] keys = {((POPClientProxy)PlanetsOPlenty.proxy).foodisgood};
+			boolean[] repeat = {true};
+			KeyBindingRegistry.registerKeyBinding(((POPClientProxy)PlanetsOPlenty.proxy).new FoodisgoodKeyHandler(keys, repeat));
+			POPLog.info("Player is foodisgoodyesiam!");
+        }
         /*switch (packetType)
         {
         case AIR_REMAINING:

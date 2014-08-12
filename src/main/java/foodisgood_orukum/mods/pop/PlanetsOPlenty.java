@@ -2,11 +2,17 @@ package foodisgood_orukum.mods.pop;
 
 import java.io.File;
 
+import org.lwjgl.input.Keyboard;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.recipe.*;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.mars.GalacticraftMars;
+import morph.api.Ability;
 import net.minecraft.block.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -15,6 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.*;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -27,6 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import foodisgood_orukum.mods.pop.items.*;
 import foodisgood_orukum.mods.pop.space.*;
 import foodisgood_orukum.mods.pop.block.POPBlocks;
+import foodisgood_orukum.mods.pop.client.POPClientProxy.FoodisgoodKeyHandler;
 import foodisgood_orukum.mods.pop.entities.*;
 import foodisgood_orukum.mods.pop.network.*;
 
@@ -43,8 +52,9 @@ public final class PlanetsOPlenty {
     public static final String MODID = "PlanetsOPlenty";
     public static final String CHANNEL = "PlanetsOPlenty";
     public static final String CHANNELENTITIES = "POPEntities";
-    public static final String VERSION = "-1.0000000000000000000000000069";
+    public static final String VERSION = "-1.0000000000000000000000000070";
     public static final boolean debug = true;
+    public static boolean doneYet = false;
 
     public static final String LANGUAGE_PATH = "/assets/planetsoplenty/lang/";//Hmm, I wonder
 
@@ -121,6 +131,10 @@ public final class PlanetsOPlenty {
 	    	CompressorRecipes.addShapelessRecipe(new ItemStack(Block.bedrock, 3), new ItemStack(Block.stone, 2));
 	    	GameRegistry.addShapelessRecipe(new ItemStack(Item.diamond, 64), new ItemStack(Block.dirt));//Temp
     	}
+        registerPOPCreature(TinyBlaze.class, "TinyBlaze", POPConfigManager.idEntityTinyBlaze, GCCoreUtil.convertTo32BitColor(255, 70, 0, 50), GCCoreUtil.convertTo32BitColor(255, 0, 200, 150), "Tiny Blaze");
+        Ability.registerAbility("TinyBlaze", Ability.getNewAbilityFireImmunity().getClass());
+        Ability.registerAbility("TinyBlaze", Ability.getNewAbilityFly().getClass());
+        Ability.registerAbility("TinyBlaze", Ability.getNewAbilityHostile().getClass());
     	registerPOPNonMobEntity(POPEntityRocketT4.class, "SpaceshipT4", POPConfigManager.idEntityT4Rocket, 150, 1, false);
     	POPCelestials.init(event);
     }
@@ -181,9 +195,9 @@ public final class PlanetsOPlenty {
         //GCMarsRecipeManager.loadRecipes();
     }
 
-    public void registerPOPCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore) {
-        //if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-         //   LanguageRegistry.instance().addStringLocalization("entity." + var1 + ".name", StatCollector.translateToLocal("entity.GalacticraftCore." + var1 + ".name"));
+    public void registerPOPCreature(Class<? extends Entity> var0, String var1, int id, int back, int fore, String defaultName) {
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+            LanguageRegistry.instance().addStringLocalization("entity." + var1 + ".name", defaultName);
         EntityRegistry.registerGlobalEntityID(var0, var1, id, back, fore);
         EntityRegistry.registerModEntity(var0, var1, id, PlanetsOPlenty.instance, 80, 3, true);
     }

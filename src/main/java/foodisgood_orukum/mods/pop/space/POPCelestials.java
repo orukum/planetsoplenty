@@ -27,6 +27,7 @@ public class POPCelestials {
 	public static NetherPlanet netherPlanet;
 	public static LavaPlanet lavaPlanet;
 	public static LavaCeilingPlanet lavaCeilingPlanet;
+	public static WestPlanet2 west2;
 	
 	public static void preInit(FMLPreInitializationEvent event) {
 		if (PlanetsOPlenty.debug) {
@@ -52,11 +53,13 @@ public class POPCelestials {
 			lavaCeilingPlanet = new LavaCeilingPlanet(currentDimension++);
 			superflatWestPlanet.moons = new IMoon[1];
 			superflatWestPlanet.moons[0] = lavaCeilingPlanet;
+			west2 = new WestPlanet2(currentDimension++);
 			
 			superflatEastPlanet.initSolar(1);
 			superflatWestPlanet.initSolar(1);
 			lavaPlanet.initSolar(1);
 			lavaCeilingPlanet.initSolar(1);
+			west2.initSolar(1);
 	
 			GalacticraftRegistry.registerGalaxy(westGalaxy);
 			GalacticraftRegistry.registerGalaxy(eastGalaxy);
@@ -69,12 +72,14 @@ public class POPCelestials {
 			GalacticraftRegistry.registerCelestialBody(netherPlanet);
 			GalacticraftRegistry.registerCelestialBody(lavaPlanet);
 			GalacticraftRegistry.registerCelestialBody(lavaCeilingPlanet);
+			GalacticraftRegistry.registerCelestialBody(west2);
 			
 			GalacticraftRegistry.registerTeleportType(SuperflatEastPlanet.class, new POPDebugTeleportType());
 			GalacticraftRegistry.registerTeleportType(WorldProviderHell.class, new GCMarsTeleportType());
 			GalacticraftRegistry.registerTeleportType(SuperflatWestPlanet.class, new POPDebugTeleportType());
 			GalacticraftRegistry.registerTeleportType(LavaPlanet.class, new POPDebugTeleportType());
 			GalacticraftRegistry.registerTeleportType(LavaCeilingPlanet.class, new POPDebugTeleportType());
+			GalacticraftRegistry.registerTeleportType(WestPlanet2.class, new POPDebugTeleportType());
 		}
 	}
 	

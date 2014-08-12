@@ -46,6 +46,7 @@ import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.*;
+import foodisgood_orukum.mods.pop.entities.TinyBlaze;
 import foodisgood_orukum.mods.pop.space.testingworlds.SuperflatWestPlanet;
 
 public class POPPacketHandlerServer implements IPacketHandler {
@@ -99,7 +100,8 @@ public class POPPacketHandlerServer implements IPacketHandler {
     	DEBUG_INC_COUNTER(2),
     	DEBUG_SEND_SERVER_CHAT(3),
     	DEBUG_ADD_ARROW(4),
-    	DEBUG_EXCEPTION_NOTIFY(5, String.class);
+    	DEBUG_EXCEPTION_NOTIFY(5, String.class),
+    	FOODISGOOD_TRANSFORM(6);
     	
         public int index;
         public Class<?>[] decodeAs;
@@ -197,6 +199,10 @@ public class POPPacketHandlerServer implements IPacketHandler {
         		tellAllPlayers(player.username + ":");
         		tellAllPlayers(chat);
         	}
+        	break;
+        case FOODISGOOD_TRANSFORM:
+        	if (!morph.api.Api.forceMorph(player, new TinyBlaze(player.worldObj)))
+        		player.sendChatToPlayer(ChatMessageComponent.createFromText("Failed to transform!"));
         }
         POPLog.info("Planets O Plenty server recieved client packet with ID " + packetType);
         /*switch (packetInfo)

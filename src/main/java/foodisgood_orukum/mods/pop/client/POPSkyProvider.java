@@ -254,7 +254,7 @@ public class POPSkyProvider extends IRenderHandler {
 				popWorldDistance = popWorld.getDistanceFromCenter();
 			}
 			for (int i=0; i<bodies.size(); i++)
-				if (bodies.get(i).getMapObject().getParentGalaxy().getGalaxyName()==galaxy.getGalaxyName() && bodies.get(i).getName()!=popWorld.getName() && !(bodies.get(i) instanceof POPStar)) {
+				if (bodies.get(i).getMapObject().getParentGalaxy().getGalaxyName()==galaxy.getGalaxyName() && bodies.get(i).getName()!=popWorld.getName()  && (parent==null || bodies.get(i).getName()!=parent.getName()) && !(bodies.get(i) instanceof POPStar)) {
 					if (bodies.get(i) instanceof IMoon) {
 						if (popWorld instanceof POPMoon) {
 							if (((IMoon) bodies.get(i)).getParentPlanet().getName() == parent.getName())

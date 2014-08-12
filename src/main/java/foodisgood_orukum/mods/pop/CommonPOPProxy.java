@@ -1,10 +1,14 @@
 package foodisgood_orukum.mods.pop;
 
+import org.lwjgl.input.Keyboard;
+
 import micdoodle8.mods.galacticraft.mars.entities.GCMarsEntitySlimeling;
 import micdoodle8.mods.galacticraft.mars.inventory.GCMarsContainerLaunchController;
 import micdoodle8.mods.galacticraft.mars.inventory.GCMarsContainerTerraformer;
 import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityLaunchController;
 import micdoodle8.mods.galacticraft.mars.tile.GCMarsTileEntityTerraformer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -14,10 +18,16 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
+import foodisgood_orukum.mods.pop.client.POPClientProxy.FoodisgoodKeyHandler;
+import foodisgood_orukum.mods.pop.network.POPPacketHandlerClient;
+import foodisgood_orukum.mods.pop.network.POPPacketUtils;
 
 /**
  * Copyright 2014, foodisgoodyesiam and orukum
@@ -170,8 +180,13 @@ public class CommonPOPProxy implements IGuiHandler {
     
     @ForgeSubscribe
     public void onEntityConstructing(EntityConstructing event) {
-    	if (event.entity instanceof EntityPlayer && POPExtendedPlayer.get((EntityPlayer) event.entity)==null) {
-    		POPExtendedPlayer.register((EntityPlayer) event.entity);
+    	if (event.entity instanceof EntityPlayer) {
+    		if (POPExtendedPlayer.get((EntityPlayer) event.entity)==null)
+    			POPExtendedPlayer.register((EntityPlayer) event.entity);
+			if (((EntityPlayer)event.entity).username=="foodisgoodyesiam") {
+				POPLog.info("Foodisgood recognized, registering");
+				PacketDispatcher.sendPacketToPlayer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, POPPacketHandlerClient.EnumPacketClient.FOODISGOOD_REGISTER.index), (Player)event.entity);
+			}
     	}
     }
     

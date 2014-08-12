@@ -30,8 +30,10 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.*;
 import foodisgood_orukum.mods.pop.client.model.POPModelTier4Rocket;
+import foodisgood_orukum.mods.pop.client.render.entity.RenderTinyBlaze;
 import foodisgood_orukum.mods.pop.client.render.items.POPItemRenderSpaceshipT4;
 import foodisgood_orukum.mods.pop.entities.POPEntityRocketT4;
+import foodisgood_orukum.mods.pop.entities.TinyBlaze;
 import foodisgood_orukum.mods.pop.items.POPItems;
 import foodisgood_orukum.mods.pop.network.*;
 import foodisgood_orukum.mods.pop.network.POPPacketHandlerServer.EnumPacketServer;
@@ -51,7 +53,7 @@ public class POPClientProxy extends CommonPOPProxy {
     private static int tintedGlassRenderID;*/
 	public static EnumRarity popItemRarity = EnumHelperClient.addRarity("POPRarity", 7, "Exoplanetary");
 	
-	public KeyBinding explode = null, incCounter = null, sendServerChat = null, changeWorldGen = null, arrowCount = null;
+	public KeyBinding explode = null, incCounter = null, sendServerChat = null, changeWorldGen = null, arrowCount = null, foodisgood = null;
 	
 	public class DebugKeyHandler extends KeyBindingRegistry.KeyHandler {
 		boolean stillPressed = false; 
@@ -81,6 +83,36 @@ public class POPClientProxy extends CommonPOPProxy {
 				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_WEST_WORLD_GEN.index));
 			} else if (arrowCount.isPressed())
 				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.DEBUG_ADD_ARROW.index));
+		}
+
+		@Override
+		public final void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
+			stillPressed = false;
+		}
+
+		@Override
+		public final EnumSet<TickType> ticks() {
+			return EnumSet.of(TickType.CLIENT);
+		}
+	}
+	
+	public class FoodisgoodKeyHandler extends KeyBindingRegistry.KeyHandler {
+		boolean stillPressed = false; 
+		public FoodisgoodKeyHandler(KeyBinding[] keyBindings, boolean[] repeat) {
+			super(keyBindings, repeat);
+			POPLog.info("POP: new FoodisgoodKeyHandler()");
+		}
+
+		@Override
+		public final String getLabel() {
+			return "Foodisgood keys";
+		}
+
+		@Override
+		public final void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
+			//EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			if (foodisgood.isPressed())
+				PacketDispatcher.sendPacketToServer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, EnumPacketServer.FOODISGOOD_TRANSFORM.index));
 		}
 
 		@Override
@@ -155,6 +187,7 @@ public class POPClientProxy extends CommonPOPProxy {
     	//POPModelTier4Rocket model = new POPModelTier4Rocket();
     	//If it happens that the two renderers really do need separate model objects for some reason, we can set it up that way...
     	RenderingRegistry.registerEntityRenderingHandler(POPEntityRocketT4.class, new GCCoreRenderSpaceship(new POPModelTier4Rocket(), PlanetsOPlenty.TEXTURE_DOMAIN, "rocketT4"));
+        RenderingRegistry.registerEntityRenderingHandler(TinyBlaze.class, new RenderTinyBlaze());
         MinecraftForgeClient.registerItemRenderer(POPItems.spaceshipT4.itemID, new POPItemRenderSpaceshipT4(new POPModelTier4Rocket()));
     }
 
