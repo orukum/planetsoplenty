@@ -227,6 +227,7 @@ public class POPSkyProvider extends IRenderHandler {
 	 */
 	public POPSkyProvider(POPWorld worldObj) {
 		popWorld = worldObj;
+		popWorld.rendererLoaded = true;
 		POPLog.info("POP Sky provider initialized for " + popWorld.getName() + ", with ID " + popWorld.dimensionId);
 		starSeed = popWorld.getSeed() ^ popWorld.getDimensionID();
 		if (popWorld.getParentGalaxy() instanceof POPGalaxy) {
@@ -253,13 +254,13 @@ public class POPSkyProvider extends IRenderHandler {
 				popWorldDistance = popWorld.getDistanceFromCenter();
 			}
 			for (int i=0; i<bodies.size(); i++)
-				if (bodies.get(i).getMapObject().getParentGalaxy()==galaxy && bodies.get(i)!=popWorld) {
+				if (bodies.get(i).getMapObject().getParentGalaxy().getGalaxyName()==galaxy.getGalaxyName() && bodies.get(i).getName()!=popWorld.getName() && !(bodies.get(i) instanceof POPStar)) {
 					if (bodies.get(i) instanceof IMoon) {
 						if (popWorld instanceof POPMoon) {
-							if (((IMoon) bodies.get(i)).getParentPlanet() == parent)
+							if (((IMoon) bodies.get(i)).getParentPlanet().getName() == parent.getName())
 								moonsTemp.add((IMoon)bodies.get(i));
 						} else {
-							if (((IMoon) bodies.get(i)).getParentPlanet() == popWorld)
+							if (((IMoon) bodies.get(i)).getParentPlanet().getName() == popWorld.getName())
 								moonsTemp.add((IMoon)bodies.get(i));
 						}
 					} else if (bodies.get(i) instanceof IPlanet)
@@ -380,13 +381,17 @@ public class POPSkyProvider extends IRenderHandler {
 
 		GL11.glPushMatrix();
 
-		GL11.glDisable(GL11.GL_BLEND);
+		//GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glEnable(GL11.GL_FOG);
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 		// Distant Galaxy:
 		var12 = 10.5F;
 		GL11.glRotatef(0.0F, 0.0F, 0.0F, 1.0F);
+		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(150F, 1.0F, 0.0F, 0.0F);
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(POPSkyProvider.galaxyTexture);
 		GL11.glColor4f(0.4F, 0.4F, 0.4F, 1.0F);
@@ -402,6 +407,27 @@ public class POPSkyProvider extends IRenderHandler {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_FOG);
 		GL11.glPopMatrix();
+		final float worldAngleRad = centerAngleRad(popWorld.getPhaseShift(), popWorld.getStretchValue());
+		//OTHER PLANETS:
+		if (otherPlanets!=null) {
+			for (int i=0; i<otherPlanets.length; i++) {
+				GL11.glPushMatrix();
+				GL11.glScalef(0.6F, 0.6F, 0.6F);
+				GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F + angleP(i, worldAngleRad), 1.0F, 0.0F, 0.0F);
+				GL11.glRotatef(200F, 1.0F, 0.0F, 0.0F);
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1F);
+				var12 = .5F*((float)Math.atan(otherPlanets[i].getMapObject().getPlanetSize()/(distanceToPlanet(i, worldAngleRad)*19.8F)))*180F/(3F*((float)Math.PI));
+				FMLClientHandler.instance().getClient().renderEngine.bindTexture(planetTextures[i]);
+				tesselator.startDrawingQuads();
+				tesselator.addVertexWithUV(-var12, -100.0D, var12, 0, 1);
+				tesselator.addVertexWithUV(var12, -100.0D, var12, 1, 1);
+				tesselator.addVertexWithUV(var12, -100.0D, -var12, 1, 0);
+				tesselator.addVertexWithUV(-var12, -100.0D, -var12, 0, 0);
+				tesselator.draw();
+				//That set of four lines below was here originally
+				GL11.glPopMatrix();
+			}
+		}
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
@@ -415,11 +441,11 @@ public class POPSkyProvider extends IRenderHandler {
 				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				if (suns[0].getDistanceFromCenter()==0) {
-					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F + angleS(0, world.getCelestialAngle(partialTicks)), 1.0F, 0.0F, 0.0F);
-					var12 = ((suns[0].getDistanceFromCenter()==0) ? 30.0F : 30.0F*((float)Math.atan(suns[0].getSize()/(distanceToStar(0)*19.8F)))/(3F*((float)Math.PI)/180F));//Treating it like the normal sun is 30 degrees across, not sure if that's true					
-				} else {
 					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-					var12 = 30F*suns[0].getSize();
+					var12 = 30.0F*((float)Math.atan(suns[0].getSize()/(popWorldDistance*19.8F)))*180F/(3F*((float)Math.PI));					
+				} else {
+					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F + angleS(0, worldAngleRad), 1.0F, 0.0F, 0.0F);
+					var12 = 30.0F*((float)Math.atan(suns[0].getSize()/(distanceToStar(0, worldAngleRad)*19.8F)))*180F/(3F*((float)Math.PI));//Treating it like the normal sun is 30 degrees across, not sure if that's true
 				}
 				FMLClientHandler.instance().getClient().renderEngine.bindTexture(sunTextures[0]);//Note: Another option might possibly be to actually vary their heights in the sky... TODO: Consider this
 				tesselator.startDrawingQuads();
@@ -437,7 +463,7 @@ public class POPSkyProvider extends IRenderHandler {
 			int order[] = {0, 0, 0, 0, 0, 0};
 			float[] distances = {0F, 0F, 0F, 0F, 0F, 0F};
 			for (int i=0; i<suns.length; i++)
-				distances[i] = distanceToStar(i);
+				distances[i] = distanceToStar(i, worldAngleRad);
 			switch (suns.length) {
 			case 3:
 				float d0 = distances[0], d1 = distances[1], d2 = distances[2];
@@ -491,12 +517,12 @@ public class POPSkyProvider extends IRenderHandler {
 			for (int i=0; i<(suns.length>6 ? 6 : suns.length); x=order[++i]) {
 				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				if (suns[0].getDistanceFromCenter()==0) {
-					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F + angleS(x, world.getCelestialAngle(partialTicks)), 1.0F, 0.0F, 0.0F);
-					var12 = ((suns[x].getDistanceFromCenter()==0) ? 30.0F : 30.0F*((float)Math.atan(suns[x].getSize()/(distanceToStar(0)*19.8F)))/(3F*((float)Math.PI)/180F));//Treating it like the normal sun is 30 degrees across, not sure if that's true					
-				} else {
+				if (suns[x].getDistanceFromCenter()==0) {
 					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-					var12 = 30F*suns[x].getSize();
+					var12 = 30.0F*((float)Math.atan(suns[x].getSize()/(popWorldDistance*19.8F)))*180F/(3F*((float)Math.PI));
+				} else {
+					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F + angleS(x, worldAngleRad), 1.0F, 0.0F, 0.0F);
+					var12 = 30.0F*((float)Math.atan(suns[x].getSize()/(distanceToStar(x, worldAngleRad)*19.8F)))*180F/(3F*((float)Math.PI));//Treating it like the normal sun is 30 degrees across, not sure if that's true
 				}
 				FMLClientHandler.instance().getClient().renderEngine.bindTexture(sunTextures[x]);
 				tesselator.startDrawingQuads();
@@ -512,13 +538,54 @@ public class POPSkyProvider extends IRenderHandler {
 			}
 		}
 		GL11.glDisable(GL11.GL_BLEND);
-		// HOME:
+		// MOONS:
+		if (moons!=null) {
+			if (parent==null) {
+				for (int i=0; i<moons.length; i++) {
+					GL11.glScalef(0.6F, 0.6F, 0.6F);
+					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F + centerAngleDegree(moons[i].getMapObject().getPhaseShift(), moons[i].getMapObject().getStretchValue()), 1.0F, 0.0F, 0.0F);
+					GL11.glRotatef(200F, /*1.0F*/20F, 0.0F, 0.0F);
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1F);
+					var12 = 10.0F*((float)Math.atan(moons[i].getMapObject().getPlanetSize()/(moons[i].getMapObject().getDistanceFromCenter()*19.8F)))*180F/(3F*((float)Math.PI));
+					FMLClientHandler.instance().getClient().renderEngine.bindTexture(moonTextures[i]);
+					tesselator.startDrawingQuads();
+					tesselator.addVertexWithUV(-var12, -100.0D, var12, 0, 1);
+					tesselator.addVertexWithUV(var12, -100.0D, var12, 1, 1);
+					tesselator.addVertexWithUV(var12, -100.0D, -var12, 1, 0);
+					tesselator.addVertexWithUV(-var12, -100.0D, -var12, 0, 0);
+					tesselator.draw();
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+				}
+			} else {
+				for (int i=0; i<moons.length; i++) {
+					GL11.glScalef(0.6F, 0.6F, 0.6F);
+					GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F + angleM(i, worldAngleRad), 1.0F, 0.0F, 0.0F);
+					GL11.glRotatef(200F, /*1.0F*/20F, 0.0F, 0.0F);
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1F);
+					var12 = 10.0F*((float)Math.atan(moons[i].getMapObject().getPlanetSize()/(distanceToMoon(i, worldAngleRad)*19.8F)))*180F/(3F*((float)Math.PI));
+					//var12 = 10.0F;
+					FMLClientHandler.instance().getClient().renderEngine.bindTexture(moonTextures[i]);
+					tesselator.startDrawingQuads();
+					tesselator.addVertexWithUV(-var12, -100.0D, var12, 0, 1);
+					tesselator.addVertexWithUV(var12, -100.0D, var12, 1, 1);
+					tesselator.addVertexWithUV(var12, -100.0D, -var12, 1, 0);
+					tesselator.addVertexWithUV(-var12, -100.0D, -var12, 0, 0);
+					tesselator.draw();
+					//That set of four lines below was here originally
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+				}
+			}
+		}
+		// PARENT:
 		if (parent!=null && parentTexture!=null) {
+			final float parentRotation = (float) (world.getSpawnPoint().posZ - mc.thePlayer.posZ) * 0.01F;
 			GL11.glScalef(0.6F, 0.6F, 0.6F);
-			GL11.glRotatef(40.0F, 0.0F, 0.0F, 1.0F);
+			GL11.glRotatef(parentRotation, 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(200F, 1.0F, 0.0F, 0.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1F);
-			var12 = 0.5F;
+			var12 = 10.0F*((float)Math.atan(parent.getMapObject().getPlanetSize()/(popWorld.getDistanceFromCenter()*19.8F)))*180F/(3F*((float)Math.PI));
 			FMLClientHandler.instance().getClient().renderEngine.bindTexture(parentTexture);
 			tesselator.startDrawingQuads();
 			tesselator.addVertexWithUV(-var12, -100.0D, var12, 0, 1);
@@ -528,6 +595,7 @@ public class POPSkyProvider extends IRenderHandler {
 			tesselator.draw();
 			//That set of four lines below was here originally
 			GL11.glPopMatrix();
+			GL11.glPushMatrix();
 		}
 		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -542,7 +610,6 @@ public class POPSkyProvider extends IRenderHandler {
 		//TODO: Once I've figured out that, add in rendering of moons. Make sure they're after all planet-related stuff is done
 		//TODO: Hmm, figure out if I can use display lists anywhere to make this more efficient? (after all, drawing the planet this is orbiting, if this is a moon, won't vary by much
 		if (skyColor5 < 0.0D) {
-			GL11.glPushMatrix();
 			GL11.glTranslatef(0.0F, 12.0F, 0.0F);
 			GL11.glCallList(this.glSkyList2);
 			GL11.glPopMatrix();
@@ -572,11 +639,12 @@ public class POPSkyProvider extends IRenderHandler {
 			tesselator.addVertex(var10, var12, var10);
 			tesselator.addVertex(var10, var12, -var10);
 			tesselator.draw();
+			GL11.glPushMatrix();//B
 		}
 
 		GL11.glColor3f(70F / 256F, 70F / 256F, 70F / 256F);
-
-		GL11.glPushMatrix();
+		
+		//GL11.glPushMatrix(); //Moved to spot marked B
 		GL11.glTranslatef(0.0F, -((float) (skyColor5 - 16.0D)), 0.0F);
 		GL11.glCallList(this.glSkyList2);
 		GL11.glPopMatrix();

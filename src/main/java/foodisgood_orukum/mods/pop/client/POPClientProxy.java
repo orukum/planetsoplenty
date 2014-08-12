@@ -7,30 +7,26 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.particle.EntitySmokeFX;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.particle.*;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.client.EnumHelperClient;
-import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.*;
 import net.minecraftforge.common.MinecraftForge;
-import micdoodle8.mods.galacticraft.core.client.fx.GCCoreEntityLaunchFlameFX;
-import micdoodle8.mods.galacticraft.core.client.fx.GCCoreEntityLaunchSmokeFX;
-import micdoodle8.mods.galacticraft.core.client.fx.GCCoreEntityOxygenFX;
+import micdoodle8.mods.galacticraft.core.client.fx.*;
 import micdoodle8.mods.galacticraft.core.client.render.entities.GCCoreRenderSpaceship;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.client.registry.*;
+import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.*;
+import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import foodisgood_orukum.mods.pop.*;
 import foodisgood_orukum.mods.pop.client.model.POPModelTier4Rocket;
@@ -39,6 +35,7 @@ import foodisgood_orukum.mods.pop.entities.POPEntityRocketT4;
 import foodisgood_orukum.mods.pop.items.POPItems;
 import foodisgood_orukum.mods.pop.network.*;
 import foodisgood_orukum.mods.pop.network.POPPacketHandlerServer.EnumPacketServer;
+import foodisgood_orukum.mods.pop.space.POPWorld;
 
 /**
  * Copyright 2014, foodisgoodyesiam and orukum
@@ -128,6 +125,7 @@ public class POPClientProxy extends CommonPOPProxy {
         ClientProxyMars.tintedGlassRenderID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new GCMarsBlockRendererTintedGlassPane(ClientProxyMars.tintedGlassRenderID));*/
         NetworkRegistry.instance().registerChannel(new POPPacketHandlerClient(), PlanetsOPlenty.CHANNEL, Side.CLIENT);
+		TickRegistry.registerTickHandler(new TickHandlerClient(), Side.CLIENT);
     }
 
     @Override
@@ -349,4 +347,42 @@ public class POPClientProxy extends CommonPOPProxy {
 
         return null;
     }
+
+	public static class TickHandlerClient implements ITickHandler { //TODO: This is just temp, I think, there's got to be a less laggy way to do this...
+		@Override
+		public void tickStart(EnumSet<TickType> type, Object... tickData) {
+			final Minecraft minecraft = FMLClientHandler.instance().getClient();
+
+			final WorldClient world = minecraft.theWorld;
+
+			if (type.equals(EnumSet.of(TickType.CLIENT))) {
+				if (world != null && world.provider instanceof POPWorld) {
+					if (world.provider.getSkyRenderer() == null) {
+						world.provider.setSkyRenderer(new POPSkyProvider((POPWorld)world.provider));
+						if (PlanetsOPlenty.debug)
+							POPPacketHandlerServer.tellAllPlayers("POPSkyRenderer registered for " + Minecraft.getMinecraft().thePlayer.username);
+					}
+					if (world.provider.getCloudRenderer() == null) {//Is a second if really needed?
+						//world.provider.setCloudRenderer(new GCCoreCloudRenderer());
+						//TODO
+					}
+				}
+			}
+		}
+
+		@Override
+		public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+			//
+		}
+
+		@Override
+		public String getLabel() {
+			return "POP Client";
+		}
+
+		@Override
+		public EnumSet<TickType> ticks() {
+			return EnumSet.of(TickType.CLIENT);
+		}
+	}
 }
