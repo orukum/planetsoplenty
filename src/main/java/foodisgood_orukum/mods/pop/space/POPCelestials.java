@@ -28,6 +28,11 @@ public class POPCelestials {
 	public static LavaPlanet lavaPlanet;
 	public static LavaCeilingPlanet lavaCeilingPlanet;
 	public static WestPlanet2 west2;
+	public static WestPlanet3 west3;
+	public static WestMoonGradient westMoonGradient;
+	public static WestMoonBillowed westMoonBillowed;
+	public static WestMoonRidged westMoonRidged;
+	public static WestMoonAll westMoonAll;
 	
 	public static void preInit(FMLPreInitializationEvent event) {
 		if (PlanetsOPlenty.debug) {
@@ -54,12 +59,27 @@ public class POPCelestials {
 			superflatWestPlanet.moons = new IMoon[1];
 			superflatWestPlanet.moons[0] = lavaCeilingPlanet;
 			west2 = new WestPlanet2(currentDimension++);
+			west3 = new WestPlanet3(currentDimension++);
+			westMoonGradient = new WestMoonGradient(currentDimension++);
+			westMoonBillowed = new WestMoonBillowed(currentDimension++);
+			westMoonRidged = new WestMoonRidged(currentDimension++);
+			westMoonAll = new WestMoonAll(currentDimension++);
+			west3.moons = new IMoon[4];
+			west3.moons[3] = westMoonGradient;
+			west3.moons[2] = westMoonBillowed;
+			west3.moons[1] = westMoonRidged;
+			west3.moons[0] = westMoonAll;
 			
 			superflatEastPlanet.initSolar(1);
 			superflatWestPlanet.initSolar(1);
 			lavaPlanet.initSolar(1);
 			lavaCeilingPlanet.initSolar(1);
 			west2.initSolar(1);
+			west3.initSolar(1);
+			westMoonGradient.initSolar(1);
+			westMoonBillowed.initSolar(1);
+			westMoonRidged.initSolar(1);
+			westMoonAll.initSolar(1);
 	
 			GalacticraftRegistry.registerGalaxy(westGalaxy);
 			GalacticraftRegistry.registerGalaxy(eastGalaxy);
@@ -73,6 +93,11 @@ public class POPCelestials {
 			GalacticraftRegistry.registerCelestialBody(lavaPlanet);
 			GalacticraftRegistry.registerCelestialBody(lavaCeilingPlanet);
 			GalacticraftRegistry.registerCelestialBody(west2);
+			GalacticraftRegistry.registerCelestialBody(west3);
+			GalacticraftRegistry.registerCelestialBody(westMoonGradient);
+			GalacticraftRegistry.registerCelestialBody(westMoonBillowed);
+			GalacticraftRegistry.registerCelestialBody(westMoonRidged);
+			GalacticraftRegistry.registerCelestialBody(westMoonAll);
 			
 			GalacticraftRegistry.registerTeleportType(SuperflatEastPlanet.class, new POPDebugTeleportType());
 			GalacticraftRegistry.registerTeleportType(WorldProviderHell.class, new GCMarsTeleportType());
@@ -80,6 +105,11 @@ public class POPCelestials {
 			GalacticraftRegistry.registerTeleportType(LavaPlanet.class, new POPDebugTeleportType());
 			GalacticraftRegistry.registerTeleportType(LavaCeilingPlanet.class, new POPDebugTeleportType());
 			GalacticraftRegistry.registerTeleportType(WestPlanet2.class, new POPDebugTeleportType());
+			GalacticraftRegistry.registerTeleportType(WestPlanet3.class, new POPDebugTeleportType());
+			GalacticraftRegistry.registerTeleportType(WestMoonGradient.class, new POPDebugTeleportType());
+			GalacticraftRegistry.registerTeleportType(WestMoonBillowed.class, new POPDebugTeleportType());
+			GalacticraftRegistry.registerTeleportType(WestMoonRidged.class, new POPDebugTeleportType());
+			GalacticraftRegistry.registerTeleportType(WestMoonAll.class, new POPDebugTeleportType());
 		}
 	}
 	

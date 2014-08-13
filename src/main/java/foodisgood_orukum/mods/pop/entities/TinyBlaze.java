@@ -25,7 +25,7 @@ public class TinyBlaze extends EntityBlaze {
         super(par1World);
         //this.isImmuneToFire = true;
         this.experienceValue = 10;
-        setSize(height/20, width/20);
+        setSize(height/14, width/14);
     }
 
     @Override

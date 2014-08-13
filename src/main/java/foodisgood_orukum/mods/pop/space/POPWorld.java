@@ -154,14 +154,18 @@ public abstract class POPWorld extends WorldProvider implements ICelestialBody, 
 		return getPlanetSize()==0 ? 1 : 1/getPlanetSize();
 	}
 	
+	public final double getGravityInGs() {
+		return (getGravity()-ZERO_G)/GC_RATIO;
+	}
+	
 	@Override
 	public double getFuelUsageMultiplier() {
-		return getGravity();
+		return getGravityInGs();
 	}
 	
 	@Override
 	public float getFallDamageModifier() {
-		return (float) Math.pow(getGravity(), 1.12F);
+		return (float) Math.pow(getGravityInGs(), 1.12F);
 	}
 	
 	@Override

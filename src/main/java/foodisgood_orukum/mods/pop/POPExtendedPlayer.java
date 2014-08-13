@@ -17,7 +17,7 @@ public class POPExtendedPlayer implements IExtendedEntityProperties {
 	
 	public POPExtendedPlayer(EntityPlayer playerArg) {
 		this.player = playerArg;
-		if (playerArg.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag(EXT_PROP_NAME)==null) {
+		if (!playerArg.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey(EXT_PROP_NAME) || playerArg.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag(EXT_PROP_NAME)==null || playerArg.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag(EXT_PROP_NAME).hasNoTags()) {
 			//Initialize other variables here
 			increment = 0;
 			foodisgoodRegistered = false;
@@ -32,7 +32,7 @@ public class POPExtendedPlayer implements IExtendedEntityProperties {
 	public static final POPExtendedPlayer get(EntityPlayer player) {
 		if (player.getExtendedProperties(EXT_PROP_NAME)==null) {
 			register(player);
-			POPLog.severe("[Planets O Plenty] Player " + player.username + " failed to have extended properties registered when joining server? Registering now in get()");
+			POPLog.severe("[Planets O Plenty] Player " + player.username + " failed to have extended properties registered when joining server? Registering now in get()", player);
 		}
 		return (POPExtendedPlayer) player.getExtendedProperties(EXT_PROP_NAME);
 	}

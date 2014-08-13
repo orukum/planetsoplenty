@@ -44,19 +44,19 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 
-public class WestPlanet2 extends POPPlanet {
-	public WestPlanet2(int dimension) {
+public class WestPlanet3 extends POPPlanet {
+	public WestPlanet3(int dimension) {
 		super();
 		dimensionId = dimension;
 	}
 	
-	public WestPlanet2() {
-		dimensionId = POPCelestials.west2.dimensionId;
+	public WestPlanet3() {
+		dimensionId = POPCelestials.west3.dimensionId;
 	}
 	
 	@Override
 	public String getName() {
-		return "West Debug Planet 2";
+		return "West Debug Planet 3";
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class WestPlanet2 extends POPPlanet {
 
 	@Override
 	public Class<? extends WorldProvider> getWorldProvider() {
-		return WestPlanet2.class;
+		return WestPlanet3.class;
 	}
 
 	@Override
@@ -82,22 +82,22 @@ public class WestPlanet2 extends POPPlanet {
 
 	@Override
 	public float getPlanetSize() {
-		return 2F;
+		return 4F;
 	}
 
 	@Override
 	public float getDistanceFromCenter() {
-		return 2F;
+		return 3.2F;
 	}
 
 	@Override
 	public float getPhaseShift() {
-		return 120F;
+		return 79F;
 	}
 
 	@Override
 	public float getStretchValue() {
-		return 4F;
+		return 6F;
 	}
 
 	@Override
@@ -231,12 +231,12 @@ public class WestPlanet2 extends POPPlanet {
 
     @Override
     public void registerWorldChunkManager() {
-        this.worldChunkMgr = new POPWest2ChunkManager();
+        this.worldChunkMgr = new POPWest3ChunkManager();
     }
 
     @Override
     public IChunkProvider createChunkGenerator() {
-        return new POPWest2ChunkProvider(this.worldObj, this.worldObj.getSeed(), true);
+        return new POPWest3ChunkProvider(this.worldObj, this.worldObj.getSeed(), true);
     }
 
     @Override
@@ -246,7 +246,7 @@ public class WestPlanet2 extends POPPlanet {
 
     @Override
     public String getWelcomeMessage() {
-        return "Welcome to West Superflat Test Planet!";
+        return "Welcome to West Debug Planet 3!";
     }
 
     @Override
@@ -256,7 +256,7 @@ public class WestPlanet2 extends POPPlanet {
 
     @Override
     public boolean canSnowAt(int x, int y, int z) {
-        return y>170 || x<-40;
+        return y>100 || x<-90;
     }
 
     @Override
@@ -270,7 +270,7 @@ public class WestPlanet2 extends POPPlanet {
         return 1234;
     }
     
-    public class POPWest2ChunkManager extends WorldChunkManager {
+    public class POPWest3ChunkManager extends WorldChunkManager {
         @Override
         public BiomeGenBase getBiomeGenAt(int par1, int par2) {
         	return BiomeGenBase.desert;
@@ -343,7 +343,7 @@ public class WestPlanet2 extends POPPlanet {
     
 	public static short blockID = (short) Block.sandStone.blockID;
     
-    public class POPWest2ChunkProvider extends ChunkProviderGenerate {
+    public class POPWest3ChunkProvider extends ChunkProviderGenerate {
         /*final short topBlockIDHigh = (short) Block.grass.blockID;
         final byte topBlockMetaHigh = 0;
         final short fillBlockIDHigh = (short) Block.anvil.blockID;
@@ -364,6 +364,9 @@ public class WestPlanet2 extends POPPlanet {
         private final NoiseModule noiseGen2;
         private final NoiseModule noiseGen3;
         private final NoiseModule noiseGen4;
+        private final NoiseModule noiseGen5;
+        private final NoiseModule noiseGen6;
+        private final NoiseModule noiseGen7;
 
         private final World worldObj;
 
@@ -378,14 +381,17 @@ public class WestPlanet2 extends POPPlanet {
         private static final int CHUNK_SIZE_Z = 16;
         private static final int CRATER_PROB = 100;
 
-        public POPWest2ChunkProvider(World par1World, long par2, boolean par4) {
+        public POPWest3ChunkProvider(World par1World, long par2, boolean par4) {
             super(par1World, par2, par4);
             this.worldObj = par1World;
             this.rand = new Random(par2);
             this.noiseGen1 = new Gradient(this.rand.nextLong(), 4, 0.25);
             this.noiseGen2 = new Gradient(this.rand.nextLong(), 1, 0.45);
             this.noiseGen3 = new RidgedMulti(this.rand.nextLong(), 9);
-            this.noiseGen4 = new Billowed(this.rand.nextLong(), 2, 0.35);
+            this.noiseGen4 = new Billowed(this.rand.nextLong(), 2, 0.15);
+            this.noiseGen5 = new Billowed(this.rand.nextLong(), 1, 1.02);
+            this.noiseGen6 = new RidgedMulti(this.rand.nextLong(), 2);
+            this.noiseGen7 = new Gradient(this.rand.nextLong(), 1, 0.25);
         }
 
         public void generateTerrain(int chunkX, int chunkZ, short[] idArray, byte[] metaArray) {
@@ -393,10 +399,13 @@ public class WestPlanet2 extends POPPlanet {
             this.noiseGen2.frequency = 0.015;
             this.noiseGen3.frequency = 0.01;
             this.noiseGen4.frequency = 0.02;
+            this.noiseGen5.frequency = 0.09;
+            this.noiseGen6.frequency = chunkX<-10 ? .34 : .012;
+            this.noiseGen7.frequency = 0.021;
             for (int x = 0; x < CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < CHUNK_SIZE_Z; z++) {
-                    final double d = this.noiseGen1.getNoise(x + chunkX * 16, z + chunkZ * 16) * 8;
-                    final double d2 = this.noiseGen2.getNoise(x + chunkX * 16, z + chunkZ * 16) * 24;
+                    final double d = (this.noiseGen1.getNoise(x + chunkX * 16, z + chunkZ * 16) + .6*noiseGen5.getNoise(x + chunkX * 16, z + chunkZ * 16) )* 8*noiseGen4.getNoise(x + chunkX * 16, z + chunkZ * 16);
+                    final double d2 = (this.noiseGen2.getNoise(x + chunkX * 16, z + chunkZ * 16) + noiseGen6.getNoise(x + chunkX * 16, z + chunkZ * 16)) * 24;
                     double d3 = this.noiseGen3.getNoise(x + chunkX * 16, z + chunkZ * 16) - 0.1;
                     d3 *= 4;
 
@@ -481,7 +490,7 @@ public class WestPlanet2 extends POPPlanet {
                 for (int cz = chunkZ - 2; cz <= chunkZ + 2; cz++)
                     for (int x = 0; x < CHUNK_SIZE_X; x++)
                         for (int z = 0; z < CHUNK_SIZE_Z; z++)
-                            if (Math.abs(this.randFromPoint(cx * 16 + x, (cz * 16 + z) * 1000)) < this.noiseGen4.getNoise(x * CHUNK_SIZE_X + x, cz * CHUNK_SIZE_Z + z) / CRATER_PROB) {
+                            if (Math.abs(this.randFromPoint(cx * 16 + x, (cz * 16 + z) * 1000)) < this.noiseGen7.getNoise(x * CHUNK_SIZE_X + x, cz * CHUNK_SIZE_Z + z) / CRATER_PROB) {
                                 final Random random = new Random(cx * 16 + x + (cz * 16 + z) * 5000);
                                 final GCCoreCraterSize cSize = GCCoreCraterSize.sizeArray[random.nextInt(GCCoreCraterSize.sizeArray.length)];
                                 final int size = random.nextInt(cSize.MAX_SIZE - cSize.MIN_SIZE) + cSize.MIN_SIZE;

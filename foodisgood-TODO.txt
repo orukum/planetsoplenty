@@ -4,6 +4,7 @@
 -Bugs with mercury for whatever reason, probably because there's a still but no moving version
 -Figure out how to register key binding (or some other controls, perhaps a console command?) for just me
 -Sort out problems with Tiny Blaze - eye position, suffocation, etc
+-Moon's distance from center is 40 - use this to update my own moons
 
 	Other things to do next time:
 -Add lava world
