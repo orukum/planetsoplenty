@@ -42,20 +42,17 @@ import foodisgood_orukum.mods.pop.items.POPItems;
 public class POPEntityRocketT4 extends GCMarsEntityRocketT2 {
     //public IUpdatePlayerListBox rocketSoundUpdater;
 
-    public POPEntityRocketT4(World par1World)
-    {
+    public POPEntityRocketT4(World par1World) {
         super(par1World);
     }
 
-    public POPEntityRocketT4(World par1World, double par2, double par4, double par6, EnumRocketType rocketType)
-    {
+    public POPEntityRocketT4(World par1World, double par2, double par4, double par6, EnumRocketType rocketType) {
         super(par1World, par2, par4, par6, rocketType);
         //this.rocketType = rocketType;
         this.cargoItems = new ItemStack[this.getSizeInventory()];
     }
 
-    public POPEntityRocketT4(World par1World, double par2, double par4, double par6, boolean reversed, EnumRocketType rocketType, ItemStack[] inv)
-    {
+    public POPEntityRocketT4(World par1World, double par2, double par4, double par6, boolean reversed, EnumRocketType rocketType, ItemStack[] inv) {
         this(par1World, par2, par4, par6, rocketType);
         this.cargoItems = inv;
     }
@@ -84,8 +81,7 @@ public class POPEntityRocketT4 extends GCMarsEntityRocketT2 {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void onUpdate()
-    {
+    public void onUpdate() {
         super.onUpdate();
 
         int i;

@@ -60,10 +60,10 @@ public class POPCelestials {
 			superflatWestPlanet.moons[0] = lavaCeilingPlanet;
 			west2 = new WestPlanet2(currentDimension++);
 			west3 = new WestPlanet3(currentDimension++);
-			westMoonGradient = new WestMoonGradient(currentDimension++);
-			westMoonBillowed = new WestMoonBillowed(currentDimension++);
-			westMoonRidged = new WestMoonRidged(currentDimension++);
 			westMoonAll = new WestMoonAll(currentDimension++);
+			westMoonRidged = new WestMoonRidged(currentDimension++);
+			westMoonBillowed = new WestMoonBillowed(currentDimension++);
+			westMoonGradient = new WestMoonGradient(currentDimension++);
 			west3.moons = new IMoon[4];
 			west3.moons[3] = westMoonGradient;
 			west3.moons[2] = westMoonBillowed;

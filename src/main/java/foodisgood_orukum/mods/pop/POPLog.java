@@ -20,14 +20,18 @@ public final class POPLog {
     }
     
     public static void info(String message, EntityPlayer player) {
-        FMLRelaunchLog.log("Planets O Plenty", Level.INFO, "Sent also to client: " + message);
-        if (!player.worldObj.isRemote)
+        if (!player.worldObj.isRemote) {
+        	FMLRelaunchLog.log("Planets O Plenty", Level.INFO, player.username + ", sent also to client: " + message);
         	PacketDispatcher.sendPacketToPlayer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, POPPacketHandlerClient.EnumPacketClient.POPLOG.index, false, message), (Player) player);
+        } else
+        	POPLog.info(player.username + ": " + message);
     }
 
     public static void severe(String message, EntityPlayer player) {
-        FMLRelaunchLog.log("Planets O Plenty", Level.SEVERE, "Sent also to client: " + message);
-        if (!player.worldObj.isRemote)
+        if (!player.worldObj.isRemote) {
+        	FMLRelaunchLog.log("Planets O Plenty", Level.SEVERE, player.username + ", sent also to client: " + message);
         	PacketDispatcher.sendPacketToPlayer(POPPacketUtils.createPacket(PlanetsOPlenty.CHANNEL, POPPacketHandlerClient.EnumPacketClient.POPLOG.index, true, message), (Player) player);
+        } else
+        	POPLog.severe(player.username + ": " + message);
     }
 }

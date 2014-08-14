@@ -87,7 +87,7 @@ public class WestMoonBillowed extends POPMoon {
 
 	@Override
 	public float getDistanceFromCenter() {
-		return .182F;
+		return 18.2F;
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import net.minecraft.world.WorldProvider;
 import micdoodle8.mods.galacticraft.api.world.*;
 
 /**
+ * Keep in mind, the distanceToCenter value for the Overworld's moon is 30.0
  * @author foodisgoodyesiam
  *
  */

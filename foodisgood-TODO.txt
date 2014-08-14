@@ -18,7 +18,7 @@
 -Update this list
 -Add sky rendering components in POPWorld dealing with stars, moons, other planets
 -Add atmospheres
--Hmm, clouds are semitransparent, like sky blocks? That should be usefuly knowledge
+-Hmm, clouds are semitransparent, like sky blocks? That should be useful knowledge
 -Building on that: Try making own cloud generator instead of using Sky-like blocks for world ceiling
 -Add more about horizons to match planet's size
 -update getStarBrightness, it's used in POPSkyRenderer

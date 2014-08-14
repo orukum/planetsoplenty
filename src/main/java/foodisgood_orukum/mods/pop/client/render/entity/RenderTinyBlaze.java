@@ -14,6 +14,6 @@ public class RenderTinyBlaze extends RenderBlaze {
 
     @Override
 	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2) {
-        GL11.glScalef(1F/14F, 1F/145F, 1F/14F);
+        GL11.glScalef(1F/10F, 1F/10F, 1F/10F);
     }
 }

@@ -82,12 +82,12 @@ public class WestMoonGradient extends POPMoon {
 
 	@Override
 	public float getPlanetSize() {
-		return .6F;
+		return .4F;
 	}
 
 	@Override
 	public float getDistanceFromCenter() {
-		return .1F;
+		return 10F;
 	}
 
 	@Override
